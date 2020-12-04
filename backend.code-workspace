@@ -4,7 +4,10 @@
       "path": "."
     }
   ],
-    "files.insertFinalNewline": true,
-    "files.eol": "\n"
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "files.insertFinalNewline": true
   }
 }

@@ -3,4 +3,8 @@
   "description": "backend",
   "scripts": {},
   "author": "Revanced GmbH",
+  "license": "LicenseRef-LICENSE",
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  }
 }
