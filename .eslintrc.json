@@ -1,0 +1,33 @@
+{
+  "extends": ["airbnb-typescript/base"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "env": {
+    "node": true,
+    "browser": true,
+    "jest": true
+  },
+  "rules": {
+    "max-len": ["error", 200],
+    "import/prefer-default-export": "off",
+    "import/no-default-export": "error",
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": true,
+        "variables": true
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": true,
+        "variables": true,
+        "typedefs": true
+      }
+    ]
+  }
+}
