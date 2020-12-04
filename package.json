@@ -5,6 +5,7 @@
   "author": "Revanced GmbH",
   "license": "LicenseRef-LICENSE",
   "devDependencies": {
+    "lerna": "^3.22.1",
     "prettier": "^2.2.1"
   }
 }
