@@ -3,7 +3,7 @@
     "target": "ES2015",
     "module": "commonjs",
     "outDir": "./out",
-    "rootDir": "./src",
+    "rootDir": "./",
     "removeComments": true,
     "noEmitOnError": true,
     "strict": true,
@@ -12,5 +12,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true
-  }
+  },
+  "include": ["index.ts"]
 }
