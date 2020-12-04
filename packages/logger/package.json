@@ -1,0 +1,13 @@
+{
+  "name": "@backend/logger",
+  "version": "1.0.0",
+  "description": "server",
+  "author": "Revanced GmbH",
+  "license": "LicenseRef-LICENSE",
+  "main": "./out/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "npx jest --collect-coverage",
+    "watch": "tsc -w"
+  }
+}
