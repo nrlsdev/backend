@@ -8,6 +8,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.formatOnPaste": false,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "git.ignoreLimitWarning": true
   }
 }

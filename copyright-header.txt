@@ -1,0 +1,13 @@
+/***************************************************************************
+* Copyright © Revanced GmbH, 2020
+*
+* All rights reserved. All software names used are trade names and / or
+* brands of the respective manufacturers.
+* 
+* The user of the computer program acknowledges that the above
+* copyright notice in the sense of the world copyright agreement 
+* remains attached to the position specified by the author in the function
+* of the computer program in order to adequately express the reservation
+* of copyright. This copyright notice may not be removed, modified or
+* dislocated by the customer, user and / or third parties.
+***************************************************************************/
