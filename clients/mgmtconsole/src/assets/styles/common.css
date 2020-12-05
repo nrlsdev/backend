@@ -1,0 +1,24 @@
+*:not(text) {
+  margin: 0;
+  padding: 0;
+  font-size: var(--default-size-font);
+  font-family: var(--system-font-family-font);
+  color: var(--default-font-color);
+}
+
+picture,
+source,
+img,
+svg {
+  vertical-align: middle;
+}
+
+body {
+  background-color: var(--default-page-background-color) !important;
+}
+
+.common-wrapper {
+  width: 95%;
+  max-width: 1024px;
+  margin: 15px auto;
+}

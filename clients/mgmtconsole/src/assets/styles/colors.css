@@ -1,0 +1,56 @@
+:root {
+  /* common */
+  --transparent-color: rgba(0, 0, 0, 0);
+  --black-color: rgb(0, 0, 0);
+  --white-color: rgb(255, 255, 255);
+
+  /* branding */
+  --primary-color: rgb(252, 100, 0);
+  --primary-hover-color: rgb(226, 89, 0);
+  --primary-active-color: rgb(201, 79, 0);
+
+  /* logos */
+  --company-logo-color: var(--primary-color);
+}
+
+.light-mode {
+  /* grays */
+  --gray1-color: rgb(142, 142, 147);
+  --gray2-color: rgb(174, 174, 178);
+  --gray3-color: rgb(199, 199, 204);
+  --gray4-color: rgb(209, 209, 214);
+  --gray5-color: rgb(229, 229, 234);
+  --gray6-color: rgb(242, 242, 247);
+  --gray7-color: rgb(252, 252, 257);
+
+  /* reds */
+  --red1-color: rgb(255, 59, 48);
+
+  /* common */
+  --default-page-background-color: var(--white-color);
+  --default-font-color: var(--black-color);
+  --default-inverted-font-color: var(--white-color);
+  --default-readonly-font-color: var(--gray1-color);
+  --default-icon-color: var(--black-color);
+  --default-icon-hover-color: var(--primary-color);
+.dark-mode {
+  /* grays */
+  --gray1-color: rgb(142, 142, 147);
+  --gray2-color: rgb(99, 99, 102);
+  --gray3-color: rgb(72, 72, 74);
+  --gray4-color: rgb(58, 58, 60);
+  --gray5-color: rgb(44, 44, 46);
+  --gray6-color: rgb(28, 28, 30);
+  --gray7-color: rgb(17, 17, 18);
+
+  /* reds */
+  --red1-color: rgb(255, 69, 58);
+
+  /* common */
+  --default-page-background-color: var(--black-color);
+  --default-font-color: var(--white-color);
+  --default-inverted-font-color: var(--black-color);
+  --default-readonly-font-color: var(--gray2-color);
+  --default-icon-color: var(--white-color);
+  --default-icon-hover-color: var(--primary-color);
+}
