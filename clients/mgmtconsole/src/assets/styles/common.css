@@ -6,6 +6,11 @@
   color: var(--default-font-color);
 }
 
+input,
+text {
+  user-select: none;
+}
+
 picture,
 source,
 img,
