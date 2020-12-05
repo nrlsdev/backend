@@ -42,6 +42,8 @@
   --account-input-border-bottom-color: var(--primary-color);
   --account-error-message-color: var(--red1-color);
   --account-submit-button-color: var(--primary-color);
+  --account-submit-button-hover-color: var(--primary-hover-color);
+  --account-submit-button-active-color: var(--primary-active-color);
   --account-submit-button-font-color: var(--white-color);
   --account-link-color: var(--primary-color);
 }
@@ -76,6 +78,8 @@
   --account-input-placeholder-color: var(--gray1-color);
   --account-error-message-color: var(--red1-color);
   --account-submit-button-color: var(--primary-color);
+  --account-submit-button-hover-color: var(--primary-hover-color);
+  --account-submit-button-active-color: var(--primary-active-color);
   --account-submit-button-font-color: var(--white-color);
   --account-link-color: var(--primary-color);
 }

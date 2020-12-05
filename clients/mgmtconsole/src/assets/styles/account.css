@@ -79,6 +79,14 @@
   color: var(--account-submit-button-font-color);
 }
 
+.account-button:hover {
+  background-color: var(--account-submit-button-hover-color);
+}
+
+.account-button:active {
+  background-color: var(--account-submit-button-active-color);
+}
+
 .account-link {
   color: var(--account-link-color);
   text-decoration: none;
