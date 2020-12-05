@@ -1,0 +1,70 @@
+:root {
+  --system-font-family-font: system-ui, -apple-system, Arial, sans-serif;
+  --default-size-font: 1em;
+}
+
+.system-large-title-font {
+  font-size: 2em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
+
+.system-title-one-font {
+  font-size: 1.647em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
+
+.system-title-two-font {
+  font-size: 1.294em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
+
+.system-title-three-font {
+  font-size: 1.176em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
+
+.system-headline-font {
+  font-size: 1em;
+  font-weight: bold;
+  color: var(--default-font-color);
+}
+
+.system-body-font {
+  font-size: 1em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
+
+.system-callout-font {
+  font-size: 0.941em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
+
+.system-subhead-font {
+  font-size: 0.882em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
+
+.system-footnote-font {
+  font-size: 0.764em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
+
+.system-caption-one-font {
+  font-size: 0.706em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
+
+.system-caption-two-font {
+  font-size: 0.647em;
+  font-weight: normal;
+  color: var(--default-font-color);
+}
