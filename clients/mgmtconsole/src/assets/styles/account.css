@@ -91,3 +91,7 @@
   color: var(--account-link-color);
   text-decoration: none;
 }
+
+.account-link:hover {
+  text-decoration: underline;
+}
