@@ -1,0 +1,73 @@
+.account-page-container {
+  width: 350px;
+  margin: 100px auto;
+  text-align: center;
+}
+
+.account-form-container {
+  width: auto;
+  margin-bottom: 16px;
+  padding: 50px 12.5%;
+  border: 1px solid var(--account-form-border-color);
+  border-radius: 10px;
+  background-color: var(--account-form-background-color);
+}
+
+.account-company-logo-container {
+  display: inline-flex;
+  padding-bottom: 50px;
+}
+
+.account-company-logo {
+  width: 75px;
+  height: 75px;
+  margin: auto 0;
+}
+
+.account-title {
+  margin-bottom: 50px;
+  font-size: 1.75em;
+  color: var(--account-form-title-font-color);
+}
+
+.account-input {
+  width: 100%;
+  margin-bottom: 16px;
+  padding-bottom: 5px;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  background-color: var(--account-input-background-color);
+  border-bottom: 1px solid var(--account-input-border-bottom-color);
+}
+
+.account-error-message {
+  width: 100%;
+  display: block;
+  text-align: left;
+  font-size: 0.875em;
+  font-weight: bold;
+  color: var(--account-error-message-color);
+}
+
+.account-actions {
+  display: grid;
+  gap: 16px;
+}
+
+.account-button {
+  width: 100%;
+  outline: none;
+  margin-top: 16px;
+  padding: 10px 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--account-submit-button-color);
+  font-weight: bold;
+  color: var(--account-submit-button-font-color);
+}
+
+.account-link {
+  color: var(--account-link-color);
+  text-decoration: none;
+}
