@@ -53,6 +53,15 @@
   color: var(--account-input-placeholder-color);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--default-font-color) !important;
+  box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
+  -webkit-box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
+}
+
 .account-error-message {
   width: 100%;
   display: block;
