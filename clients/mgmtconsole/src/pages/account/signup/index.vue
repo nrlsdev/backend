@@ -61,6 +61,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import { SystemUserAuthenticationModule } from '../../../store/modules/system-user-authentication';
 
 @Component
 export default class AccountSignUpPage extends Vue {
@@ -80,6 +81,13 @@ export default class AccountSignUpPage extends Vue {
       this.errorMessage = this.$t('StrErrorPasswordsDoNotMatch').toString();
       return;
     }
+
+    SystemUserAuthenticationModule.signUp({
+      email: this.email,
+      firstname: this.firstname,
+      lastname: this.lastname,
+      password: this.password,
+    });
   }
 }
 </script>
