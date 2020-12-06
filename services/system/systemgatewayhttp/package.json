@@ -10,5 +10,9 @@
     "clean": "rm -rd ./out",
     "watch": "tsc -w",
     "dev": "node ./out/index.js"
+  },
+  "dependencies": {
+    "@backend/server": "^1.0.0",
+    "@backend/logger": "^1.0.0"
   }
 }
