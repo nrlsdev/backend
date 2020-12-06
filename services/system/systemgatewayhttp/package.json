@@ -1,0 +1,14 @@
+{
+  "name": "@backend/systemgatewayhttp",
+  "version": "1.0.0",
+  "description": "systemgatewayhttp",
+  "author": "Revanced GmbH",
+  "license": "LicenseRef-LICENSE",
+  "main": "./out/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rd ./out",
+    "watch": "tsc -w",
+    "dev": "node ./out/index.js"
+  }
+}
