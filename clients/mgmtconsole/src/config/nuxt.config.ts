@@ -50,6 +50,7 @@ export const config: NuxtConfig = {
     'nuxt-mq',
     'nuxt-i18n',
     'bootstrap-vue/nuxt',
+    'cookie-universal-nuxt',
   ],
   mq: MQConfiguration,
   i18n: LanguageConfiguration,
