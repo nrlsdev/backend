@@ -8,7 +8,6 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rd ./out",
-    "watch": "tsc -w",
     "dev": "node ./out/index.js"
   },
   "dependencies": {

@@ -35,8 +35,4 @@ export class Server {
       }:${this.port}`,
     );
   }
-
-  public get(path: any, ...handlers: any) {
-    this.Application.get(path, handlers);
-  }
 }

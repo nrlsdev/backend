@@ -14,7 +14,7 @@ async function startNuxtServer() {
     await builder.build();
   }
 
-  server.get('*', nuxt.render);
+  server.Application.get('*', nuxt.render);
   server.start();
 }
 
