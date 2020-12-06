@@ -8,10 +8,13 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rd ./out",
-    "dev": "node ./out/index.js"
+    "dev": "cross-env NODE_ENV=development nodemon ./src/index.ts --watch src"
   },
   "dependencies": {
+    "@backend/logger": "^1.0.0",
     "@backend/server": "^1.0.0",
-    "@backend/logger": "^1.0.0"
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.1.0"
   }
 }
