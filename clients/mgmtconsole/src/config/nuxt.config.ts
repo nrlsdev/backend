@@ -41,7 +41,7 @@ export const config: NuxtConfig = {
     '@/assets/styles/fonts.css',
     '@/assets/styles/bootstrap.scss',
   ],
-  plugins: [],
+  plugins: ['@/plugins/language.client'],
   components: true,
   buildModules: ['@nuxt/typescript-build', '@nuxtjs/color-mode'],
   modules: [
