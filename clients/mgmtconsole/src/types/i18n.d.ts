@@ -1,7 +1,34 @@
 import { Vue } from 'nuxt-property-decorator';
+import { TranslateResult } from 'vue-i18n';
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $t: (str: string) => string;
+    $t: {
+      (
+        key: string,
+        values?: any[] | { [key: string]: any } | undefined,
+      ): TranslateResult;
+      (
+        key: string,
+        locale: string,
+        values?: any[] | { [key: string]: any } | undefined,
+      ): TranslateResult;
+    };
+  }
+}
+
+declare module '@nuxt/types' {
+  interface Context {
+    $t: {
+      (
+        key: string,
+        values?: any[] | { [key: string]: any } | undefined,
+      ): TranslateResult;
+      (
+        key: string,
+        locale: string,
+        values?: any[] | { [key: string]: any } | undefined,
+      ): TranslateResult;
+    };
   }
 }

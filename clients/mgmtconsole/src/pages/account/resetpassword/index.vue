@@ -4,13 +4,13 @@
       <div class="account-company-logo-container">
         <VLogo class="account-company-logo" />
       </div>
-      <h1 class="account-title">Reset Password</h1>
+      <h1 class="account-title">{{ $t('StrResetPassword') }}</h1>
       <form>
         <section class="account-section">
           <input
             class="account-input"
             type="email"
-            placeholder="E-Mail"
+            :placeholder="$t('StrEmail')"
             required
           />
         </section>
@@ -18,23 +18,25 @@
           <input
             class="account-input"
             type="password"
-            placeholder="New Password"
+            :placeholder="$t('StrNewPassword')"
             required
           />
           <input
             class="account-input"
             type="password"
-            placeholder="Verify Password"
+            :placeholder="$t('StrVerifyPassword')"
             required
           />
         </section>
         <label class="account-error-message"></label>
-        <button class="account-button" type="submit">Reset</button>
+        <button class="account-button" type="submit">
+          {{ $t('StrReset') }}
+        </button>
       </form>
     </div>
-    <n-link class="account-link" to="/account/signin" prefetch
-      >Back to Sign In Page</n-link
-    >
+    <n-link class="account-link" to="/account/signin" prefetch>{{
+      $t('StrBackToSignInPage')
+    }}</n-link>
   </div>
 </template>
 
