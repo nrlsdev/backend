@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Application, json } from 'express';
 import { Logger } from '@backend/logger';
 
 export class Server {
@@ -18,9 +18,16 @@ export class Server {
     this.logger = new Logger(
       `${hostname === '' ? 'localhost' : hostname}:${port}::server`,
     );
+
     this.application = express();
     this.hostname = hostname;
     this.port = port;
+
+    this.initialize();
+  }
+
+  private initialize() {
+    this.Application.use(json());
   }
 
   public start() {
