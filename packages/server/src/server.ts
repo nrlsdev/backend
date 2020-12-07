@@ -2,7 +2,7 @@ import express, { Application, json } from 'express';
 import { Logger } from '@backend/logger';
 
 export class Server {
-  private logger: Logger;
+  private static logger: Logger;
 
   private application: Application;
 
@@ -15,7 +15,7 @@ export class Server {
   }
 
   public constructor(hostname: string, port: number) {
-    this.logger = new Logger(
+    Server.logger = new Logger(
       `${hostname === '' ? 'localhost' : hostname}:${port}::server`,
     );
 
@@ -35,7 +35,7 @@ export class Server {
   }
 
   private listen() {
-    this.logger.info(
+    Server.logger.info(
       'listen',
       `Server listening on http://${
         this.hostname === '' ? 'localhost' : this.hostname
