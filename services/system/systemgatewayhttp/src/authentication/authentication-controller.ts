@@ -1,6 +1,8 @@
+import { MessageQueueType, MessageSeverityType } from '@backend/messagehandler';
 import { Request, Response } from '@backend/server';
+import { messageManager } from '../message-manager';
 
-export function onUserSignUp(request: Request, response: Response) {
+export async function onUserSignUp(request: Request, response: Response) {
   const { email, firstname, lastname, password } = request.body;
 
   if (!email || !firstname || !lastname || !password) {
@@ -15,12 +17,18 @@ export function onUserSignUp(request: Request, response: Response) {
     return;
   }
 
+  await messageManager.sendReplyToMessage(
+    {},
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.SYSTEM_USER,
+  );
+
   response.statusCode = 200;
   response.statusMessage = 'OK';
   response.send({}).end();
 }
 
-export function onUserSignIn(request: Request, response: Response) {
+export async function onUserSignIn(request: Request, response: Response) {
   const { email, password } = request.body;
 
   if (!email || !password) {
@@ -35,12 +43,18 @@ export function onUserSignIn(request: Request, response: Response) {
     return;
   }
 
+  await messageManager.sendReplyToMessage(
+    {},
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.SYSTEM_USER,
+  );
+
   response.statusCode = 200;
   response.statusMessage = 'OK';
   response.send({}).end();
 }
 
-export function onValidateToken(request: Request, response: Response) {
+export async function onValidateToken(request: Request, response: Response) {
   const { jwt } = request.query;
 
   if (!jwt) {
@@ -54,6 +68,12 @@ export function onValidateToken(request: Request, response: Response) {
       .end();
     return;
   }
+
+  await messageManager.sendReplyToMessage(
+    {},
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.SYSTEM_USER,
+  );
 
   response.statusCode = 200;
   response.statusMessage = 'OK';

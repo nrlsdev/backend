@@ -18,7 +18,7 @@ export class MessageManager {
 
   private port: number = -1;
 
-  private logger: Logger = new Logger('MessageManager');
+  private static logger: Logger = new Logger('MessageManager');
 
   private constructor(config?: MessageManagerConfiguration) {
     if (config) {
@@ -43,7 +43,7 @@ export class MessageManager {
       rpcSeverityType,
       callback,
     );
-    this.logger.debug('createRPCServer', 'Created rpc server');
+    MessageManager.logger.debug('createRPCServer', 'Created rpc server');
     return server;
   }
 
@@ -57,7 +57,7 @@ export class MessageManager {
       rpcQueueType,
       rpcSeverityType,
     );
-    this.logger.debug('createRPCClient', 'Created rpc client');
+    MessageManager.logger.debug('createRPCClient', 'Created rpc client');
     return client;
   }
 
@@ -71,7 +71,7 @@ export class MessageManager {
       rpcSeverityType,
     );
     const responseMessage: ResponseMessage = await client.sendMessage(message);
-    this.logger.debug('sendReplyToMessage', 'Sent reply to message');
+    MessageManager.logger.debug('sendReplyToMessage', 'Sent reply to message');
     await client.close();
     return responseMessage;
   }
