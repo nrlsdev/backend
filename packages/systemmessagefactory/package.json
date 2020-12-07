@@ -1,7 +1,7 @@
 {
-  "name": "@backend/logger",
+  "name": "@backend/systemmessagefactory",
   "version": "1.0.0",
-  "description": "logger",
+  "description": "systemmessagefactory",
   "author": "Revanced GmbH",
   "license": "LicenseRef-LICENSE",
   "main": "./out/index.js",
@@ -9,5 +9,8 @@
     "build": "tsc",
     "test": "npx jest --collect-coverage",
     "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@backend/messagehandler": "^1.0.0"
   }
 }
