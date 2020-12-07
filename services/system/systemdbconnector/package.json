@@ -15,7 +15,11 @@
     "@backend/messagehandler": "^1.0.0",
     "@backend/systemmessagefactory": "^1.0.0",
     "cross-env": "^7.0.3",
+    "mongoose": "^5.11.4",
     "nodemon": "^2.0.6",
     "ts-node": "^9.1.0"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.10.2"
   }
 }
