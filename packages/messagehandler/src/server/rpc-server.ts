@@ -1,5 +1,5 @@
 import { Channel, connect, Connection, ConsumeMessage } from 'amqplib';
-import { RequestMessage, MessageHandlerRPCServerConfiguration } from '..';
+import { RequestMessage, MessageHandlerRPCServerConfiguration } from '../..';
 
 // ToDo: Refactor
 export class RpcServer {

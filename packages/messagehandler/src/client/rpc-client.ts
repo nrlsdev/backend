@@ -1,7 +1,7 @@
 import { Channel, connect, Connection, ConsumeMessage } from 'amqplib';
 import { EventEmitter } from 'events';
 import { v4 as uuid } from 'uuid';
-import { ResponseMessage, MessageHandlerRPCClientConfiguration } from '..';
+import { ResponseMessage, MessageHandlerRPCClientConfiguration } from '../..';
 
 // ToDo: Refactor
 export class RpcClient {
@@ -104,7 +104,14 @@ export class RpcClient {
           ) as ResponseMessage;
           return responseMessage;
         }
-        return { error: '422 Unprocessable Entity' };
+        return {
+          meta: {
+            statusCode: 422,
+          },
+          body: {
+            error: '422 Unprocessable Entity',
+          },
+        };
       });
   }
 }

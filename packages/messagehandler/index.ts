@@ -1,9 +1,9 @@
 export { MessageManager } from './src/message-manager';
-export { MessageRPCServer } from './src/message-rpc-server';
+export { MessageRPCServer } from './src/server/message-rpc-server';
 export { MessageHandlerRPCServerConfiguration } from './src/configuration/message-handler-rpc-server-configruation';
-export { MessageRPCClient } from './src/message-rpc-client';
+export { MessageRPCClient } from './src/client/message-rpc-client';
 export { MessageHandlerRPCClientConfiguration } from './src/configuration/message-handler-rpc-client-configruation';
-export { MessageQueueType } from './src/message-queue-type';
-export { MessageSeverityType } from './src/message-severity-type';
-export { RequestMessage } from './src/request-message';
-export { ResponseMessage } from './src/response-message';
+export { MessageQueueType } from './src/types/message-queue-type';
+export { MessageSeverityType } from './src/types/message-severity-type';
+export { RequestMessage } from './src/messages/request-message';
+export { ResponseMessage } from './src/messages/response-message';

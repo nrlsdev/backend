@@ -5,7 +5,7 @@ import {
   ResponseMessage,
   RequestMessage,
   MessageHandlerRPCServerConfiguration,
-} from '..';
+} from '../..';
 
 export class MessageRPCServer {
   private server: RpcServer;

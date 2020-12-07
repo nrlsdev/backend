@@ -5,7 +5,7 @@ import {
   ResponseMessage,
   MessageSeverityType,
   MessageHandlerRPCClientConfiguration,
-} from '..';
+} from '../..';
 
 export class MessageRPCClient {
   private client: RpcClient;
@@ -32,7 +32,7 @@ export class MessageRPCClient {
     return new MessageRPCClient(client);
   }
 
-  public async sendMessage(message: RequestMessage | ResponseMessage) {
+  public async sendMessage(message: RequestMessage) {
     const responseMessage: ResponseMessage = await this.client.sendRPCMessage(
       JSON.stringify(message),
     );
