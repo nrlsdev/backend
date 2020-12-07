@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  systemmessagehandler:
+    image: rabbitmq:latest
+    ports:
+      - '5672:5672'
