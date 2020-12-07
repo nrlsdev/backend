@@ -1,5 +1,10 @@
-import { MessageQueueType, MessageSeverityType } from '@backend/messagehandler';
+import {
+  MessageQueueType,
+  MessageSeverityType,
+  ResponseMessage,
+} from '@backend/messagehandler';
 import { Request, Response } from '@backend/server';
+import { SystemUserMessage } from '@backend/systemmessagefactory';
 import { messageManager } from '../message-manager';
 
 export async function onUserSignUp(request: Request, response: Response) {
@@ -17,15 +22,20 @@ export async function onUserSignUp(request: Request, response: Response) {
     return;
   }
 
-  await messageManager.sendReplyToMessage(
-    {},
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    SystemUserMessage.createSystemUserRequest(
+      email,
+      firstname,
+      lastname,
+      password,
+    ),
     MessageQueueType.SYSTEM_DBCONNECTOR,
     MessageSeverityType.SYSTEM_USER,
   );
 
-  response.statusCode = 200;
-  response.statusMessage = 'OK';
-  response.send({}).end();
+  response.statusCode = responseMessage.meta.statusCode;
+  response.statusMessage = responseMessage.meta.statusMessage;
+  response.send(responseMessage.body.data).end();
 }
 
 export async function onUserSignIn(request: Request, response: Response) {
@@ -43,18 +53,12 @@ export async function onUserSignIn(request: Request, response: Response) {
     return;
   }
 
-  await messageManager.sendReplyToMessage(
-    {},
-    MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.SYSTEM_USER,
-  );
-
   response.statusCode = 200;
   response.statusMessage = 'OK';
   response.send({}).end();
 }
 
-export async function onValidateToken(request: Request, response: Response) {
+export function onValidateToken(request: Request, response: Response) {
   const { jwt } = request.query;
 
   if (!jwt) {
@@ -68,12 +72,6 @@ export async function onValidateToken(request: Request, response: Response) {
       .end();
     return;
   }
-
-  await messageManager.sendReplyToMessage(
-    {},
-    MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.SYSTEM_USER,
-  );
 
   response.statusCode = 200;
   response.statusMessage = 'OK';

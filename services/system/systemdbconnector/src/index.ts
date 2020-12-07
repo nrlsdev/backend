@@ -3,8 +3,8 @@ import {
   MessageQueueType,
   MessageSeverityType,
   RequestMessage,
-  ResponseMessage,
 } from '@backend/messagehandler';
+import { SystemUserMessage, ErrorMessage } from '@backend/systemmessagefactory';
 
 const messageManager: MessageManager = MessageManager.create({
   hostname: 'localhost',
@@ -22,9 +22,19 @@ async function startup() {
 }
 
 async function onSystemUserMessage(requestMessage: RequestMessage) {
-  const responseMessage: ResponseMessage = {};
+  const { type } = requestMessage.meta;
 
-  console.log(requestMessage);
+  if (!type) {
+    return ErrorMessage.unprocessableEntityErrorResponse();
+  }
 
-  return responseMessage;
+  switch (type) {
+    case SystemUserMessage.TYPE_SYSTEM_USER_CREATE: {
+      // ToDo
+      return SystemUserMessage.createdSystemUserResponse(200, 'OK');
+    }
+    default: {
+      return ErrorMessage.unprocessableEntityErrorResponse();
+    }
+  }
 }

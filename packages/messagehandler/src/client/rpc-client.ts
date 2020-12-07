@@ -107,10 +107,9 @@ export class RpcClient {
         return {
           meta: {
             statusCode: 422,
+            statusMessage: 'Unprocessable Entity',
           },
-          body: {
-            error: '422 Unprocessable Entity',
-          },
+          body: {},
         };
       });
   }
