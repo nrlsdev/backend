@@ -1,13 +1,14 @@
+import { ResponseMessage } from '@backend/messagehandler';
+import { StatusCodes } from '../status-codes';
+
 export class ErrorMessage {
   public static errorResponse(
     statusCode: number,
-    statusMessage: string,
     error?: string,
-  ) {
+  ): ResponseMessage {
     return {
       meta: {
         statusCode,
-        statusMessage,
       },
       body: {
         error,
@@ -16,6 +17,6 @@ export class ErrorMessage {
   }
 
   public static unprocessableEntityErrorResponse(error?: string) {
-    return ErrorMessage.errorResponse(422, 'Unprocessable Entity', error);
+    return ErrorMessage.errorResponse(StatusCodes.UNPROCESSABLE_ENTITY, error);
   }
 }

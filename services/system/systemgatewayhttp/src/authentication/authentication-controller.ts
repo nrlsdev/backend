@@ -4,21 +4,22 @@ import {
   ResponseMessage,
 } from '@backend/messagehandler';
 import { Request, Response } from '@backend/server';
-import { SystemUserMessage } from '@backend/systemmessagefactory';
+import { ErrorMessage, SystemUserMessage } from '@backend/systemmessagefactory';
 import { messageManager } from '../message-manager';
+
+// ToDo: server express middleware to set status code and message from response message
 
 export async function onUserSignUp(request: Request, response: Response) {
   const { email, firstname, lastname, password } = request.body;
 
   if (!email || !firstname || !lastname || !password) {
-    response.statusCode = 422;
-    response.statusMessage = 'Unprocessable Entity';
+    const responseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
 
     response
-      .send({
-        error: '422 Unprocessable Entity',
-      })
+      .status(responseMessage.meta.statusCode)
+      .send(responseMessage)
       .end();
+
     return;
   }
 
@@ -33,47 +34,41 @@ export async function onUserSignUp(request: Request, response: Response) {
     MessageSeverityType.SYSTEM_USER,
   );
 
-  response.statusCode = responseMessage.meta.statusCode;
-  response.statusMessage = responseMessage.meta.statusMessage;
-  response.send(responseMessage.body.data).end();
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
 
 export async function onUserSignIn(request: Request, response: Response) {
   const { email, password } = request.body;
 
   if (!email || !password) {
-    response.statusCode = 422;
-    response.statusMessage = 'Unprocessable Entity';
+    const responseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
 
     response
-      .send({
-        error: '422 Unprocessable Entity',
-      })
+      .status(responseMessage.meta.statusCode)
+      .send(responseMessage)
       .end();
+
     return;
   }
 
-  response.statusCode = 200;
-  response.statusMessage = 'OK';
-  response.send({}).end();
+  // ToDo
+  response.status(200).send({}).end();
 }
 
 export function onValidateToken(request: Request, response: Response) {
   const { jwt } = request.query;
 
   if (!jwt) {
-    response.statusCode = 422;
-    response.statusMessage = 'Unprocessable Entity';
+    const responseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
 
     response
-      .send({
-        error: '422 Unprocessable Entity',
-      })
+      .status(responseMessage.meta.statusCode)
+      .send(responseMessage)
       .end();
+
     return;
   }
 
-  response.statusCode = 200;
-  response.statusMessage = 'OK';
-  response.send({}).end();
+  // ToDo
+  response.status(200).send({}).end();
 }

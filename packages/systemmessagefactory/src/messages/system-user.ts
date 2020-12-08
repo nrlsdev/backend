@@ -27,14 +27,15 @@ export class SystemUserMessage {
 
   public static createdSystemUserResponse(
     statusCode: number,
-    statusMessage: string,
+    error?: string,
   ): ResponseMessage {
     return {
       meta: {
         statusCode,
-        statusMessage,
       },
-      body: {},
+      body: {
+        error,
+      },
     };
   }
 }

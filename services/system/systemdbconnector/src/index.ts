@@ -7,6 +7,7 @@ import {
 } from '@backend/messagehandler';
 import { SystemUserMessage, ErrorMessage } from '@backend/systemmessagefactory';
 import { Database } from './database/database';
+import { createSystemUser } from './controller/system-user';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const messageManager: MessageManager = MessageManager.create({
@@ -49,8 +50,7 @@ async function onSystemUserMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case SystemUserMessage.TYPE_SYSTEM_USER_CREATE: {
-      // ToDo
-      return SystemUserMessage.createdSystemUserResponse(200, 'OK');
+      return createSystemUser(requestMessage.body.data);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();
