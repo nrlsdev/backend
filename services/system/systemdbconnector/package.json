@@ -16,6 +16,7 @@
     "@backend/systemmessagefactory": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "cross-env": "^7.0.3",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.4",
     "nodemon": "^2.0.6",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/mongodb": "^3.6.2",
     "@types/mongoose": "^5.10.2",
     "@types/uuid": "^8.3.0"

@@ -24,17 +24,20 @@ export async function createSystemUser(systemUser: SystemUser) {
 }
 
 export async function signInSystemUser(email: string, password: string) {
-  const error = await Database.systemUserEntity.signInSystemUser(
+  const result = await Database.systemUserEntity.signInSystemUser(
     email,
     password,
   );
 
-  if (error) {
-    return ErrorMessage.errorResponse(StatusCodes.UNAUTHORIZED, error.message);
+  if (result.error) {
+    return ErrorMessage.errorResponse(
+      StatusCodes.UNAUTHORIZED,
+      result.error.message,
+    );
   }
 
   return SystemUserMessage.signedInSystemUserResponse(
     StatusCodes.OK,
-    'ToDo: Generate Token',
-  ); // ToDo
+    result.token,
+  );
 }
