@@ -7,7 +7,7 @@
   "main": "./out/index.js",
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rd ./out",
+    "clean": "rm -rd ./out && rm -rd ./node_modules",
     "dev": "cross-env NODE_ENV=development nodemon ./src/index.ts --watch src"
   },
   "dependencies": {

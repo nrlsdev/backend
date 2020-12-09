@@ -10,7 +10,7 @@
     "build": "nuxt-ts build",
     "export": "nuxt-ts export",
     "serve": "nuxt-ts serve",
-    "clean": "rm -rd ./out",
+    "clean": "rm -rd ./out && rm -rd ./.nuxt && rm -rd ./node_modules",
     "generate": "nuxt generate"
   },
   "dependencies": {
