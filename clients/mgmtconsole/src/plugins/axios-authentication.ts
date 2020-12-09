@@ -2,7 +2,7 @@ import { initializeAuthenticationAPI } from '@/utils/axios-accessor';
 import { AxiosInstance } from 'axios';
 import { Context } from '@nuxt/types';
 
-export default function (
+function axiosAuthentication(
   context: Context,
   inject: (key: string, value: any) => void,
 ) {
@@ -13,3 +13,5 @@ export default function (
   inject('authenticationAPI', authenticationAPI);
   initializeAuthenticationAPI(authenticationAPI);
 }
+
+export default axiosAuthentication;
