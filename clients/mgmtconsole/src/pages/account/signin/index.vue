@@ -5,7 +5,7 @@
         <VLogo class="account-company-logo" />
       </div>
       <h1 class="account-title">{{ $t('StrSignIn') }}</h1>
-      <form>
+      <form method="POST" @submit.prevent="onSignInButtonClicked">
         <input
           class="account-input"
           type="email"
@@ -39,15 +39,29 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import { SystemUserAuthenticationModule } from '../../../store/modules/system-user-authentication';
 
 @Component
 export default class AccountSignInPage extends Vue {
   protected email: string = '';
   protected password: string = '';
-  protected errorMessage: string = '';
+  protected errorMessage: string | null = null;
 
   protected layout() {
     return 'account';
+  }
+
+  protected async onSignInButtonClicked() {
+    const error = await SystemUserAuthenticationModule.signIn({
+      email: this.email,
+      password: this.password,
+    });
+
+    this.errorMessage = error;
+
+    if (!error) {
+      this.$router.push('/');
+    }
   }
 }
 </script>
