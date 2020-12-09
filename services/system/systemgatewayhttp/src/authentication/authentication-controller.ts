@@ -59,21 +59,3 @@ export async function onUserSignIn(request: Request, response: Response) {
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
-
-export function onValidateToken(request: Request, response: Response) {
-  const { jwt } = request.query;
-
-  if (!jwt) {
-    const responseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
-
-    response
-      .status(responseMessage.meta.statusCode)
-      .send(responseMessage)
-      .end();
-
-    return;
-  }
-
-  // ToDo
-  response.status(200).send({}).end();
-}
