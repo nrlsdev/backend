@@ -14,9 +14,6 @@
   },
   "dependencies": {
     "@backend/messagehandler": "^1.0.0",
-    "http-status-codes": "^2.1.4"
-  },
-  "devDependencies": {
-    "@types/http-status-codes": "^1.2.0"
+    "@backend/server": "^1.0.0"
   }
 }

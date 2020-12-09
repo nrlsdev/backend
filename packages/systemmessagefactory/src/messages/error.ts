@@ -1,5 +1,5 @@
 import { ResponseMessage } from '@backend/messagehandler';
-import { StatusCodes } from '../status-codes';
+import { StatusCodes } from '@backend/server';
 
 export class ErrorMessage {
   public static errorResponse(

@@ -13,6 +13,7 @@
   "dependencies": {
     "@backend/logger": "^1.0.0",
     "@backend/messagehandler": "^1.0.0",
+    "@backend/server": "^1.0.0",
     "@backend/systemmessagefactory": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "cross-env": "^7.0.3",

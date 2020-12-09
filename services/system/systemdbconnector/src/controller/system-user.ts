@@ -1,8 +1,5 @@
-import {
-  ErrorMessage,
-  StatusCodes,
-  SystemUserMessage,
-} from '@backend/systemmessagefactory';
+import { ErrorMessage, SystemUserMessage } from '@backend/systemmessagefactory';
+import { StatusCodes } from '@backend/server';
 import { Database } from '../database/database';
 import { SystemUser } from '../database/entities/system-user-entity';
 import { MongoErrorCode } from '../database/error-codes';
