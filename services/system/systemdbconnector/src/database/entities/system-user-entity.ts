@@ -2,6 +2,7 @@ import { Document, Schema, Model, model } from 'mongoose';
 import { MongoError } from 'mongodb';
 import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
+import { hash } from 'bcryptjs';
 
 export interface SystemUser {
   _id?: string;
@@ -43,14 +44,23 @@ export class SystemUserEntity {
   }
 
   public async createSystemUser(systemUser: SystemUser) {
+    const hashedPassword: string = await hash(systemUser.password!, 10);
+    const sytemUserToCreate = systemUser;
+
+    sytemUserToCreate.password = hashedPassword;
+
     try {
-      const dbSystemUser: SystemUserDocument = new SystemUserModel(systemUser);
+      const dbSystemUser: SystemUserDocument = new SystemUserModel(
+        sytemUserToCreate,
+      );
+
       await dbSystemUser.save();
-      this.logger.debug('createSystemUser', 'Successfully created system user');
     } catch (exception) {
       this.logger.error('createSystemUser', exception);
       return exception as MongoError;
     }
+
+    this.logger.debug('createSystemUser', 'Successfully created system user');
 
     return null;
   }
