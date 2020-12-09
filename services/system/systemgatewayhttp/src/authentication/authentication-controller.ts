@@ -51,8 +51,13 @@ export async function onUserSignIn(request: Request, response: Response) {
     return;
   }
 
-  // ToDo
-  response.status(200).send({}).end();
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    SystemUserMessage.signInSystemUserRequest(email, password),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.SYSTEM_USER,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
 
 export function onValidateToken(request: Request, response: Response) {

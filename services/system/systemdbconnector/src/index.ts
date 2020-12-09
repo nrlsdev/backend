@@ -7,7 +7,8 @@ import {
 } from '@backend/messagehandler';
 import { SystemUserMessage, ErrorMessage } from '@backend/systemmessagefactory';
 import { Database } from './database/database';
-import { createSystemUser } from './controller/system-user';
+import { createSystemUser, signInSystemUser } from './controller/system-user';
+import { SystemUser } from './database/entities/system-user-entity';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const messageManager: MessageManager = MessageManager.create({
@@ -50,7 +51,12 @@ async function onSystemUserMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case SystemUserMessage.TYPE_SYSTEM_USER_CREATE: {
-      return createSystemUser(requestMessage.body.data);
+      return createSystemUser(requestMessage.body.data as SystemUser);
+    }
+    case SystemUserMessage.TYPE_SYSTEM_USER_SIGN_IN: {
+      const { data }: any = requestMessage.body;
+
+      return signInSystemUser(data.email, data.password);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();
