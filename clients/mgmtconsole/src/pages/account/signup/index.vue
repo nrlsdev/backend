@@ -70,24 +70,30 @@ export default class AccountSignUpPage extends Vue {
   protected lastname: string = '';
   protected password: string = '';
   protected verifyPassword: string = '';
-  protected errorMessage: string = '';
+  protected errorMessage: string | null = null;
 
   protected layout() {
     return 'account';
   }
 
-  protected onSignUpButtonClicked() {
+  protected async onSignUpButtonClicked() {
     if (this.password !== this.verifyPassword) {
       this.errorMessage = this.$t('StrErrorPasswordsDoNotMatch').toString();
       return;
     }
 
-    SystemUserAuthenticationModule.signUp({
+    const error = await SystemUserAuthenticationModule.signUp({
       email: this.email,
       firstname: this.firstname,
       lastname: this.lastname,
       password: this.password,
     });
+
+    this.errorMessage = error;
+
+    if (!error) {
+      this.$router.push('/account/signin');
+    }
   }
 }
 </script>
