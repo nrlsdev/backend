@@ -1,4 +1,3 @@
-import { Vue } from 'nuxt-property-decorator';
 import { TranslateResult } from 'vue-i18n';
 
 declare module 'vue/types/vue' {

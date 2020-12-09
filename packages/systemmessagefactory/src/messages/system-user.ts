@@ -2,6 +2,7 @@ import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
 
 export class SystemUserMessage {
   public static readonly TYPE_SYSTEM_USER_CREATE = 'system_user_create';
+
   public static readonly TYPE_SYSTEM_USER_SIGN_IN = 'system_user_sign_IN';
 
   // Create system user request
@@ -58,7 +59,48 @@ export class SystemUserMessage {
     };
   }
 
+  public static signedInSystemUserDatabaseResponse(
+    statusCode: number,
+    _id: string,
+    email: string,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          _id,
+          email,
+        },
+        error,
+      },
+    };
+  }
+
   public static signedInSystemUserResponse(
+    statusCode: number,
+    token: string,
+    refreshToken: string,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          token,
+          refreshToken,
+        },
+        error,
+      },
+    };
+  }
+
+  // Refresh token
+  public static refreshSystemUserTokenResponse(
     statusCode: number,
     token: string,
     error?: string,

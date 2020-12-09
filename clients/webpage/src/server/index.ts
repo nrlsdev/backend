@@ -1,6 +1,6 @@
 import { Nuxt, Builder } from 'nuxt';
-import { config } from '../config/nuxt.config';
 import { Server } from '@backend/server';
+import { config } from '../config/nuxt.config';
 
 const server: Server = new Server('', 8080);
 const nuxt: any = new Nuxt(config);

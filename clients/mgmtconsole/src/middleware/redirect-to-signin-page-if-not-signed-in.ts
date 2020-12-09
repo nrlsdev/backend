@@ -10,7 +10,6 @@ const redirectToSignInPageIfNotSignedIn: Middleware = (context: Context) => {
   }
 
   // ToDo: Verify token
-  console.log('ToDo: verify token');
 };
 
 export default redirectToSignInPageIfNotSignedIn;

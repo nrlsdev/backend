@@ -14,6 +14,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxt/types": "^2.14.9",
     "@nuxt/typescript-runtime": "^0.4.10",
     "@nuxtjs/axios": "^5.12.1",
     "bootstrap-vue": "^2.16.0",
@@ -23,7 +24,6 @@
     "@backend/server": "^1.0.0"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.14.9",
     "@nuxt/typescript-build": "^1.0.3",
     "@nuxtjs/color-mode": "^1.0.3",
     "@nuxtjs/svg": "^0.1.11",

@@ -3,7 +3,6 @@ import { MongoError } from 'mongodb';
 import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
 import { hash, compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
 
 export interface SystemUser {
   _id?: string;
@@ -71,7 +70,11 @@ export class SystemUserEntity {
 
     if (!systemUser) {
       this.logger.error('signInSystemUser', 'No systemuser with email found.');
-      return { error: new Error('Invalid E-Mail or password.'), token: null };
+      return {
+        error: new Error('Invalid E-Mail or password.'),
+        _id: null,
+        email: null,
+      };
     }
 
     const doPasswordsMatch: boolean = await compare(
@@ -81,17 +84,13 @@ export class SystemUserEntity {
 
     if (!doPasswordsMatch) {
       this.logger.error('signInSystemUser', 'Passwords do not match.');
-      return { error: new Error('Invalid E-Mail or password.'), token: null };
+      return {
+        error: new Error('Invalid E-Mail or password.'),
+        _id: null,
+        email: null,
+      };
     }
 
-    const token: string = sign(
-      {
-        _id: systemUser._id!,
-      },
-      'SECRET OR KEY',
-      {},
-    ); // ToDo:
-
-    return { error: null, token };
+    return { error: null, _id: systemUser._id, email: systemUser.email };
   }
 }

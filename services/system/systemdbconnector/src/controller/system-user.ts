@@ -33,8 +33,9 @@ export async function signInSystemUser(email: string, password: string) {
     );
   }
 
-  return SystemUserMessage.signedInSystemUserResponse(
+  return SystemUserMessage.signedInSystemUserDatabaseResponse(
     StatusCodes.OK,
-    result.token,
+    result._id,
+    result.email,
   );
 }

@@ -7,6 +7,9 @@ function axiosSystem(
   inject: (key: string, value: any) => void,
 ) {
   const systemAPI: AxiosInstance = context.$axios.create({
+    headers: {
+      Authorization: 'Bearer ToDo:LoadToken',
+    },
     baseURL: 'http://localhost:8083', // ToDo
   }) as AxiosInstance;
   inject('systemAPI', systemAPI);

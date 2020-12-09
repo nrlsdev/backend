@@ -1,4 +1,3 @@
-import { Vue } from 'nuxt-property-decorator';
 import { NuxtCookies } from 'cookie-universal-nuxt';
 
 declare module 'vue/types/vue' {
