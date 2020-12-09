@@ -26,7 +26,6 @@ class SystemUserAuthentication
   @Mutation
   public setToken(token: string | null) {
     this.token = token;
-    window.$nuxt.$cookies.set('user_token', token);
   }
 
   @Action
