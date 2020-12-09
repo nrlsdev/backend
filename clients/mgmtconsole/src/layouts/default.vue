@@ -6,7 +6,7 @@
 import { Vue, Component } from 'nuxt-property-decorator';
 
 @Component({
-  middleware: ['redirect-to-login-if-not-signed-in'],
+  middleware: ['redirect-to-signin-page-if-not-signed-in'],
 })
 export default class DefaultLayout extends Vue {}
 </script>

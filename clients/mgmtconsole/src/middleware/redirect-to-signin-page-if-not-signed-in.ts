@@ -1,7 +1,7 @@
 import { Middleware, Context } from '@nuxt/types';
 import { SystemUserAuthenticationModule } from '@/store/modules/system-user-authentication';
 
-const redirectToLoginIfNotSignedIn: Middleware = (context: Context) => {
+const redirectToSignInPageIfNotSignedIn: Middleware = (context: Context) => {
   const vuexToken = SystemUserAuthenticationModule.token;
 
   if (!vuexToken) {
@@ -13,4 +13,4 @@ const redirectToLoginIfNotSignedIn: Middleware = (context: Context) => {
   console.log('ToDo: verify token');
 };
 
-export default redirectToLoginIfNotSignedIn;
+export default redirectToSignInPageIfNotSignedIn;
