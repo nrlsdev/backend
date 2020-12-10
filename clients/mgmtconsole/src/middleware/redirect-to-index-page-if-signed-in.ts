@@ -1,18 +1,16 @@
 import { Middleware, Context } from '@nuxt/types';
 import { SystemUserAuthenticationModule } from '@/store/modules/system-user-authentication';
 
-const redirectToSignInPageIfNotSignedIn: Middleware = async (
-  context: Context,
-) => {
+const redirectToIndexPageIfSignedIn: Middleware = async (context: Context) => {
   const isTokenValid: boolean = await SystemUserAuthenticationModule.validateAndRefreshToken(
     context,
   );
 
-  if (isTokenValid) {
+  if (!isTokenValid) {
     return;
   }
 
-  context.redirect('/account/signin');
+  context.redirect('/');
 };
 
-export default redirectToSignInPageIfNotSignedIn;
+export default redirectToIndexPageIfSignedIn;

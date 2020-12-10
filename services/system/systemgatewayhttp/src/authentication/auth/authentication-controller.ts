@@ -5,9 +5,11 @@ import {
 } from '@backend/messagehandler';
 import { Request, Response, StatusCodes } from '@backend/server';
 import { ErrorMessage, SystemUserMessage } from '@backend/systemmessagefactory';
-import { sign } from 'jsonwebtoken';
-import { messageManager } from '../message-manager';
+import { sign, decode } from 'jsonwebtoken';
+import { Logger } from '@backend/logger';
+import { messageManager } from '../../message-manager';
 
+const logger: Logger = new Logger('authentication-controller');
 const tokenList: { [id: string]: string } = {};
 
 export async function onUserSignUp(request: Request, response: Response) {
@@ -73,9 +75,17 @@ export async function onUserSignIn(request: Request, response: Response) {
 
   const responseMessage: ResponseMessage = SystemUserMessage.signedInSystemUserResponse(
     StatusCodes.OK,
-    token,
-    refreshToken,
   );
+
+  response.cookie('token', token, {
+    expires: new Date(new Date().getTime() + 300000),
+    httpOnly: true,
+  });
+
+  response.cookie('refreshToken', refreshToken, {
+    expires: new Date(new Date().getTime() + 86400000),
+    httpOnly: true,
+  });
 
   tokenList[refreshToken] = token;
 
@@ -83,17 +93,25 @@ export async function onUserSignIn(request: Request, response: Response) {
 }
 
 export async function onRefreshToken(request: Request, response: Response) {
-  const { body } = request;
-  const { refreshToken } = body;
+  const { refreshToken } = request.cookies;
 
   if (refreshToken && tokenList[refreshToken]) {
-    const newToken = generateJWTToken('_id', 'email');
+    const { _id, email } = decode(refreshToken) as any;
+    const newToken = generateJWTToken(_id, email);
 
     tokenList[refreshToken] = newToken;
-    const responseMessage: ResponseMessage = SystemUserMessage.refreshSystemUserTokenResponse(
+
+    const responseMessage: ResponseMessage = SystemUserMessage.systemUserRefreshTokenResponse(
       StatusCodes.OK,
-      newToken,
     );
+
+    response.cookie('token', newToken, {
+      expires: new Date(new Date().getTime() + 300000),
+      httpOnly: true,
+    });
+
+    logger.debug('onRefreshToken', 'Refresh token from user was refreshed.');
+
     response
       .status(responseMessage.meta.statusCode)
       .send(responseMessage)

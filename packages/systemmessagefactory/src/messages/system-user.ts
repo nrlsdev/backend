@@ -81,8 +81,6 @@ export class SystemUserMessage {
 
   public static signedInSystemUserResponse(
     statusCode: number,
-    token: string,
-    refreshToken: string,
     error?: string,
   ): ResponseMessage {
     return {
@@ -90,19 +88,14 @@ export class SystemUserMessage {
         statusCode,
       },
       body: {
-        data: {
-          token,
-          refreshToken,
-        },
         error,
       },
     };
   }
 
   // Refresh token
-  public static refreshSystemUserTokenResponse(
+  public static systemUserRefreshTokenResponse(
     statusCode: number,
-    token: string,
     error?: string,
   ): ResponseMessage {
     return {
@@ -110,9 +103,6 @@ export class SystemUserMessage {
         statusCode,
       },
       body: {
-        data: {
-          token,
-        },
         error,
       },
     };

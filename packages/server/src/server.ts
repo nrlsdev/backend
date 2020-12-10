@@ -1,4 +1,6 @@
 import express, { Application, json } from 'express';
+import cookieParser from 'cookie-parser';
+import cors, { CorsOptions } from 'cors';
 import { Logger } from '@backend/logger';
 
 export class Server {
@@ -22,12 +24,6 @@ export class Server {
     this.application = express();
     this.hostname = hostname;
     this.port = port;
-
-    this.initialize();
-  }
-
-  private initialize() {
-    this.Application.use(json());
   }
 
   public start() {
@@ -41,5 +37,17 @@ export class Server {
         this.hostname === '' ? 'localhost' : this.hostname
       }:${this.port}`,
     );
+  }
+
+  public useJsonMiddleware() {
+    this.Application.use(json());
+  }
+
+  public useCookieParser() {
+    this.application.use(cookieParser());
+  }
+
+  public useCors(opions?: CorsOptions) {
+    this.application.use(cors(opions));
   }
 }

@@ -8,29 +8,30 @@ export const checkToken = (
   response: Response,
   next: NextFunction,
 ) => {
-  const { headers } = request;
-
-  const token: string =
-    request.body.token ||
-    request.query.token ||
-    headers['x-access-token'] ||
-    headers.authorization?.replace(/^Bearer\s/, '');
+  const { token } = request.cookies;
 
   if (!token) {
     const responseMessage: ResponseMessage = ErrorMessage.forbiddenErrorResponse(
       'No authentication token provided.',
     );
 
-    response.status(responseMessage.meta.statusCode).send();
+    response
+      .status(responseMessage.meta.statusCode)
+      .send(responseMessage)
+      .end();
     return;
   }
-  // ToDo: Tokenn secret
+
+  // ToDo: Token secret
   if (!validateToken(token, 'TOKEN - SECRET OR KEY')) {
     const responseMessage: ResponseMessage = ErrorMessage.unauthorizedErrorResponse(
       'No valid authentication token.',
     );
 
-    response.status(responseMessage.meta.statusCode).send(responseMessage);
+    response
+      .status(responseMessage.meta.statusCode)
+      .send(responseMessage)
+      .end();
     return;
   }
 

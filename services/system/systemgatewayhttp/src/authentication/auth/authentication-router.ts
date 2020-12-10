@@ -11,6 +11,6 @@ authenticationRouter.post('/signup', onUserSignUp);
 
 authenticationRouter.post('/signin', onUserSignIn);
 
-authenticationRouter.post('/refreshtoken', onRefreshToken);
+authenticationRouter.get('/refreshtoken', onRefreshToken);
 
 export { authenticationRouter };

@@ -1,17 +1,10 @@
-import {
-  VuexModule,
-  Module,
-  getModule,
-  Mutation,
-  Action,
-} from 'vuex-module-decorators';
+import { VuexModule, Module, getModule, Action } from 'vuex-module-decorators';
 import { store } from '@/store';
 import { authenticationAPI } from '@/utils/axios-accessor';
 import { ResponseMessage } from '@backend/messagehandler';
+import { Context } from '@nuxt/types';
 
-export interface SystemUserAuthenticationState {
-  token: string | null;
-}
+export interface SystemUserAuthenticationState {}
 
 @Module({
   dynamic: true,
@@ -21,13 +14,6 @@ export interface SystemUserAuthenticationState {
 class SystemUserAuthentication
   extends VuexModule
   implements SystemUserAuthenticationState {
-  public token: string | null = null;
-
-  @Mutation
-  public setToken(token: string | null) {
-    this.token = token;
-  }
-
   @Action
   public async signUp(payload: {
     email: string;
@@ -39,11 +25,10 @@ class SystemUserAuthentication
     const responseMessage: ResponseMessage = response.data as ResponseMessage;
     const { error } = responseMessage.body;
 
-    this.setToken(null);
-
-    if (error) {
-      return error;
+    if (error || response.status !== 200) {
+      return !error ? null : error;
     }
+
     return null;
   }
 
@@ -53,17 +38,55 @@ class SystemUserAuthentication
     const responseMessage: ResponseMessage = response.data as ResponseMessage;
     const { error } = responseMessage.body;
 
-    if (error) {
-      this.setToken(null);
-      return error;
+    if (error || response.status !== 200) {
+      return !error ? null : error;
     }
 
-    const { data }: any = responseMessage.body;
-    const { token } = data;
-
-    this.setToken(token);
-
     return null;
+  }
+
+  @Action
+  public async validateAndRefreshToken(context: Context) {
+    const hasValidToken: boolean = await this.validateToken();
+
+    if (hasValidToken) {
+      return true;
+    }
+
+    const wasTokenRefreshed: boolean = await this.refreshToken(context);
+
+    return wasTokenRefreshed;
+  }
+
+  @Action
+  private async validateToken() {
+    const response = await authenticationAPI.get('/validate/token');
+    const responseMessage: ResponseMessage = response.data as ResponseMessage;
+    const { error } = responseMessage.body;
+
+    if (error || response.status !== 200) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Action
+  private async refreshToken(context: Context) {
+    const response = await authenticationAPI.get('/auth/refreshtoken');
+    const responseMessage: ResponseMessage = response.data as ResponseMessage;
+    const { error } = responseMessage.body;
+
+    if (error || response.status !== 200) {
+      context.$cookies.removeAll();
+      return false;
+    }
+
+    if (process.server) {
+      context.res.setHeader('Set-Cookie', response.headers['set-cookie']);
+    }
+
+    return true;
   }
 }
 
