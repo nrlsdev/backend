@@ -1,6 +1,4 @@
-import { LanguageDefinition } from './language-definition';
-
-export const deDE: LanguageDefinition = {
+export const deDE = {
   StrAlreadyGotAnAccount: 'Haben sie bereits ein Konto',
   StrBackToSignInPage: 'Zurück zur Anmeldeseite',
   StrCreateNewAccount: 'Neuen Account erstellen',

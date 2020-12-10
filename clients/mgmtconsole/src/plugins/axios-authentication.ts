@@ -12,7 +12,7 @@ function axiosAuthentication(
   }) as AxiosInstance;
 
   inject('authenticationAPI', authenticationAPI);
-  initializeAuthenticationAPI(authenticationAPI);
+  initializeAuthenticationAPI(authenticationAPI, context);
 }
 
 export default axiosAuthentication;

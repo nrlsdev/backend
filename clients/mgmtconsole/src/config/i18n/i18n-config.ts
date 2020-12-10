@@ -1,26 +1,27 @@
-import { ILanguageConfiguration } from './i18n-config.interface';
+import { NuxtVueI18n } from 'nuxt-i18n';
 import { enUS } from './lang/en-US';
 import { deDE } from './lang/de-DE';
 
-export const LanguageConfiguration: ILanguageConfiguration = {
+export const LanguageConfiguration: NuxtVueI18n.Options.AllOptionsInterface = {
   locales: [
     {
-      code: 'en',
+      code: 'en-US',
       iso: 'en-US',
       name: 'English',
     },
     {
-      code: 'de',
+      code: 'de-DE',
       iso: 'de-DE',
       name: 'Deutsch',
     },
   ],
-  defaultLocale: 'en',
+  defaultLocale: 'en-US',
+  strategy: 'no_prefix',
   vueI18n: {
-    fallbackLocale: 'en',
+    fallbackLocale: 'en-US',
     messages: {
-      en: enUS,
-      de: deDE,
+      'en-US': enUS,
+      'de-DE': deDE,
     },
   },
 };

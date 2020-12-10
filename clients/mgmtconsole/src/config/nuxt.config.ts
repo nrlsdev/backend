@@ -41,11 +41,7 @@ export const config: NuxtConfig = {
     '@/assets/styles/fonts.css',
     '@/assets/styles/bootstrap.scss',
   ],
-  plugins: [
-    '@/plugins/language.client',
-    '@/plugins/axios-authentication',
-    '@/plugins/axios-system',
-  ],
+  plugins: ['@/plugins/axios-authentication', '@/plugins/axios-system'],
   components: true,
   buildModules: ['@nuxt/typescript-build', '@nuxtjs/color-mode'],
   modules: [

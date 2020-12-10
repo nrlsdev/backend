@@ -1,6 +1,4 @@
-import { LanguageDefinition } from './language-definition';
-
-export const enUS: LanguageDefinition = {
+export const enUS = {
   StrAlreadyGotAnAccount: 'Already have an Account',
   StrBackToSignInPage: 'Back to Sign In Page',
   StrCreateNewAccount: 'Create a new Account',

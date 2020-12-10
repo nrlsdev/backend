@@ -10,8 +10,9 @@ function axiosSystem(
     withCredentials: true,
     baseURL: 'http://localhost:8083', // ToDo
   }) as AxiosInstance;
+
   inject('systemAPI', systemAPI);
-  initializeSystemAPI(systemAPI);
+  initializeSystemAPI(systemAPI, context);
 }
 
 export default axiosSystem;
