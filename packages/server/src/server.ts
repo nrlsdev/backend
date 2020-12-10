@@ -47,7 +47,9 @@ export class Server {
     this.application.use(cookieParser());
   }
 
-  public useCors(opions?: CorsOptions) {
-    this.application.use(cors(opions));
+  public useCors(options?: CorsOptions) {
+    const serverCors = cors(options);
+
+    this.application.use(serverCors);
   }
 }
