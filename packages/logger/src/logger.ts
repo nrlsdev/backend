@@ -1,18 +1,18 @@
-const resetEffect: string = '\x1b[0m';
+export const resetEffect: string = '\x1b[0m';
 
-const brightEffect: string = '\x1b[1m';
+export const brightEffect: string = '\x1b[1m';
 
-const debugColor: string = `${brightEffect}\x1b[34m`;
+export const debugColor: string = `${brightEffect}\x1b[34m`;
 
-const traceColor: string = `${brightEffect}\x1b[36m`;
+export const traceColor: string = `${brightEffect}\x1b[36m`;
 
-const infoColor: string = `${brightEffect}\x1b[32m`;
+export const infoColor: string = `${brightEffect}\x1b[32m`;
 
-const warnColor: string = `${brightEffect}\x1b[33m`;
+export const warnColor: string = `${brightEffect}\x1b[33m`;
 
-const errorColor: string = `${brightEffect}\x1b[31m`;
+export const errorColor: string = `${brightEffect}\x1b[31m`;
 
-const fatalColor: string = `${brightEffect}\x1b[41m`;
+export const fatalColor: string = `${brightEffect}\x1b[41m`;
 
 export enum LogType {
   TRACE = 'TRACE',
