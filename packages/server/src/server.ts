@@ -2,6 +2,7 @@ import express, { Application, json } from 'express';
 import cookieParser from 'cookie-parser';
 import cors, { CorsOptions } from 'cors';
 import { Logger } from '@backend/logger';
+import { language } from './middleware/language';
 
 export class Server {
   private static logger: Logger;
@@ -43,13 +44,17 @@ export class Server {
     this.Application.use(json());
   }
 
-  public useCookieParser() {
+  public useCookieParserMiddleware() {
     this.application.use(cookieParser());
   }
 
-  public useCors(options?: CorsOptions) {
+  public useCorsMiddleware(options?: CorsOptions) {
     const serverCors = cors(options);
 
     this.application.use(serverCors);
+  }
+
+  public useLanguageMiddleware() {
+    this.application.use(language);
   }
 }

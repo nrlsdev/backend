@@ -7,15 +7,17 @@ const authenticationServer: Server = new Server('', 8082);
 const systemServer: Server = new Server('', 8083);
 
 authenticationServer.useJsonMiddleware();
-authenticationServer.useCookieParser();
-authenticationServer.useCors({
+authenticationServer.useLanguageMiddleware();
+authenticationServer.useCookieParserMiddleware();
+authenticationServer.useCorsMiddleware({
   origin: 'http://localhost:8002',
   credentials: true,
 });
 
 systemServer.useJsonMiddleware();
-systemServer.useCookieParser();
-systemServer.useCors({
+systemServer.useLanguageMiddleware();
+systemServer.useCookieParserMiddleware();
+systemServer.useCorsMiddleware({
   origin: 'http://localhost:8003',
   credentials: true,
 });
