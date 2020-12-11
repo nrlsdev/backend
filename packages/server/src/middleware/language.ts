@@ -1,5 +1,5 @@
 import { Constants } from '@backend/constants';
-import { Request, Response, NextFunction } from '../../index';
+import { Request, Response, NextFunction } from 'express';
 
 export const language = (
   request: Request,
