@@ -1,0 +1,24 @@
+{
+  "name": "@backend/messagehandler",
+  "version": "1.0.0",
+  "description": "messagehandler",
+  "author": "Revanced GmbH",
+  "license": "LicenseRef-LICENSE",
+  "main": "./out/index.js",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rd ./out && rm -rd ./node_modules",
+    "test": "npx jest --collect-coverage",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@backend/logger": "^1.0.0",
+    "amqplib": "^0.6.0",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.5.16",
+    "@types/uuid": "^8.3.0"
+  }
+}

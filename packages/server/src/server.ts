@@ -1,8 +1,11 @@
-import express, { Application } from 'express';
+import express, { Application, json } from 'express';
+import cookieParser from 'cookie-parser';
+import cors, { CorsOptions } from 'cors';
 import { Logger } from '@backend/logger';
+import { language } from './middleware/language';
 
 export class Server {
-  private logger: Logger;
+  private static logger: Logger;
 
   private application: Application;
 
@@ -15,9 +18,10 @@ export class Server {
   }
 
   public constructor(hostname: string, port: number) {
-    this.logger = new Logger(
+    Server.logger = new Logger(
       `${hostname === '' ? 'localhost' : hostname}:${port}::server`,
     );
+
     this.application = express();
     this.hostname = hostname;
     this.port = port;
@@ -28,7 +32,7 @@ export class Server {
   }
 
   private listen() {
-    this.logger.info(
+    Server.logger.info(
       'listen',
       `Server listening on http://${
         this.hostname === '' ? 'localhost' : this.hostname
@@ -36,7 +40,21 @@ export class Server {
     );
   }
 
-  public get(path: any, ...handlers: any) {
-    this.Application.get(path, handlers);
+  public useJsonMiddleware() {
+    this.Application.use(json());
+  }
+
+  public useCookieParserMiddleware() {
+    this.application.use(cookieParser());
+  }
+
+  public useCorsMiddleware(options?: CorsOptions) {
+    const serverCors = cors(options);
+
+    this.application.use(serverCors);
+  }
+
+  public useLanguageMiddleware() {
+    this.application.use(language);
   }
 }

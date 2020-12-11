@@ -1,8 +1,10 @@
 import { Nuxt, Builder } from 'nuxt';
-import { config } from '../config/nuxt.config';
 import { Server } from '@backend/server';
+import { SystemConfiguration } from '@backend/systemconfiguration';
+import { config } from '../config/nuxt.config';
 
-const server: Server = new Server('', 8081);
+const { host, port } = SystemConfiguration.systemMgmtConsole;
+const server: Server = new Server(host, port);
 const nuxt: any = new Nuxt(config);
 
 async function startNuxtServer() {
@@ -14,7 +16,7 @@ async function startNuxtServer() {
     await builder.build();
   }
 
-  server.get('*', nuxt.render);
+  server.Application.get('*', nuxt.render);
   server.start();
 }
 

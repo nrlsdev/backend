@@ -5,16 +5,25 @@
   "author": "Revanced GmbH",
   "license": "LicenseRef-LICENSE",
   "main": "./out/index.js",
+  "private": true,
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rd ./out && rm -rd ./node_modules",
     "test": "npx jest --collect-coverage",
     "watch": "tsc -w"
   },
   "dependencies": {
+    "@backend/constants": "^1.0.0",
+    "@backend/logger": "^1.0.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "@backend/logger": "^1.0.0"
+    "http-status-codes": "^2.1.4"
   },
   "devDependencies": {
-    "@types/express": "^4.17.9"
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.8",
+    "@types/express": "^4.17.9",
+    "@types/http-status-codes": "^1.2.0"
   }
 }

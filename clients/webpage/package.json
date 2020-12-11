@@ -10,20 +10,21 @@
     "build": "nuxt-ts build",
     "export": "nuxt-ts export",
     "serve": "nuxt-ts serve",
-    "clean": "rm -rd ./out",
+    "clean": "rm -rd ./out && rm -rd ./.nuxt && rm -rd ./node_modules",
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxt/types": "^2.14.9",
     "@nuxt/typescript-runtime": "^0.4.10",
     "@nuxtjs/axios": "^5.12.1",
     "bootstrap-vue": "^2.16.0",
     "nuxt": "^2.14.3",
     "nuxt-i18n": "^6.13.10",
     "nuxt-property-decorator": "^2.7.2",
-    "@backend/server": "^1.0.0"
+    "@backend/server": "^1.0.0",
+    "@backend/systemconfiguration": "^1.0.0"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.14.9",
     "@nuxt/typescript-build": "^1.0.3",
     "@nuxtjs/color-mode": "^1.0.3",
     "@nuxtjs/svg": "^0.1.11",

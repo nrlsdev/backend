@@ -4,13 +4,13 @@
       <div class="account-company-logo-container">
         <VLogo class="account-company-logo" />
       </div>
-      <h1 class="account-title">Sign Up</h1>
-      <form>
+      <h1 class="account-title">{{ $t('StrSignUp') }}</h1>
+      <form method="POST" @submit.prevent="onSignUpButtonClicked">
         <section class="account-section">
           <input
             class="account-input"
             type="email"
-            placeholder="E-Mail"
+            :placeholder="$t('StrEmail')"
             v-model="email"
             required
           />
@@ -19,14 +19,14 @@
           <input
             class="account-input"
             type="text"
-            placeholder="Firstname"
+            :placeholder="$t('StrFirstname')"
             v-model="firstname"
             required
           />
           <input
             class="account-input"
             type="text"
-            placeholder="Lastname"
+            :placeholder="$t('StrLastname')"
             v-model="lastname"
             required
           />
@@ -35,30 +35,33 @@
           <input
             class="account-input"
             type="password"
-            placeholder="Password"
+            :placeholder="$t('StrPassword')"
             v-model="password"
             required
           />
           <input
             class="account-input"
             type="password"
-            placeholder="Verify Password"
+            :placeholder="$t('StrVerifyPassword')"
             v-model="verifyPassword"
             required
           />
         </section>
         <label class="account-error-message">{{ errorMessage }}</label>
-        <button class="account-button" type="submit">Sign Up</button>
+        <button class="account-button" type="submit">
+          {{ $t('StrSignUp') }}
+        </button>
       </form>
     </div>
-    <n-link class="account-link" to="/account/signin" prefetch
-      >Already got an Account</n-link
-    >
+    <n-link class="account-link" to="/account/signin" prefetch>{{
+      $t('StrAlreadyGotAnAccount')
+    }}</n-link>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import { SystemUserAuthenticationModule } from '../../../store/modules/system-user-authentication';
 
 @Component
 export default class AccountSignUpPage extends Vue {
@@ -67,10 +70,30 @@ export default class AccountSignUpPage extends Vue {
   protected lastname: string = '';
   protected password: string = '';
   protected verifyPassword: string = '';
-  protected errorMessage: string = '';
+  protected errorMessage: string | null = null;
 
   protected layout() {
     return 'account';
+  }
+
+  protected async onSignUpButtonClicked() {
+    if (this.password !== this.verifyPassword) {
+      this.errorMessage = this.$t('StrErrorPasswordsDoNotMatch').toString();
+      return;
+    }
+
+    const error = await SystemUserAuthenticationModule.signUp({
+      email: this.email,
+      firstname: this.firstname,
+      lastname: this.lastname,
+      password: this.password,
+    });
+
+    this.errorMessage = error;
+
+    if (!error) {
+      this.$router.push('/account/signin');
+    }
   }
 }
 </script>
