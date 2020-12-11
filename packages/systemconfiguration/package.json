@@ -10,6 +10,22 @@
     "build": "tsc",
     "clean": "rm -rd ./out && rm -rd ./node_modules",
     "test": "npx jest --collect-coverage",
-    "watch": "tsc -w"
+    "watch": "cross-env NODE_ENV=development nodemon --watch index.ts --watch src",
+    "copy": "copyfiles ./src/config/**/*.{env,json} ./out"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.1.1"
+  },
+  "nodemonConfig": {
+    "ext": "ts,env",
+    "verbose": true,
+    "exec": "tsc && npm run copy"
   }
 }

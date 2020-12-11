@@ -3,7 +3,7 @@ import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
 export class SystemUserMessage {
   public static readonly TYPE_SYSTEM_USER_CREATE = 'system_user_create';
 
-  public static readonly TYPE_SYSTEM_USER_SIGN_IN = 'system_user_sign_IN';
+  public static readonly TYPE_SYSTEM_USER_SIGN_IN = 'system_user_sign_in';
 
   // Create system user request
   public static createSystemUserRequest(

@@ -1,8 +1,17 @@
 import { NuxtConfig } from '@nuxt/types';
+import { SystemConfiguration } from '@backend/systemconfiguration';
 import { LanguageConfiguration } from './i18n/i18n-config';
 import { MQConfiguration } from './nuxt-mq/nuxt-mq-config';
 
-const isDev: boolean = process.env.NODE_ENV !== 'production'; // ToDo: production type in config
+const isDev: boolean = process.env.NODE_ENV === 'development';
+const {
+  authenticationProtocol,
+  authenticationHost,
+  authenticationPort,
+  systemProtocol,
+  systemHost,
+  systemPort,
+} = SystemConfiguration.systemgatewayhttp;
 
 export const config: NuxtConfig = {
   dev: isDev,
@@ -67,5 +76,13 @@ export const config: NuxtConfig = {
         'postcss-nesting': {},
       },
     },
+  },
+  publicRuntimeConfig: {
+    authenticationBaseUrl: `${authenticationProtocol}://${
+      authenticationHost === '' ? 'localhost' : authenticationHost
+    }:${authenticationPort}`,
+    systemBaseUrl: `${systemProtocol}://${
+      systemHost === '' ? 'localhost' : systemHost
+    }:${systemPort}`,
   },
 };

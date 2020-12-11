@@ -21,7 +21,8 @@
     "nuxt": "^2.14.3",
     "nuxt-i18n": "^6.13.10",
     "nuxt-property-decorator": "^2.7.2",
-    "@backend/server": "^1.0.0"
+    "@backend/server": "^1.0.0",
+    "@backend/systemconfiguration": "^1.0.0"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^1.0.3",

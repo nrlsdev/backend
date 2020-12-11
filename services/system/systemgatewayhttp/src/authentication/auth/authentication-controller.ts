@@ -7,9 +7,16 @@ import { Request, Response, StatusCodes } from '@backend/server';
 import { ErrorMessage, SystemUserMessage } from '@backend/systemmessagefactory';
 import { sign, decode } from 'jsonwebtoken';
 import { Logger } from '@backend/logger';
+import { SystemConfiguration } from '@backend/systemconfiguration';
 import { messageManager } from '../../message-manager';
 
 const logger: Logger = new Logger('authentication-controller');
+const {
+  jsonWebTokenSecret,
+  jsonWebTokenLifetime,
+  refreshTokenSecret,
+  refreshTokenLifetime,
+} = SystemConfiguration.systemAuthentication;
 const tokenList: { [id: string]: string } = {};
 
 export async function onUserSignUp(request: Request, response: Response) {
@@ -78,12 +85,12 @@ export async function onUserSignIn(request: Request, response: Response) {
   );
 
   response.cookie('token', token, {
-    expires: new Date(new Date().getTime() + 300000),
+    expires: new Date(new Date().getTime() + +jsonWebTokenLifetime),
     httpOnly: true,
   });
 
   response.cookie('refreshToken', refreshToken, {
-    expires: new Date(new Date().getTime() + 86400000),
+    expires: new Date(new Date().getTime() + +refreshTokenLifetime),
     httpOnly: true,
   });
 
@@ -106,7 +113,7 @@ export async function onRefreshToken(request: Request, response: Response) {
     );
 
     response.cookie('token', newToken, {
-      expires: new Date(new Date().getTime() + 300000),
+      expires: new Date(new Date().getTime() + +jsonWebTokenLifetime),
       httpOnly: true,
     });
 
@@ -131,9 +138,9 @@ function generateJWTToken(_id: string, email: string) {
       _id,
       email,
     },
-    'TOKEN - SECRET OR KEY',
-    { expiresIn: '300000' },
-  ); // ToDo: KeyOrSecret
+    jsonWebTokenSecret,
+    { expiresIn: jsonWebTokenLifetime },
+  );
 
   return token;
 }
@@ -144,9 +151,9 @@ function generateRefreshToken(_id: string, email: string) {
       _id,
       email,
     },
-    'REFRESH TOKEN - SECRET OR KEY',
-    { expiresIn: '86400000' },
-  ); // ToDo: KeyOrSecret
+    refreshTokenSecret,
+    { expiresIn: refreshTokenLifetime },
+  );
 
   return refreshToken;
 }

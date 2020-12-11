@@ -8,7 +8,7 @@ function axiosAuthentication(
 ) {
   const authenticationAPI: AxiosInstance = context.$axios.create({
     withCredentials: true,
-    baseURL: 'http://localhost:8082', // ToDo
+    baseURL: context.$config.authenticationBaseUrl,
   }) as AxiosInstance;
 
   inject('authenticationAPI', authenticationAPI);

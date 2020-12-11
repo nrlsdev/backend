@@ -2,6 +2,7 @@ import { decode, verify } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from '@backend/server';
 import { ErrorMessage } from '@backend/systemmessagefactory';
 import { ResponseMessage } from '@backend/messagehandler';
+import { SystemConfiguration } from '@backend/systemconfiguration';
 
 export const checkToken = (
   request: Request,
@@ -22,8 +23,12 @@ export const checkToken = (
     return;
   }
 
-  // ToDo: Token secret
-  if (!validateToken(token, 'TOKEN - SECRET OR KEY')) {
+  if (
+    !validateToken(
+      token,
+      SystemConfiguration.systemAuthentication.jsonWebTokenSecret,
+    )
+  ) {
     const responseMessage: ResponseMessage = ErrorMessage.unauthorizedErrorResponse(
       'No valid authentication token.',
     );

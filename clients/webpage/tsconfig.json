@@ -18,7 +18,7 @@
     "paths": {
       "~/*": ["./src/*"],
       "@/*": ["./src/*"],
-      "nuxt": ["./src/server/nuxt.d.ts"]
+      "nuxt": ["src/types/nuxt.d.ts"]
     },
     "types": ["@types/node", "@nuxt/types", "@nuxtjs/axios", "nuxt-i18n"]
   }

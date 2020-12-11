@@ -15,6 +15,7 @@
     "@backend/messagehandler": "^1.0.0",
     "@backend/server": "^1.0.0",
     "@backend/systemmessagefactory": "^1.0.0",
+    "@backend/systemconfiguration": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "cross-env": "^7.0.3",
     "mongodb": "^3.6.3",

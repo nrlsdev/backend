@@ -6,20 +6,23 @@ import {
   RequestMessage,
 } from '@backend/messagehandler';
 import { SystemUserMessage, ErrorMessage } from '@backend/systemmessagefactory';
+import { SystemConfiguration } from '@backend/systemconfiguration';
 import { Database } from './database/database';
 import { createSystemUser, signInSystemUser } from './controller/system-user';
 import { SystemUser } from './database/entities/system-user-entity';
 
 const logger: Logger = new Logger('systemdbconnector::index');
+const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
 const messageManager: MessageManager = MessageManager.create({
-  hostname: 'localhost',
-  port: 5672,
+  hostname: mhHost,
+  port: mhPort,
 });
 
 startup();
 
 async function startup() {
   await connectToDatabase();
+
   messageManager.createRPCServer(
     MessageQueueType.SYSTEM_DBCONNECTOR,
     MessageSeverityType.SYSTEM_USER,
@@ -28,14 +31,16 @@ async function startup() {
 }
 
 async function connectToDatabase() {
+  const {
+    dbHost,
+    dbPort,
+    dbName,
+    dbUsername,
+    dbPassword,
+  } = SystemConfiguration.systemdbconnector;
+
   try {
-    await Database.connect(
-      'ckc3fp0ra5nyqrct.myfritz.net',
-      37011,
-      'devdb',
-      'devdb',
-      'devdb',
-    );
+    await Database.connect(dbHost, dbPort, dbName, dbUsername, dbPassword);
     logger.info('connectToDatabase', 'Connected to the system database');
   } catch (exception) {
     logger.error('connectToDatabase', exception.message);

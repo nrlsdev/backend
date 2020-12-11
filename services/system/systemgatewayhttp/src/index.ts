@@ -1,16 +1,26 @@
 import { Server } from '@backend/server';
+import { SystemConfiguration } from '@backend/systemconfiguration';
 import { authenticationRouter } from './authentication/auth/authentication-router';
 import { validationRouter } from './authentication/validate/validate-router';
 import { checkToken } from './authentication/token-checker';
 
-const authenticationServer: Server = new Server('', 8082);
-const systemServer: Server = new Server('', 8083);
+const {
+  authenticationHost,
+  authenticationPort,
+  systemHost,
+  systemPort,
+} = SystemConfiguration.systemgatewayhttp;
+const authenticationServer: Server = new Server(
+  authenticationHost,
+  authenticationPort,
+);
+const systemServer: Server = new Server(systemHost, systemPort);
 
 authenticationServer.useJsonMiddleware();
 authenticationServer.useLanguageMiddleware();
 authenticationServer.useCookieParserMiddleware();
 authenticationServer.useCorsMiddleware({
-  origin: 'http://localhost:8002',
+  origin: true, // ToDo: whitelisted domains (custom middleware): https://stackoverflow.com/questions/43150051/how-to-enable-cors-nodejs-with-express
   credentials: true,
 });
 
@@ -18,7 +28,7 @@ systemServer.useJsonMiddleware();
 systemServer.useLanguageMiddleware();
 systemServer.useCookieParserMiddleware();
 systemServer.useCorsMiddleware({
-  origin: 'http://localhost:8003',
+  origin: true, // ToDo: whitelisted domains (custom middleware): https://stackoverflow.com/questions/43150051/how-to-enable-cors-nodejs-with-express
   credentials: true,
 });
 

@@ -1,6 +1,9 @@
 import { MessageManager } from '@backend/messagehandler';
+import { SystemConfiguration } from '@backend/systemconfiguration';
+
+const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
 
 export const messageManager = MessageManager.create({
-  hostname: 'localhost',
-  port: 5672,
+  hostname: mhHost,
+  port: mhPort,
 });

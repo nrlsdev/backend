@@ -8,7 +8,7 @@ function axiosSystem(
 ) {
   const systemAPI: AxiosInstance = context.$axios.create({
     withCredentials: true,
-    baseURL: 'http://localhost:8083', // ToDo
+    baseURL: context.$config.systemBaseUrl,
   }) as AxiosInstance;
 
   inject('systemAPI', systemAPI);
