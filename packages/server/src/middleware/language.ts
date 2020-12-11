@@ -1,3 +1,4 @@
+import { Constants } from '@backend/constants';
 import { Request, Response, NextFunction } from '../../index';
 
 export const language = (
@@ -5,10 +6,12 @@ export const language = (
   _response: Response,
   next: NextFunction,
 ) => {
-  const languageCode: string = request.headers['content-language'] as string;
+  const languageCode: string = request.headers[
+    Constants.HTTP_HEADER_CONTENT_LANGUAGE
+  ] as string;
 
   if (!languageCode) {
-    request.body.languageCode = 'en-US'; // ToDo: default
+    request.body.languageCode = Constants.DEFAULT_LANGUAGE_CODE;
     next();
     return;
   }

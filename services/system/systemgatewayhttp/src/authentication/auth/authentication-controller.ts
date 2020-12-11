@@ -8,6 +8,7 @@ import { ErrorMessage, SystemUserMessage } from '@backend/systemmessagefactory';
 import { sign, decode } from 'jsonwebtoken';
 import { Logger } from '@backend/logger';
 import { SystemConfiguration } from '@backend/systemconfiguration';
+import { Constants } from '@backend/constants';
 import { messageManager } from '../../message-manager';
 
 const logger: Logger = new Logger('authentication-controller');
@@ -84,12 +85,12 @@ export async function onUserSignIn(request: Request, response: Response) {
     StatusCodes.OK,
   );
 
-  response.cookie('token', token, {
+  response.cookie(Constants.JSON_WEB_TOKEN_COOKIE_NAME, token, {
     expires: new Date(new Date().getTime() + +jsonWebTokenLifetime),
     httpOnly: true,
   });
 
-  response.cookie('refreshToken', refreshToken, {
+  response.cookie(Constants.REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
     expires: new Date(new Date().getTime() + +refreshTokenLifetime),
     httpOnly: true,
   });
@@ -112,7 +113,7 @@ export async function onRefreshToken(request: Request, response: Response) {
       StatusCodes.OK,
     );
 
-    response.cookie('token', newToken, {
+    response.cookie(Constants.JSON_WEB_TOKEN_COOKIE_NAME, newToken, {
       expires: new Date(new Date().getTime() + +jsonWebTokenLifetime),
       httpOnly: true,
     });

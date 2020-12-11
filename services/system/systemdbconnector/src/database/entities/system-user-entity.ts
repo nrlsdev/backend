@@ -3,6 +3,7 @@ import { MongoError } from 'mongodb';
 import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
 import { hash, compare } from 'bcryptjs';
+import { Constants } from '@backend/constants';
 
 export interface SystemUser {
   _id?: string;
@@ -44,7 +45,10 @@ export class SystemUserEntity {
   }
 
   public async createSystemUser(systemUser: SystemUser) {
-    const hashedPassword: string = await hash(systemUser.password!, 10);
+    const hashedPassword: string = await hash(
+      systemUser.password!,
+      Constants.PASSWORD_BCRYPT_SALT_LENGTH,
+    );
     const sytemUserToCreate = systemUser;
 
     sytemUserToCreate.password = hashedPassword;

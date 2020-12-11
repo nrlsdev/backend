@@ -3,7 +3,7 @@ import { Server } from '@backend/server';
 import { SystemConfiguration } from '@backend/systemconfiguration';
 import { config } from '../config/nuxt.config';
 
-const { host, port } = SystemConfiguration.systemMgmtConsole;
+const { host, port } = SystemConfiguration.systemWebPage;
 const server: Server = new Server(host, port);
 const nuxt: any = new Nuxt(config);
 

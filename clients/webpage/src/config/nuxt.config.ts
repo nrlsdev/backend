@@ -2,7 +2,7 @@ import { NuxtConfig } from '@nuxt/types';
 import { LanguageConfiguration } from './i18n/i18n-config';
 import { MQConfiguration } from './nuxt-mq/nuxt-mq-config';
 
-const isDev: boolean = process.env.NODE_ENV !== 'production'; // ToDo: production type in config
+const isDev: boolean = process.env.NODE_ENV === 'development';
 
 export const config: NuxtConfig = {
   dev: isDev,
