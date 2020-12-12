@@ -6,6 +6,12 @@ export const language = (
   _response: Response,
   next: NextFunction,
 ) => {
+  const { headers } = request;
+  if (!headers) {
+    request.body.languageCode = Constants.DEFAULT_LANGUAGE_CODE;
+    next();
+    return;
+  }
   const languageCode: string = request.headers[
     Constants.HTTP_HEADER_CONTENT_LANGUAGE
   ] as string;
