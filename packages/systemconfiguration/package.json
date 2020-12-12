@@ -9,7 +9,6 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rd ./out && rm -rd ./node_modules",
-    "test": "npx jest --collect-coverage",
     "watch": "cross-env NODE_ENV=development nodemon --watch index.ts --watch src",
     "copy": "copyfiles ./src/config/**/*.{env,json} ./out"
   },

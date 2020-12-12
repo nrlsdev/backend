@@ -1,4 +1,4 @@
-import { SystemUserMessage } from '../../src/messages/system-user';
+import { SystemUserMessage } from '../../../src/messages/system-user';
 
 const email: string = 'test@revanced.com';
 const password: string = 'password1234';
