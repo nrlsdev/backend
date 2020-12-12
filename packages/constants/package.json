@@ -9,7 +9,6 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rd ./out && rm -rd ./node_modules",
-    "test": "npx jest --collect-coverage",
     "watch": "tsc -w"
   }
 }

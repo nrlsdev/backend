@@ -9,7 +9,7 @@ export class Server {
 
   private application: Application;
 
-  private hostname: string;
+  private host: string;
 
   private port: number;
 
@@ -17,25 +17,33 @@ export class Server {
     return this.application;
   }
 
-  public constructor(hostname: string, port: number) {
+  public get Host() {
+    return this.host;
+  }
+
+  public get Port() {
+    return this.port;
+  }
+
+  public constructor(host: string, port: number) {
     Server.logger = new Logger(
-      `${hostname === '' ? 'localhost' : hostname}:${port}::server`,
+      `${host === '' ? 'localhost' : host}:${port}::server`,
     );
 
     this.application = express();
-    this.hostname = hostname;
+    this.host = host;
     this.port = port;
   }
 
   public start() {
-    this.Application.listen(this.port, this.hostname, this.listen.bind(this));
+    this.Application.listen(this.port, this.host, this.listen.bind(this));
   }
 
   private listen() {
     Server.logger.info(
       'listen',
       `Server listening on http://${
-        this.hostname === '' ? 'localhost' : this.hostname
+        this.host === '' ? 'localhost' : this.host
       }:${this.port}`,
     );
   }
