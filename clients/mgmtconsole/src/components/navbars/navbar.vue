@@ -54,6 +54,7 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { SystemUserModule } from '../../store/modules/system-user';
+import { SystemUserAuthenticationModule } from '../../store/modules/system-user-authentication';
 
 @Component
 export default class Navbar extends Vue {
@@ -89,6 +90,7 @@ export default class Navbar extends Vue {
 
   protected onNavbarPopoverSignOutItemClicked() {
     this.showAccountPopover = false;
+    SystemUserAuthenticationModule.signOut(this.$nuxt.context);
     // ToDo: signout
     console.log('onNavbarPopoverSignOutItemClicked: Not implemented yet!');
   }

@@ -1,22 +1,23 @@
 <template>
-  <svg viewBox="0 0 674 124" version="1.1">
+  <svg width="2000px" height="816px" viewBox="0 0 2000 816">
     <path
-      d="M74.75 0 C67.708 0 62 5.708 62 12.75 L62 187.25 C62 194.292 67.708 200 74.75 200 L249.25 200 C256.292 200 262 194.292 262 187.25 L262 12.75 C262 5.708 256.292 0 249.25 0 Z"
+      d="M64 0 C28.654 0 0 28.654 0 64 L0 752 C0 787.346 28.654 816 64 816 L752 816 C787.346 816 816 787.346 816 752 L816 64 C816 28.654 787.346 0 752 0 Z"
+      stroke="none"
     />
     <defs>
       <text
         id="string"
-        transform="matrix(1.0 0.0 0.0 1.0 275.0 224.0)"
-        y="-77.0"
-        font-family="Helvetica, Helvetica"
-        font-size="126"
-        x="40.44873046875"
+        transform="matrix(1.0 0.0 0.0 1.0 1029.0 282.5)"
+        y="198.0"
+        font-family="ArialMT, Arial"
+        x="1.92919921875"
+        font-size="219"
         text-decoration="none"
       >
-        Name
+        Revanced
       </text>
     </defs>
-    <use id="Name" xlink:href="#string" />
+    <use id="Revanced" xlink:href="#string" />
   </svg>
 </template>
 
