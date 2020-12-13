@@ -27,15 +27,30 @@ export async function signInSystemUser(email: string, password: string) {
   );
 
   if (result.error) {
-    return ErrorMessage.errorResponse(
-      StatusCodes.UNAUTHORIZED,
-      result.error.message,
-    );
+    return ErrorMessage.unauthorizedErrorResponse(result.error.message);
   }
 
   return SystemUserMessage.signedInSystemUserDatabaseResponse(
     StatusCodes.OK,
     result._id,
     result.email,
+  );
+}
+
+export async function getSystemuserData(systemUserId: string) {
+  const result = await Database.systemUserEntity.getSystemuserData(
+    systemUserId,
+  );
+  const { error } = result;
+
+  if (error) {
+    return ErrorMessage.unauthorizedErrorResponse(error);
+  }
+
+  return SystemUserMessage.getSystemUserDataResponse(
+    StatusCodes.OK,
+    result.email!,
+    result.firstname!,
+    result.lastname!,
   );
 }

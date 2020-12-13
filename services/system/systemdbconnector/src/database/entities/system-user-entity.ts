@@ -97,4 +97,26 @@ export class SystemUserEntity {
 
     return { error: null, _id: systemUser._id, email: systemUser.email };
   }
+
+  public async getSystemuserData(systemUserId: string) {
+    const systemUser = await SystemUserModel.findOne({
+      _id: systemUserId,
+    });
+
+    if (!systemUser) {
+      return {
+        error: 'Wrong userId. Should not happen.',
+        email: null,
+        firstname: null,
+        lastname: null,
+      };
+    }
+
+    return {
+      error: null,
+      email: systemUser.email,
+      firstname: systemUser.firstname,
+      lastname: systemUser.lastname,
+    };
+  }
 }

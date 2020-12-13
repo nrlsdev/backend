@@ -5,6 +5,8 @@ export class SystemUserMessage {
 
   public static readonly TYPE_SYSTEM_USER_SIGN_IN = 'system_user_sign_in';
 
+  public static readonly TYPE_SYSTEM_USER_DATA = 'system_user_data';
+
   // Create system user request
   public static createSystemUserRequest(
     email: string,
@@ -103,6 +105,42 @@ export class SystemUserMessage {
         statusCode,
       },
       body: {
+        error,
+      },
+    };
+  }
+
+  // Get systemuser data
+  public static getSystemUserDataRequest(systemUserId: string): RequestMessage {
+    return {
+      meta: {
+        type: SystemUserMessage.TYPE_SYSTEM_USER_DATA,
+      },
+      body: {
+        data: {
+          systemUserId,
+        },
+      },
+    };
+  }
+
+  public static getSystemUserDataResponse(
+    statusCode: number,
+    email: string,
+    firstname: string,
+    lastname: string,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          email,
+          firstname,
+          lastname,
+        },
         error,
       },
     };
