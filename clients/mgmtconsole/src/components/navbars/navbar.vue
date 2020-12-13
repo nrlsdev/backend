@@ -22,7 +22,7 @@
           >
             <div class="navbar-account-popover-item">
               <label class="navbar-account-popover-item-label"
-                >[firstname] [lastname]</label
+                >{{ firstname }} {{ lastname }}</label
               >
             </div>
             <div
@@ -53,10 +53,24 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import { SystemUserModule } from '../../store/modules/system-user';
 
 @Component
 export default class Navbar extends Vue {
   protected showAccountPopover: boolean = false;
+  protected firstname: string = '';
+  protected lastname: string = '';
+
+  protected async fetch() {
+    const userdata = await SystemUserModule.getUserData();
+
+    if (!userdata) {
+      return;
+    }
+
+    this.firstname = userdata!.firstname;
+    this.lastname = userdata!.lastname;
+  }
 
   protected mounted() {
     this.$root.$on('bv::popover::hide', () => {

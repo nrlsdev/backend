@@ -49,14 +49,11 @@ class SystemUser extends VuexModule implements SystemUserState {
     }
 
     const { email, firstname, lastname } = responseMessage.body.data as any;
+    const userdata = { email, firstname, lastname };
 
-    this.setUserData({
-      email,
-      firstname,
-      lastname,
-    });
+    this.setUserData(userdata);
 
-    return this.userdata;
+    return userdata;
   }
 }
 
