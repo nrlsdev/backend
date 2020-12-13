@@ -46,6 +46,19 @@ class SystemUserAuthentication
   }
 
   @Action
+  public async signOut(context: Context) {
+    const response = await authenticationAPI.get('/auth/signout');
+    const responseMessage: ResponseMessage = response.data as ResponseMessage;
+    const { error } = responseMessage.body;
+
+    if (error || response.status !== 200) {
+      return;
+    }
+    context.$cookies.removeAll();
+    context.redirect('/account/signin');
+  }
+
+  @Action
   public async validateAndRefreshToken(context: Context) {
     const hasValidToken: boolean = await this.validateToken();
 
@@ -78,7 +91,7 @@ class SystemUserAuthentication
     const { error } = responseMessage.body;
 
     if (error || response.status !== 200) {
-      context.$cookies.removeAll();
+      this.signOut(context);
       return false;
     }
 

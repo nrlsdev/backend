@@ -95,6 +95,21 @@ export class SystemUserMessage {
     };
   }
 
+  // SignOut
+  public static signedOutSystemUserResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
+
   // Refresh token
   public static systemUserRefreshTokenResponse(
     statusCode: number,
