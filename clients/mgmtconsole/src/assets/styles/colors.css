@@ -15,6 +15,7 @@
 
 .light-mode {
   /* grays */
+  --gray0-color: rgb(92, 92, 94);
   --gray1-color: rgb(142, 142, 147);
   --gray2-color: rgb(174, 174, 178);
   --gray3-color: rgb(199, 199, 204);
@@ -46,10 +47,21 @@
   --account-submit-button-active-color: var(--primary-active-color);
   --account-submit-button-font-color: var(--white-color);
   --account-link-color: var(--primary-color);
+
+  /* navbar */
+  --navbar-color: var(--gray4-color);
+  --navbar-avatar-background: var(--primary-color);
+  --navbar-avatar-background-hover: var(--primary-hover-color);
+  --navbar-avatar-icon-color: var(--navbar-color);
+  --navbar-avatar-popover-background-color: var(--gray5-color);
+  --navbar-avatar-popover-item-color: var(--gray0-color);
+  --navbar-avatar-popover-item-link-color: var(--default-font-color);
+  --navbar-avatar-popover-item-link-hover-color: var(--primary-color);
 }
 
 .dark-mode {
   /* grays */
+  --gray0-color: rgb(190, 190, 194);
   --gray1-color: rgb(142, 142, 147);
   --gray2-color: rgb(99, 99, 102);
   --gray3-color: rgb(72, 72, 74);
@@ -82,4 +94,14 @@
   --account-submit-button-active-color: var(--primary-active-color);
   --account-submit-button-font-color: var(--white-color);
   --account-link-color: var(--primary-color);
+
+  /* navbar */
+  --navbar-color: var(--gray5-color);
+  --navbar-avatar-background: var(--primary-color);
+  --navbar-avatar-background-hover: var(--primary-hover-color);
+  --navbar-avatar-icon-color: var(--navbar-color);
+  --navbar-avatar-popover-background-color: var(--gray3-color);
+  --navbar-avatar-popover-item-color: var(--gray0-color);
+  --navbar-avatar-popover-item-link-color: var(--default-font-color);
+  --navbar-avatar-popover-item-link-hover-color: var(--primary-color);
 }
