@@ -54,7 +54,7 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { SystemUserModule } from '../../store/modules/system-user';
-import { SystemUserAuthenticationModule } from '../../store/modules/system-user-authentication';
+import { signOut } from '../../api/system-user-authentication';
 
 @Component
 export default class Navbar extends Vue {
@@ -89,9 +89,9 @@ export default class Navbar extends Vue {
     this.$router.push('/settings');
   }
 
-  protected onNavbarPopoverSignOutItemClicked() {
+  protected async onNavbarPopoverSignOutItemClicked() {
     this.showAccountPopover = false;
-    SystemUserAuthenticationModule.signOut(this.$nuxt.context);
+    await signOut(this.$nuxt.context);
     this.$router.push('/account/signin');
   }
 }

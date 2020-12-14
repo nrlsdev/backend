@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
-import { SystemUserAuthenticationModule } from '../../../store/modules/system-user-authentication';
+import { signIn } from '../../../api/system-user-authentication';
 
 @Component
 export default class AccountSignInPage extends Vue {
@@ -52,10 +52,7 @@ export default class AccountSignInPage extends Vue {
   }
 
   protected async onSignInButtonClicked() {
-    const error = await SystemUserAuthenticationModule.signIn({
-      email: this.email,
-      password: this.password,
-    });
+    const error = await signIn(this.email, this.password);
 
     this.errorMessage = error;
 

@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
-import { SystemUserAuthenticationModule } from '../../../store/modules/system-user-authentication';
+import { signUp } from '../../../api/system-user-authentication';
 
 @Component
 export default class AccountSignUpPage extends Vue {
@@ -82,12 +82,12 @@ export default class AccountSignUpPage extends Vue {
       return;
     }
 
-    const error = await SystemUserAuthenticationModule.signUp({
-      email: this.email,
-      firstname: this.firstname,
-      lastname: this.lastname,
-      password: this.password,
-    });
+    const error = await signUp(
+      this.email,
+      this.firstname,
+      this.lastname,
+      this.password,
+    );
 
     this.errorMessage = error;
 
