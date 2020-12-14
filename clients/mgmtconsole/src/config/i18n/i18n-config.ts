@@ -24,4 +24,8 @@ export const LanguageConfiguration: NuxtVueI18n.Options.AllOptionsInterface = {
       'de-DE': deDE,
     },
   },
+  detectBrowserLanguage: {
+    alwaysRedirect: false,
+    useCookie: false,
+  },
 };

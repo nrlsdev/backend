@@ -29,18 +29,18 @@
               class="navbar-account-popover-item navbar-account-popover-item-link"
               @click="onNavbarPopoverSettingsItemClicked"
             >
-              <label class="navbar-account-popover-item-link-label"
-                >Einstellungen</label
-              >
+              <label class="navbar-account-popover-item-link-label">{{
+                $t('StrSettings')
+              }}</label>
               <Icon icon="gear" />
             </div>
             <div
               class="navbar-account-popover-item navbar-account-popover-item-link"
               @click="onNavbarPopoverSignOutItemClicked"
             >
-              <label class="navbar-account-popover-item-link-label"
-                >Sign Out</label
-              >
+              <label class="navbar-account-popover-item-link-label">{{
+                $t('StrSignOut')
+              }}</label>
               <Icon icon="signout" />
             </div>
           </b-popover>
