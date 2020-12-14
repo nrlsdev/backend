@@ -168,6 +168,39 @@ describe('SystemUserMessage', () => {
     });
   });
 
+  describe('.signedOutSystemUserResponse()', () => {
+    it('should return a signed out systemuser response message without an error object', () => {
+      const statusCode: number = 200;
+      const responseMessage = SystemUserMessage.signedOutSystemUserResponse(
+        statusCode,
+      );
+
+      expect(responseMessage).toMatchObject({
+        meta: {
+          statusCode,
+        },
+        body: {},
+      });
+    });
+
+    it('should return a signed out systemuser response message with an error object', () => {
+      const statusCode: number = 400;
+      const responseMessage = SystemUserMessage.signedOutSystemUserResponse(
+        statusCode,
+        testErrorMessage,
+      );
+
+      expect(responseMessage).toMatchObject({
+        meta: {
+          statusCode,
+        },
+        body: {
+          error: testErrorMessage,
+        },
+      });
+    });
+  });
+
   describe('.systemUserRefreshTokenResponse()', () => {
     it('should return a systemuser refresh token response message without an error object', () => {
       const statusCode: number = 200;
@@ -195,6 +228,80 @@ describe('SystemUserMessage', () => {
           statusCode,
         },
         body: {
+          error: testErrorMessage,
+        },
+      });
+    });
+  });
+
+  describe('.getSystemUserDataRequest()', () => {
+    it('should return a get systemuser data request message', () => {
+      const systemUserId: string = '2931023-sadkasd983d-2190ej01d12-d12d21d';
+      const responseMessage = SystemUserMessage.getSystemUserDataRequest(
+        systemUserId,
+      );
+
+      expect(responseMessage).toMatchObject({
+        meta: {
+          type: SystemUserMessage.TYPE_SYSTEM_USER_DATA,
+        },
+        body: {
+          data: {
+            systemUserId,
+          },
+        },
+      });
+    });
+  });
+
+  describe('.getSystemUserDataResponse()', () => {
+    it('should return a get systemuser data token response message without an error object', () => {
+      const statusCode: number = 400;
+      const firstname: string = 'Test';
+      const lastname: string = 'Revanced';
+      const responseMessage = SystemUserMessage.getSystemUserDataResponse(
+        statusCode,
+        email,
+        firstname,
+        lastname,
+      );
+
+      expect(responseMessage).toMatchObject({
+        meta: {
+          statusCode,
+        },
+        body: {
+          data: {
+            email,
+            firstname,
+            lastname,
+          },
+        },
+      });
+    });
+
+    it('should return a get systemuser data token response message with an error object', () => {
+      const statusCode: number = 400;
+      const firstname: string = 'Test';
+      const lastname: string = 'Revanced';
+      const responseMessage = SystemUserMessage.getSystemUserDataResponse(
+        statusCode,
+        email,
+        firstname,
+        lastname,
+        testErrorMessage,
+      );
+
+      expect(responseMessage).toMatchObject({
+        meta: {
+          statusCode,
+        },
+        body: {
+          data: {
+            email,
+            firstname,
+            lastname,
+          },
           error: testErrorMessage,
         },
       });
