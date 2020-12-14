@@ -100,6 +100,20 @@ export async function onUserSignIn(request: Request, response: Response) {
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
 
+export function onUserSignOut(_request: Request, response: Response) {
+  response.cookie(Constants.JSON_WEB_TOKEN_COOKIE_NAME, '', {
+    expires: new Date(),
+    httpOnly: true,
+  });
+  response.cookie(Constants.REFRESH_TOKEN_COOKIE_NAME, '', {
+    expires: new Date(),
+    httpOnly: true,
+  });
+  response
+    .send(SystemUserMessage.signedOutSystemUserResponse(StatusCodes.OK))
+    .end();
+}
+
 export async function onRefreshToken(request: Request, response: Response) {
   const { refreshToken } = request.cookies;
 

@@ -11,6 +11,12 @@ function axiosAuthentication(
     baseURL: context.$config.authenticationBaseUrl,
   }) as AxiosInstance;
 
+  authenticationAPI.defaults.validateStatus = () => {
+    return true;
+  };
+  authenticationAPI.defaults.headers['Content-Language'] =
+    context.app.i18n.locale;
+
   inject('authenticationAPI', authenticationAPI);
   initializeAuthenticationAPI(authenticationAPI, context);
 }

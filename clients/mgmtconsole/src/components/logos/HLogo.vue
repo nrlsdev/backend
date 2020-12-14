@@ -1,13 +1,13 @@
 <template>
-  <svg width="1000px" height="1000px" viewBox="0 0 1000 1000">
+  <svg width="2000px" height="816px" viewBox="0 0 2000 816">
     <path
-      d="M157 0 C121.654 0 93 28.654 93 64 L93 752 C93 787.346 121.654 816 157 816 L845 816 C880.346 816 909 787.346 909 752 L909 64 C909 28.654 880.346 0 845 0 Z"
+      d="M64 0 C28.654 0 0 28.654 0 64 L0 752 C0 787.346 28.654 816 64 816 L752 816 C787.346 816 816 787.346 816 752 L816 64 C816 28.654 787.346 0 752 0 Z"
       stroke="none"
     />
     <defs>
       <text
         id="string"
-        transform="matrix(1.0 0.0 0.0 1.0 6.0 798.5)"
+        transform="matrix(1.0 0.0 0.0 1.0 1029.0 282.5)"
         y="198.0"
         font-family="ArialMT, Arial"
         x="1.92919921875"
@@ -25,7 +25,7 @@
 import { Vue, Component } from 'nuxt-property-decorator';
 
 @Component
-export default class VLogo extends Vue {}
+export default class HLogo extends Vue {}
 </script>
 
 <style scoped>
