@@ -92,8 +92,7 @@ export default class Navbar extends Vue {
   protected onNavbarPopoverSignOutItemClicked() {
     this.showAccountPopover = false;
     SystemUserAuthenticationModule.signOut(this.$nuxt.context);
-    // ToDo: signout
-    console.log('onNavbarPopoverSignOutItemClicked: Not implemented yet!');
+    this.$router.push('/account/signin');
   }
 }
 </script>

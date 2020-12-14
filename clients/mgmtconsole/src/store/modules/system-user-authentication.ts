@@ -54,8 +54,8 @@ class SystemUserAuthentication
     if (error || response.status !== 200) {
       return;
     }
+
     context.$cookies.removeAll();
-    context.redirect('/account/signin');
   }
 
   @Action
