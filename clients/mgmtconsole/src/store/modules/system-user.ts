@@ -2,15 +2,20 @@ import {
   VuexModule,
   Module,
   getModule,
-  Action,
-  Mutation,
+  MutationAction,
 } from 'vuex-module-decorators';
 import { store } from '@/store';
 import { systemAPI } from '@/utils/axios-accessor';
 import { ResponseMessage } from '@backend/messagehandler';
 
+export interface UserData {
+  email: string;
+  firstname: string;
+  lastname: string;
+}
+
 export interface SystemUserState {
-  userdata?: { email: string; firstname: string; lastname: string };
+  userdata: UserData | null;
 }
 
 @Module({
@@ -19,41 +24,19 @@ export interface SystemUserState {
   name: 'systemuser',
 })
 class SystemUser extends VuexModule implements SystemUserState {
-  public userdata?: {
-    email: string;
-    firstname: string;
-    lastname: string;
-  } = undefined;
+  public userdata: UserData | null = null;
 
-  @Mutation
-  private setUserData(userdata: {
-    email: string;
-    firstname: string;
-    lastname: string;
-  }) {
-    this.userdata = userdata;
-  }
-
-  @Action
-  public async getUserData() {
-    if (this.userdata) {
-      return this.userdata!;
-    }
-
+  @MutationAction({ mutate: ['userdata'] })
+  public async loadUserData() {
     const response = await systemAPI.get('/systemuser');
     const responseMessage: ResponseMessage = response.data as ResponseMessage;
     const { error } = responseMessage.body;
 
     if (error || response.status !== 200) {
-      return null;
+      return { userdata: null };
     }
 
-    const { email, firstname, lastname } = responseMessage.body.data as any;
-    const userdata = { email, firstname, lastname };
-
-    this.setUserData(userdata);
-
-    return userdata;
+    return { userdata: responseMessage.body.data as UserData };
   }
 }
 

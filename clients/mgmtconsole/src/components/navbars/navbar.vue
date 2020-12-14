@@ -63,7 +63,8 @@ export default class Navbar extends Vue {
   protected lastname: string = '';
 
   protected async fetch() {
-    const userdata = await SystemUserModule.getUserData();
+    await SystemUserModule.loadUserData();
+    const userdata = SystemUserModule.userdata;
 
     if (!userdata) {
       return;
