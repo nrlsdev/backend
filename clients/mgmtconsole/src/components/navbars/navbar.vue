@@ -125,10 +125,12 @@ export default class Navbar extends Vue {
 /* popover background */
 ::v-deep .popover {
   background-color: var(--navbar-avatar-popover-background-color) !important;
+  border-color: var(--navbar-avatar-popover-border-color) !important;
 }
 
 ::v-deep .arrow::after {
   border-bottom-color: var(--navbar-avatar-popover-background-color) !important;
+  /* ToDo: adjust border color*/
 }
 
 /* popover item*/

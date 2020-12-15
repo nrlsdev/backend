@@ -15,6 +15,7 @@ export default class CustomButton extends Vue {}
 
 <style scoped>
 .custom-button-content {
+  color: var(--custom-button-font-color);
   font-weight: bold;
 }
 </style>
