@@ -4,7 +4,7 @@ import { SystemConfiguration } from '@backend/systemconfiguration';
 import { config } from '../config/nuxt.config';
 
 const { host, port } = SystemConfiguration.systemMgmtConsole;
-const server: Server = new Server(host, port);
+const server: Server = new Server(host, port, true);
 const nuxt: any = new Nuxt(config);
 
 async function startNuxtServer() {

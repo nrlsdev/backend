@@ -3,6 +3,7 @@ import { Context } from '@nuxt/types';
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { refreshToken } from '@/api/system-user-authentication';
 import { parse } from 'cookie';
+import { Agent } from 'https';
 
 function axiosSystem(
   context: Context,
@@ -12,6 +13,10 @@ function axiosSystem(
     withCredentials: true,
     baseURL: context.$config.systemBaseUrl,
   }) as AxiosInstance;
+
+  systemAPI.defaults.httpsAgent = new Agent({
+    rejectUnauthorized: false,
+  });
 
   systemAPI.defaults.validateStatus = (statusCode: number) => {
     return statusCode !== 401 && statusCode !== 403;

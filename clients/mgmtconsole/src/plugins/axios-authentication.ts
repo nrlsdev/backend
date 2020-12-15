@@ -1,6 +1,7 @@
 import { initializeAuthenticationAPI } from '@/utils/axios-accessor';
 import { AxiosInstance } from 'axios';
 import { Context } from '@nuxt/types';
+import { Agent } from 'https';
 
 function axiosAuthentication(
   context: Context,
@@ -10,6 +11,10 @@ function axiosAuthentication(
     withCredentials: true,
     baseURL: context.$config.authenticationBaseUrl,
   }) as AxiosInstance;
+
+  authenticationAPI.defaults.httpsAgent = new Agent({
+    rejectUnauthorized: false,
+  });
 
   authenticationAPI.defaults.validateStatus = () => {
     return true;

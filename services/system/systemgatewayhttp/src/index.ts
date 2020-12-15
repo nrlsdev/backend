@@ -14,8 +14,9 @@ const {
 const authenticationServer: Server = new Server(
   authenticationHost,
   authenticationPort,
+  true,
 );
-const systemServer: Server = new Server(systemHost, systemPort);
+const systemServer: Server = new Server(systemHost, systemPort, true);
 
 authenticationServer.useJsonMiddleware();
 authenticationServer.useLanguageMiddleware();
