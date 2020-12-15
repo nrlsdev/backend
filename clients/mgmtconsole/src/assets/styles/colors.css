@@ -60,6 +60,10 @@
 
   /* applications overview */
   --applications-overview-header-border-line-color: var(--black-color);
+
+  /* custom input */
+  --custom-input-border-bottom-color: var(--primary-color);
+  --custom-input-placeholder-color: var(--gray1-color);
 }
 
 .dark-mode {
@@ -110,4 +114,8 @@
 
   /* applications overview */
   --applications-overview-header-border-line-color: var(--white-color);
+
+  /* custom input */
+  --custom-input-border-bottom-color: var(--primary-color);
+  --custom-input-placeholder-color: var(--gray1-color);
 }

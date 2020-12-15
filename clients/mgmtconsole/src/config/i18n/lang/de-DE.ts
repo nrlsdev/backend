@@ -2,7 +2,9 @@ export const deDE = {
   StrAlreadyGotAnAccount: 'Haben sie bereits ein Konto',
   StrApplications: 'Anwendungen',
   StrBackToSignInPage: 'Zurück zur Anmeldeseite',
+  StrCancel: 'Abbrechen',
   StrCreateNewAccount: 'Neuen Account erstellen',
+  StrDone: 'Fertig',
   StrEmail: 'E-Mail',
   StrErrorPasswordsDoNotMatch:
     'Die Passwörter, die du eingegeben hast, stimmen nicht überein.',
