@@ -8,7 +8,7 @@ let server: Server;
 let app: Application;
 
 beforeEach(() => {
-  server = new Server(host, port);
+  server = new Server(host, port, false); // ToDo: true and false
   app = server.Application;
   app.use = jest.fn();
   app.listen = jest.fn();

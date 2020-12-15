@@ -10,7 +10,8 @@
     "build": "tsc",
     "clean": "rm -rd ./out && rm -rd ./node_modules",
     "test": "npx jest --collect-coverage",
-    "watch": "tsc -w"
+    "watch": "cross-env NODE_ENV=development nodemon --watch index.ts --watch src",
+    "copy": "copyfiles ./src/**/*.{crt,key} ./out"
   },
   "dependencies": {
     "@backend/constants": "^1.0.0",
@@ -18,12 +19,23 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "http-status-codes": "^2.1.4"
+    "fs": "0.0.1-security",
+    "http-status-codes": "^2.1.4",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.8",
     "@types/express": "^4.17.9",
-    "@types/http-status-codes": "^1.2.0"
+    "@types/http-status-codes": "^1.2.0",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.1.1"
+  },
+  "nodemonConfig": {
+    "ext": "crt,key",
+    "verbose": true,
+    "exec": "tsc && npm run copy"
   }
 }
