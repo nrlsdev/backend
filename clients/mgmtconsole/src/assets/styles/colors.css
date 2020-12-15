@@ -40,7 +40,12 @@
   --account-form-background-color: var(--gray5-color);
   --account-form-title-font-color: var(--black-color);
   --account-input-background-color: var(--account-form-background-color);
-  --account-input-border-bottom-color: var(--primary-color);
+  --account-input-border-bottom-color: var(
+    --primary-color
+  ); /* ToDo: Remove and replace with custom-input (in accounts)*/
+  --account-input-placeholder-color: var(
+    --gray0-color
+  ); /* ToDo: Remove and replace with custom-input (in accounts)*/
   --account-error-message-color: var(--red1-color);
   --account-submit-button-color: var(--primary-color);
   --account-submit-button-hover-color: var(--primary-hover-color);
@@ -60,6 +65,15 @@
 
   /* applications overview */
   --applications-overview-header-border-line-color: var(--black-color);
+
+
+  /* custom button */
+  --custom-button-positive-color: var(--primary-color);
+  --custom-button-positive-hover-color: var(--primary-hover-color);
+  --custom-button-positive-active-color: var(--primary-active-color);
+  --custom-button-negative-color: var(--gray4-color);
+  --custom-button-negative-hover-color: var(--gray3-color);
+  --custom-button-negative-active-color: var(--gray2-color);
 
   /* custom input */
   --custom-input-border-bottom-color: var(--primary-color);
@@ -93,8 +107,12 @@
   --account-background-color: var(--gray6-color);
   --account-title-font-color: var(--white-color);
   --account-input-background-color: var(--account-background-color);
-  --account-input-border-bottom-color: var(--gray4-color);
-  --account-input-placeholder-color: var(--gray1-color);
+  --account-input-border-bottom-color: var(
+    --gray4-color
+  ); /* ToDo: Remove and replace with custom-input (in accounts)*/
+  --account-input-placeholder-color: var(
+    --gray1-color
+  ); /* ToDo: Remove and replace with custom-input (in accounts)*/
   --account-error-message-color: var(--red1-color);
   --account-submit-button-color: var(--primary-color);
   --account-submit-button-hover-color: var(--primary-hover-color);
@@ -114,6 +132,15 @@
 
   /* applications overview */
   --applications-overview-header-border-line-color: var(--white-color);
+
+
+  /* custom button */
+  --custom-button-positive-color: var(--primary-color);
+  --custom-button-positive-hover-color: var(--primary-hover-color);
+  --custom-button-positive-active-color: var(--primary-active-color);
+  --custom-button-negative-color: var(--gray1-color);
+  --custom-button-negative-hover-color: var(--gray2-color);
+  --custom-button-negative-active-color: var(--gray3-color);
 
   /* custom input */
   --custom-input-border-bottom-color: var(--primary-color);
