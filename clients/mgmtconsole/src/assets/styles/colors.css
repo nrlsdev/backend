@@ -66,6 +66,9 @@
   /* applications overview */
   --applications-overview-header-border-line-color: var(--black-color);
 
+  /* modal */
+  --modal-header-border-color: var(--gray5-color);
+  --modal-background-color: var(--white-color);
 
   /* custom button */
   --custom-button-positive-color: var(--primary-color);
@@ -133,6 +136,9 @@
   /* applications overview */
   --applications-overview-header-border-line-color: var(--white-color);
 
+  /* modal */
+  --modal-header-border-color: var(--gray4-color);
+  --modal-background-color: var(--gray5-color);
 
   /* custom button */
   --custom-button-positive-color: var(--primary-color);
