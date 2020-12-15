@@ -7,7 +7,7 @@
       <h1 class="account-title">{{ $t('StrSignUp') }}</h1>
       <form method="POST" @submit.prevent="onSignUpButtonClicked">
         <section class="account-section">
-          <input
+          <CustomInput
             class="account-input"
             type="email"
             :placeholder="$t('StrEmail')"
@@ -16,14 +16,14 @@
           />
         </section>
         <section class="account-section">
-          <input
+          <CustomInput
             class="account-input"
             type="text"
             :placeholder="$t('StrFirstname')"
             v-model="firstname"
             required
           />
-          <input
+          <CustomInput
             class="account-input"
             type="text"
             :placeholder="$t('StrLastname')"
@@ -32,14 +32,14 @@
           />
         </section>
         <section class="account-section">
-          <input
+          <CustomInput
             class="account-input"
             type="password"
             :placeholder="$t('StrPassword')"
             v-model="password"
             required
           />
-          <input
+          <CustomInput
             class="account-input"
             type="password"
             :placeholder="$t('StrVerifyPassword')"
@@ -48,9 +48,9 @@
           />
         </section>
         <label class="account-error-message">{{ errorMessage }}</label>
-        <button class="account-button" type="submit">
+        <CustomButton class="block branded" type="submit">
           {{ $t('StrSignUp') }}
-        </button>
+        </CustomButton>
       </form>
     </div>
     <n-link class="account-link" to="/account/signin" prefetch>{{

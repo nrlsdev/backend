@@ -7,7 +7,7 @@
       <h1 class="account-title">{{ $t('StrResetPassword') }}</h1>
       <form>
         <section class="account-section">
-          <input
+          <CustomInput
             class="account-input"
             type="email"
             :placeholder="$t('StrEmail')"
@@ -15,13 +15,13 @@
           />
         </section>
         <section class="account-section">
-          <input
+          <CustomInput
             class="account-input"
             type="password"
             :placeholder="$t('StrNewPassword')"
             required
           />
-          <input
+          <CustomInput
             class="account-input"
             type="password"
             :placeholder="$t('StrVerifyPassword')"
@@ -29,9 +29,9 @@
           />
         </section>
         <label class="account-error-message"></label>
-        <button class="account-button" type="submit">
+        <CustomButton class="block branded" type="submit">
           {{ $t('StrReset') }}
-        </button>
+        </CustomButton>
       </form>
     </div>
     <n-link class="account-link" to="/account/signin" prefetch>{{
