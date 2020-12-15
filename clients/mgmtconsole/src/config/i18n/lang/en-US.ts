@@ -1,8 +1,12 @@
 export const enUS = {
   StrAlreadyGotAnAccount: 'Already have an Account',
   StrApplications: 'Applications',
+  StrApplicationBundleIdentifier: 'Application Bundle-ID',
+  StrApplicationName: 'Application Name',
   StrBackToSignInPage: 'Back to Sign In Page',
   StrCancel: 'Cancel',
+  StrCreate: 'Create',
+  StrCreateApplication: 'Create Application',
   StrCreateNewAccount: 'Create a new Account',
   StrDone: 'Done',
   StrEmail: 'E-Mail',

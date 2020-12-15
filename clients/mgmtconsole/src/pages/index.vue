@@ -8,6 +8,25 @@
         icon="plus"
       />
     </div>
+    <Modal
+      id="application-overview-modal"
+      :title="$t('StrCreateApplication')"
+      positiveBtnText="StrCreate"
+      :positiveBtnClickHandler="onCreateApplicationBtnClicked"
+    >
+      <div class="application-overview-modal-input">
+        <CustomInput
+          type="text"
+          :placeholder="$t('StrApplicationBundleIdentifier')"
+          v-model="createApplicationBundleId"
+        />
+        <CustomInput
+          type="text"
+          :placeholder="$t('StrApplicationName')"
+          v-model="createApplicationName"
+        />
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -16,7 +35,23 @@ import { Vue, Component } from 'nuxt-property-decorator';
 
 @Component
 export default class IndexPage extends Vue {
-  protected onCreateApplicationClicked() {}
+  protected createApplicationBundleId: string = '';
+
+  protected createApplicationName: string = '';
+
+  protected showCreateApplicationsModal: boolean = false;
+
+  protected onCreateApplicationClicked() {
+    this.$root.$emit('bv::show::modal', 'application-overview-modal');
+  }
+
+  protected onCreateApplicationBtnClicked() {
+    console.log({
+      bundleId: this.createApplicationBundleId,
+      name: this.createApplicationName,
+    });
+    console.log('Not implemented yet!');
+  }
 }
 </script>
 
@@ -39,5 +74,11 @@ export default class IndexPage extends Vue {
 
 .application-overview-icon:hover {
   fill: var(--default-icon-hover-color);
+}
+
+.application-overview-modal-input {
+  display: grid;
+  grid-template-rows: auto;
+  gap: 8px;
 }
 </style>
