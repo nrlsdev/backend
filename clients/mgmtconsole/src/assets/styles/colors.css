@@ -57,6 +57,9 @@
   --navbar-avatar-popover-item-color: var(--gray0-color);
   --navbar-avatar-popover-item-link-color: var(--default-font-color);
   --navbar-avatar-popover-item-link-hover-color: var(--primary-color);
+
+  /* applications overview */
+  --applications-overview-header-border-line-color: var(--black-color);
 }
 
 .dark-mode {
@@ -104,4 +107,7 @@
   --navbar-avatar-popover-item-color: var(--gray0-color);
   --navbar-avatar-popover-item-link-color: var(--default-font-color);
   --navbar-avatar-popover-item-link-hover-color: var(--primary-color);
+
+  /* applications overview */
+  --applications-overview-header-border-line-color: var(--white-color);
 }

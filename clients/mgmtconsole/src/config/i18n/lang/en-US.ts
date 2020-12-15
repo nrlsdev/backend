@@ -1,5 +1,6 @@
 export const enUS = {
   StrAlreadyGotAnAccount: 'Already have an Account',
+  StrApplications: 'Applications',
   StrBackToSignInPage: 'Back to Sign In Page',
   StrCreateNewAccount: 'Create a new Account',
   StrEmail: 'E-Mail',

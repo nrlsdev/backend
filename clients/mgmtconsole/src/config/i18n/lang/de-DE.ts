@@ -1,5 +1,6 @@
 export const deDE = {
   StrAlreadyGotAnAccount: 'Haben sie bereits ein Konto',
+  StrApplications: 'Anwendungen',
   StrBackToSignInPage: 'Zurück zur Anmeldeseite',
   StrCreateNewAccount: 'Neuen Account erstellen',
   StrEmail: 'E-Mail',
