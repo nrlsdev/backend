@@ -63,7 +63,10 @@ export default class Navbar extends Vue {
   protected lastname: string = '';
 
   protected async fetch() {
-    await SystemUserModule.loadUserData();
+    if (!SystemUserModule.userdata) {
+      await SystemUserModule.loadUserData();
+    }
+
     const userdata = SystemUserModule.userdata;
 
     if (!userdata) {
@@ -125,10 +128,12 @@ export default class Navbar extends Vue {
 /* popover background */
 ::v-deep .popover {
   background-color: var(--navbar-avatar-popover-background-color) !important;
+  border-color: var(--navbar-avatar-popover-border-color) !important;
 }
 
 ::v-deep .arrow::after {
   border-bottom-color: var(--navbar-avatar-popover-background-color) !important;
+  /* ToDo: adjust border color*/
 }
 
 /* popover item*/

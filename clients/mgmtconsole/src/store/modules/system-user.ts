@@ -5,8 +5,7 @@ import {
   MutationAction,
 } from 'vuex-module-decorators';
 import { store } from '@/store';
-import { systemAPI } from '@/utils/axios-accessor';
-import { ResponseMessage } from '@backend/messagehandler';
+import { getUserData } from '@/api/system-user';
 
 export interface UserData {
   email: string;
@@ -28,15 +27,9 @@ class SystemUser extends VuexModule implements SystemUserState {
 
   @MutationAction({ mutate: ['userdata'] })
   public async loadUserData() {
-    const response = await systemAPI.get('/systemuser');
-    const responseMessage: ResponseMessage = response.data as ResponseMessage;
-    const { error } = responseMessage.body;
+    const userdata = await getUserData();
 
-    if (error || response.status !== 200) {
-      return { userdata: null };
-    }
-
-    return { userdata: responseMessage.body.data as UserData };
+    return { userdata };
   }
 }
 

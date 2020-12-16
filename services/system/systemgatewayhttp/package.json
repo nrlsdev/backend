@@ -16,6 +16,7 @@
     "@backend/server": "^1.0.0",
     "@backend/systemconfiguration": "^1.0.0",
     "@backend/systemmessagefactory": "^1.0.0",
+    "@backend/systeminterfaces": "^1.0.0",
     "@backend/constants": "^1.0.0",
     "cross-env": "^7.0.3",
     "jsonwebtoken": "^8.5.1",

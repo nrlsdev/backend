@@ -4,14 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
 import { hash, compare } from 'bcryptjs';
 import { Constants } from '@backend/constants';
-
-export interface SystemUser {
-  _id?: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-  password: string;
-}
+import { SystemUser } from '@backend/systeminterfaces';
 
 type SystemUserDocument = SystemUser & Document;
 

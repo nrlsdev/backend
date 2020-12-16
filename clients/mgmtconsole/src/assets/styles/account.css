@@ -38,62 +38,18 @@
   margin-bottom: 0px;
 }
 
-.account-input {
-  width: 100%;
-  margin-bottom: 16px;
-  padding-bottom: 5px;
-  border: none;
-  border-radius: 0;
-  outline: none;
-  background-color: var(--account-input-background-color);
-  border-bottom: 1px solid var(--account-input-border-bottom-color);
-}
-
-.account-input::placeholder {
-  color: var(--account-input-placeholder-color);
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:active,
-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--default-font-color) !important;
-  box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
-  -webkit-box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
-}
-
 .account-error-message {
   width: 100%;
   display: block;
   text-align: left;
   font-size: 0.875em;
   font-weight: bold;
-  color: var(--account-error-message-color);
+  color: var(--error-message-color);
 }
 
 .account-actions {
   display: grid;
   gap: 16px;
-}
-
-.account-button {
-  width: 100%;
-  outline: none;
-  margin-top: 16px;
-  padding: 10px 5px;
-  border: none;
-  border-radius: 5px;
-  background-color: var(--account-submit-button-color);
-  font-weight: bold;
-  color: var(--account-submit-button-font-color);
-}
-
-.account-button:hover {
-  background-color: var(--account-submit-button-hover-color);
-}
-
-.account-button:active {
-  background-color: var(--account-submit-button-active-color);
 }
 
 .account-link {

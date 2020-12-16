@@ -6,14 +6,14 @@
       </div>
       <h1 class="account-title">{{ $t('StrSignIn') }}</h1>
       <form method="POST" @submit.prevent="onSignInButtonClicked">
-        <input
+        <CustomInput
           class="account-input"
           type="email"
           :placeholder="$t('StrEmail')"
           v-model="email"
           required
         />
-        <input
+        <CustomInput
           class="account-input"
           type="password"
           :placeholder="$t('StrPassword')"
@@ -22,9 +22,9 @@
         />
         <label class="account-error-message">{{ errorMessage }}</label>
         <div class="account-actions">
-          <button class="account-button" type="submit">
+          <CustomButton class="block branded" type="submit">
             {{ $t('StrSignIn') }}
-          </button>
+          </CustomButton>
           <n-link class="account-link" to="/account/resetpassword" prefetch>{{
             $t('StrForogtPassword')
           }}</n-link>

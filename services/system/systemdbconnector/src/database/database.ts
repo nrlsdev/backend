@@ -6,6 +6,7 @@ import {
   connection,
 } from 'mongoose';
 import { ConnectionState } from './connection-state';
+import { ApplicationEntity } from './entities/application-entity';
 import { SystemUserEntity } from './entities/system-user-entity';
 
 export class Database {
@@ -21,6 +22,9 @@ export class Database {
   };
 
   public static systemUserEntity: SystemUserEntity = SystemUserEntity.Instance;
+
+  public static applicationEntity: ApplicationEntity =
+    ApplicationEntity.Instance;
 
   private static getConnectionUrl(
     urlFormat: string,
