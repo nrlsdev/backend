@@ -5,7 +5,11 @@ import {
   MessageSeverityType,
   RequestMessage,
 } from '@backend/messagehandler';
-import { SystemUserMessage, ErrorMessage } from '@backend/systemmessagefactory';
+import {
+  SystemUserMessage,
+  ErrorMessage,
+  ApplicationMessage,
+} from '@backend/systemmessagefactory';
 import { SystemConfiguration } from '@backend/systemconfiguration';
 import { Database } from './database/database';
 import {
@@ -13,7 +17,9 @@ import {
   signInSystemUser,
   getSystemuserData,
 } from './controller/system-user';
+import { createApplication } from './controller/application';
 import { SystemUser } from './database/entities/system-user-entity';
+import { Application } from './database/entities/application-entity';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
@@ -31,6 +37,12 @@ async function startup() {
     MessageQueueType.SYSTEM_DBCONNECTOR,
     MessageSeverityType.SYSTEM_USER,
     onSystemUserMessage,
+  );
+
+  messageManager.createRPCServer(
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+    onApplicationMessage,
   );
 }
 
@@ -71,6 +83,23 @@ async function onSystemUserMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return getSystemuserData(data.systemUserId);
+    }
+    default: {
+      return ErrorMessage.unprocessableEntityErrorResponse();
+    }
+  }
+}
+
+async function onApplicationMessage(requestMessage: RequestMessage) {
+  const { type } = requestMessage.meta;
+
+  if (!type) {
+    return ErrorMessage.unprocessableEntityErrorResponse();
+  }
+
+  switch (type) {
+    case ApplicationMessage.TYPE_APPLICATION_CREATE: {
+      return createApplication(requestMessage.body.data as Application);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();

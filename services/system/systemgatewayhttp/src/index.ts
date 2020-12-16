@@ -2,6 +2,7 @@ import { Server } from '@backend/server';
 import { SystemConfiguration } from '@backend/systemconfiguration';
 import { authenticationRouter } from './authentication/auth/authentication-router';
 import { validationRouter } from './authentication/validate/validate-router';
+import { applicationRouter } from './application/application-router';
 import { checkToken } from './authentication/token-checker';
 import { systemuserRouter } from './systemuser/systemuser-router';
 
@@ -40,6 +41,7 @@ authenticationServer.Application.use('/validate', validationRouter);
 
 systemServer.Application.use(checkToken);
 systemServer.Application.use('/systemuser', systemuserRouter);
+systemServer.Application.use('/application', applicationRouter);
 
 authenticationServer.start();
 
