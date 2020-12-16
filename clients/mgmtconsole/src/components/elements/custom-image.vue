@@ -8,10 +8,9 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator';
 @Component
 export default class CustomImage extends Vue {
   @Prop({
-    type: String,
     required: true,
   })
-  protected src!: string;
+  protected src!: string | undefined | null;
 
   protected get Source() {
     return !this.src || this.src === ''
