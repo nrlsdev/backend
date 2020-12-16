@@ -36,6 +36,15 @@
             </div>
             <div
               class="navbar-account-popover-item navbar-account-popover-item-link"
+              @click="onNavbarPopoverSubscriptionsItemClicked"
+            >
+              <label class="navbar-account-popover-item-link-label">{{
+                $t('StrSubscriptions')
+              }}</label>
+              <Icon icon="credit-card" />
+            </div>
+            <div
+              class="navbar-account-popover-item navbar-account-popover-item-link"
               @click="onNavbarPopoverSignOutItemClicked"
             >
               <label class="navbar-account-popover-item-link-label">{{
@@ -63,9 +72,7 @@ export default class Navbar extends Vue {
   protected lastname: string = '';
 
   protected async fetch() {
-    if (!SystemUserModule.userdata) {
-      await SystemUserModule.loadUserData();
-    }
+    await SystemUserModule.loadUserData();
 
     const userdata = SystemUserModule.userdata;
 
@@ -92,6 +99,11 @@ export default class Navbar extends Vue {
     this.$router.push('/settings');
   }
 
+  protected onNavbarPopoverSubscriptionsItemClicked() {
+    this.showAccountPopover = false;
+    this.$router.push('/settings'); // ToDo
+  }
+
   protected async onNavbarPopoverSignOutItemClicked() {
     this.showAccountPopover = false;
     await signOut(this.$nuxt.context);
@@ -104,6 +116,7 @@ export default class Navbar extends Vue {
 /* navbar */
 .navbar {
   background-color: var(--navbar-color) !important;
+  border-bottom: var(--gray5-color) 1px solid;
 }
 
 .navbar-company-logo {
@@ -163,6 +176,7 @@ export default class Navbar extends Vue {
 }
 
 .navbar-account-popover-item-label {
+  line-height: 1em;
   color: var(--navbar-avatar-popover-item-color);
 }
 

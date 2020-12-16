@@ -54,10 +54,17 @@
   --navbar-avatar-popover-border-color: var(--gray3-color);
   --navbar-avatar-popover-item-color: var(--gray0-color);
   --navbar-avatar-popover-item-link-color: var(--default-font-color);
-  --navbar-avatar-popover-item-link-hover-color: var(--primary-color);
+  --navbar-avatar-popover-item-link-hover-color: var(--primary-hover-color);
 
   /* applications overview */
   --applications-overview-header-border-line-color: var(--white-color);
+
+  /* application sidebar */
+  --application-sidebar-background-color: var(--gray6-color);
+  --application-sidebar-active-link-background-color: var(
+    --primary-active-color
+  );
+  --application-sidebar-header-font-color: var(--primary-color);
 
   /* modal */
   --modal-header-border-color: var(--modal-background-color);
@@ -118,10 +125,17 @@
   --navbar-avatar-popover-border-color: var(--gray4-color);
   --navbar-avatar-popover-item-color: var(--gray1-color);
   --navbar-avatar-popover-item-link-color: var(--default-font-color);
-  --navbar-avatar-popover-item-link-hover-color: var(--primary-color);
+  --navbar-avatar-popover-item-link-hover-color: var(--primary-hover-color);
 
   /* applications overview */
   --applications-overview-header-border-line-color: var(--white-color);
+
+  /* application sidebar */
+  --application-sidebar-background-color: var(--gray6-color);
+  --application-sidebar-active-link-background-color: var(
+    --primary-active-color
+  );
+  --application-sidebar-header-font-color: var(--primary-color);
 
   /* modal */
   --modal-header-border-color: var(--modal-background-color);

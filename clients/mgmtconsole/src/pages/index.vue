@@ -60,9 +60,7 @@ export default class IndexPage extends Vue {
   protected applications: ApplicationData[] = [];
 
   protected async fetch() {
-    if (ApplicationModule.applications.length <= 0) {
-      await ApplicationModule.loadApplications();
-    }
+    await ApplicationModule.loadApplications();
 
     this.applications = ApplicationModule.applications;
   }
