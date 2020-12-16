@@ -1,0 +1,15 @@
+{
+  "name": "@backend/systeminterfaces",
+  "version": "1.0.0",
+  "description": "systeminterfaces",
+  "author": "Revanced GmbH",
+  "license": "LicenseRef-LICENSE",
+  "main": "./out/index.js",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rd ./out && rm -rd ./node_modules",
+    "test": "npx jest --collect-coverage",
+    "watch": "tsc -w"
+  }
+}
