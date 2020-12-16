@@ -77,7 +77,7 @@ export class ApplicationEntity {
   public async getAllApplicationsUserHasAuthorizationFor(userId: string) {
     try {
       const applications = await ApplicationModel.find({})
-        .select('-_id -__v -authorizedUsers')
+        .select('-__v -authorizedUsers')
         .where('authorizedUsers')
         .elemMatch({ userId });
 

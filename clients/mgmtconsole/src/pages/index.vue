@@ -28,12 +28,22 @@
         />
       </div>
     </Modal>
+    <div class="common-wrapper application-overview-container" :class="$mq">
+      <Application
+        v-for="application in applications"
+        :key="application.bundleId"
+        :application="application"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
-import { ApplicationModule } from '../store/modules/application';
+import {
+  ApplicationData,
+  ApplicationModule,
+} from '../store/modules/application';
 
 @Component
 export default class IndexPage extends Vue {
@@ -46,6 +56,16 @@ export default class IndexPage extends Vue {
   protected showCreateApplicationsModal: boolean = false;
 
   protected createApplicationError: string = '';
+
+  protected applications: ApplicationData[] = [];
+
+  protected async fetch() {
+    if (ApplicationModule.applications.length <= 0) {
+      await ApplicationModule.loadApplications();
+    }
+
+    this.applications = ApplicationModule.applications;
+  }
 
   protected onCreateApplicationClicked() {
     this.$root.$emit('bv::show::modal', 'application-overview-modal');
@@ -67,7 +87,7 @@ export default class IndexPage extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .application-overview-header {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -92,5 +112,22 @@ export default class IndexPage extends Vue {
   display: grid;
   grid-template-rows: auto;
   gap: 8px;
+}
+
+.application-overview-container {
+  display: grid;
+  gap: 40px;
+  text-align: center;
+  &.xs,
+  &.sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &.md {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &.lg,
+  &.xl {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 </style>

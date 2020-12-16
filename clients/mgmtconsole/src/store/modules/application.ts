@@ -12,6 +12,7 @@ import {
 } from '@/api/appication';
 
 export interface ApplicationData {
+  _id: string;
   bundleId: string;
   name: string;
 }
