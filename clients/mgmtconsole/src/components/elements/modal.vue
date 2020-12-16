@@ -1,6 +1,9 @@
 <template>
   <b-modal :id="id" :title="title" hide-footer centered>
     <slot />
+    <div>
+      <label class="modal-error">{{ error }}</label>
+    </div>
     <div class="modal-footer-container">
       <CustomButton
         class="block cancel"
@@ -70,6 +73,12 @@ export default class Modal extends Vue {
   })
   protected negativeBtnClickHandler!: Function;
 
+  @Prop({
+    type: String,
+    required: false,
+  })
+  protected error!: string;
+
   protected defaultPositiveBtnClickHandler() {}
 
   protected defaultNegativeBtnClickHandler() {
@@ -84,6 +93,10 @@ export default class Modal extends Vue {
   display: grid;
   grid-template-columns: auto auto;
   gap: 8px;
+}
+
+.modal-error {
+  color: var(--error-message-color);
 }
 
 /* modal header */

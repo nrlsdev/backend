@@ -9,10 +9,11 @@
       />
     </div>
     <Modal
-      id="application-overview-modal"
+      :id="applicationOverviewModalId"
       :title="$t('StrCreateApplication')"
       positiveBtnText="StrCreate"
       :positiveBtnClickHandler="onCreateApplicationBtnClicked"
+      :error="createApplicationError"
     >
       <div class="application-overview-modal-input">
         <CustomInput
@@ -32,25 +33,36 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import { ApplicationModule } from '../store/modules/application';
 
 @Component
 export default class IndexPage extends Vue {
+  private applicationOverviewModalId: string = 'application-overview-modal';
+
   protected createApplicationBundleId: string = '';
 
   protected createApplicationName: string = '';
 
   protected showCreateApplicationsModal: boolean = false;
 
+  protected createApplicationError: string = '';
+
   protected onCreateApplicationClicked() {
     this.$root.$emit('bv::show::modal', 'application-overview-modal');
   }
 
-  protected onCreateApplicationBtnClicked() {
-    console.log({
+  protected async onCreateApplicationBtnClicked() {
+    const error = await ApplicationModule.createApplication({
       bundleId: this.createApplicationBundleId,
       name: this.createApplicationName,
     });
-    console.log('Not implemented yet!');
+
+    if (error) {
+      this.createApplicationError = error;
+      return;
+    }
+
+    this.$root.$emit('bv::hide::modal', this.applicationOverviewModalId);
   }
 }
 </script>

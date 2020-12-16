@@ -33,13 +33,13 @@
   --default-readonly-font-color: var(--gray1-color);
   --default-icon-color: var(--black-color);
   --default-icon-hover-color: var(--primary-color);
+  --error-message-color: var(--red1-color);
 
   /* account */
   --account-border-color: var(--gray5-color);
   --account-background-color: var(--gray6-color);
   --account-title-font-color: var(--black-color);
   --account-input-background-color: var(--account-background-color);
-  --account-error-message-color: var(--red1-color);
   --account-submit-button-color: var(--primary-color);
   --account-submit-button-hover-color: var(--primary-hover-color);
   --account-submit-button-active-color: var(--primary-active-color);
@@ -97,13 +97,13 @@
   --default-readonly-font-color: var(--gray2-color);
   --default-icon-color: var(--white-color);
   --default-icon-hover-color: var(--primary-color);
+  --error-message-color: var(--red1-color);
 
   /* account */
   --account-border-color: var(--gray5-color);
   --account-background-color: var(--gray6-color);
   --account-title-font-color: var(--white-color);
   --account-input-background-color: var(--account-background-color);
-  --account-error-message-color: var(--red1-color);
   --account-submit-button-color: var(--primary-color);
   --account-submit-button-hover-color: var(--primary-hover-color);
   --account-submit-button-active-color: var(--primary-active-color);
