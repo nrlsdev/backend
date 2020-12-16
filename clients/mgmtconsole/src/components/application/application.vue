@@ -18,7 +18,7 @@ export default class Icon extends Vue {
   protected application!: ApplicationData;
 
   protected onApplicationClicked() {
-    this.$router.push(`/application/${this.application._id}/general`);
+    this.$router.push(`/application/statistics/${this.application._id}`);
   }
 }
 </script>

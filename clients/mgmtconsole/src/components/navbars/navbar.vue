@@ -63,9 +63,7 @@ export default class Navbar extends Vue {
   protected lastname: string = '';
 
   protected async fetch() {
-    if (!SystemUserModule.userdata) {
-      await SystemUserModule.loadUserData();
-    }
+    await SystemUserModule.loadUserData();
 
     const userdata = SystemUserModule.userdata;
 
@@ -104,6 +102,7 @@ export default class Navbar extends Vue {
 /* navbar */
 .navbar {
   background-color: var(--navbar-color) !important;
+  border-bottom: var(--gray5-color) 1px solid;
 }
 
 .navbar-company-logo {

@@ -6,11 +6,11 @@
 import { Vue, Component } from 'nuxt-property-decorator';
 
 @Component
-export default class ApplicationGeneralPage extends Vue {
+export default class ApplicationSecurityPage extends Vue {
   protected layout() {
     return 'application';
   }
 }
 </script>
 
-<style scoped></style>
+<style src="~/assets/styles/pages/application.css" scoped></style>

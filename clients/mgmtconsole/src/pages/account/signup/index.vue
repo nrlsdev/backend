@@ -98,4 +98,4 @@ export default class AccountSignUpPage extends Vue {
 }
 </script>
 
-<style src="~/assets/styles/account.css" scoped></style>
+<style src="~/assets/styles/pages/account.css" scoped></style>
