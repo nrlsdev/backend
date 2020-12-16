@@ -25,6 +25,7 @@ const ApplicationSchema: Schema = new Schema({
     required: false,
     unique: false,
   },
+  image: { type: String, required: false, unique: false },
 });
 
 const ApplicationModel: Model<

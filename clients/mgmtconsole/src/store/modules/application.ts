@@ -15,6 +15,7 @@ export interface ApplicationData {
   _id: string;
   bundleId: string;
   name: string;
+  image: string;
 }
 
 export interface ApplicationState {

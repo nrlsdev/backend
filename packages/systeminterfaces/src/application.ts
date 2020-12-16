@@ -7,4 +7,5 @@ export interface Application {
   bundleId: string;
   name: string;
   authorizedUsers: ApplicationSystemUserRole[];
+  image: string;
 }

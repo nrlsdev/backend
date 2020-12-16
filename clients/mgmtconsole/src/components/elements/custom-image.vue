@@ -1,5 +1,5 @@
 <template>
-  <div :style="`background-image:url('${src}')`"></div>
+  <div :style="`background-image:url('${Source}')`"></div>
 </template>
 
 <script lang="ts">
@@ -12,6 +12,12 @@ export default class CustomImage extends Vue {
     required: true,
   })
   protected src!: string;
+
+  protected get Source() {
+    return !this.src || this.src === ''
+      ? '/application-placeholder.png'
+      : this.src;
+  }
 }
 </script>
 

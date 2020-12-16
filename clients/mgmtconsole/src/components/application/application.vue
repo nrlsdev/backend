@@ -1,6 +1,6 @@
 <template>
   <div class="application-container" @click="onApplicationClicked">
-    <CustomImage class="application-image" src="/application-placeholder.png" />
+    <CustomImage class="application-image" :src="application.image" />
     <label>{{ application.name }}</label>
   </div>
 </template>
