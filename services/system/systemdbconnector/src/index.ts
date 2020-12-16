@@ -17,7 +17,10 @@ import {
   signInSystemUser,
   getSystemuserData,
 } from './controller/system-user';
-import { createApplication } from './controller/application';
+import {
+  createApplication,
+  getAllApplicationsUserHasAuthorizationFor,
+} from './controller/application';
 import { SystemUser } from './database/entities/system-user-entity';
 import { Application } from './database/entities/application-entity';
 
@@ -100,6 +103,11 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
   switch (type) {
     case ApplicationMessage.TYPE_APPLICATION_CREATE: {
       return createApplication(requestMessage.body.data as Application);
+    }
+    case ApplicationMessage.TYPE_APPLICATION_GET_ALL_APPLICATIONS_USER_HAS_AUTHORIZATION_FOR: {
+      const { data }: any = requestMessage.body;
+
+      return getAllApplicationsUserHasAuthorizationFor(data.userId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();

@@ -22,3 +22,23 @@ export async function createApplication(application: Application) {
 
   return ApplicationMessage.createdApplicationResponse(StatusCodes.OK);
 }
+
+export async function getAllApplicationsUserHasAuthorizationFor(
+  userId: string,
+) {
+  const {
+    applications,
+    error,
+  } = await Database.applicationEntity.getAllApplicationsUserHasAuthorizationFor(
+    userId,
+  );
+
+  if (error || !applications) {
+    return ErrorMessage.unprocessableEntityErrorResponse();
+  }
+
+  return ApplicationMessage.getAllApplicationsUserHasAuthorizationForResponse(
+    StatusCodes.OK,
+    applications,
+  );
+}
