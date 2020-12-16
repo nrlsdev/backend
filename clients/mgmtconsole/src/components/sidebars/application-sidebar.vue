@@ -73,30 +73,11 @@
         <label>{{ $t('StrHosting') }}</label>
       </n-link>
       <n-link
-        :to="createApplicationNuxtLink('privacy')"
+        :to="createApplicationNuxtLink('security-and-privacy')"
         class="application-sidebar-item"
       >
         <Icon icon="lock" />
-        <label>{{ $t('StrPrivacy') }}</label>
-      </n-link>
-      <n-link
-        :to="createApplicationNuxtLink('security')"
-        class="application-sidebar-item"
-      >
-        <Icon icon="security-checked" />
-        <label>{{ $t('StrSecurity') }}</label>
-      </n-link>
-    </div>
-    <div class="application-sidebar-header">
-      <label>{{ $t('StrUpgrades') }}</label>
-    </div>
-    <div class="application-sidebar-content">
-      <n-link
-        :to="createApplicationNuxtLink('subscription')"
-        class="application-sidebar-item"
-      >
-        <Icon icon="credit-card" />
-        <label>{{ $t('StrSubscription') }}</label>
+        <label>{{ $t('StrSecurityAndPrivacy') }}</label>
       </n-link>
     </div>
   </div>
@@ -156,7 +137,7 @@ export default class ApplicationSidebar extends Vue {
 }
 
 .application-sidebar-item + .application-sidebar-item {
-  margin-bottom: 8px;
+  margin-top: 8px;
 }
 
 .nuxt-link-exact-active {
