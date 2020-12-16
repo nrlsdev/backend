@@ -82,7 +82,7 @@ export class ApplicationMessage {
   // get application by id
   public static getApplicationByIdResponse(
     statusCode: number,
-    application: Application,
+    application?: Application,
     error?: string,
   ) {
     return {

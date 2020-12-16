@@ -32,7 +32,7 @@ export async function getAllApplicationsUserIsAuthorizedFor() {
 }
 
 export async function getApplicationById(id: string) {
-  const response = await systemAPI.get(`/application?id=${id}`);
+  const response = await systemAPI.get(`/application/${id}`);
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
   const { error } = responseMessage.body;
 

@@ -11,11 +11,9 @@ import { messageManager } from '../message-manager';
 export async function createApplication(request: Request, response: Response) {
   const { bundleId, name, tokenUserId } = request.body;
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    ApplicationMessage.createApplicationRequest(bundleId, name, [
-      {
-        userId: tokenUserId,
-      },
-    ]),
+    ApplicationMessage.createApplicationRequest(bundleId, name, {
+      userId: tokenUserId,
+    }),
     MessageQueueType.SYSTEM_DBCONNECTOR,
     MessageSeverityType.APPLICATION,
   );
@@ -72,10 +70,20 @@ export async function getApplicationById(request: Request, response: Response) {
     }
   });
 
-  const responseMessage: ResponseMessage = ApplicationMessage.getApplicationByIdResponse(
-    StatusCodes.OK,
-    application,
-  );
+  let responseMessage: ResponseMessage;
+
+  if (application) {
+    responseMessage = ApplicationMessage.getApplicationByIdResponse(
+      StatusCodes.OK,
+      application,
+    );
+  } else {
+    responseMessage = ApplicationMessage.getApplicationByIdResponse(
+      StatusCodes.NOT_FOUND,
+      undefined,
+      `No Application with Id '${id}' found.`,
+    );
+  }
 
   response.status(responseMessage.meta.statusCode);
   response.send(responseMessage).end();
