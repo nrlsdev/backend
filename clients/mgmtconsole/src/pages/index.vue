@@ -47,6 +47,14 @@ export default class IndexPage extends Vue {
 
   protected createApplicationError: string = '';
 
+  protected async asyncData() {
+    await ApplicationModule.loadApplications();
+
+    return {
+      applications: ApplicationModule.applications,
+    };
+  }
+
   protected onCreateApplicationClicked() {
     this.$root.$emit('bv::show::modal', 'application-overview-modal');
   }
