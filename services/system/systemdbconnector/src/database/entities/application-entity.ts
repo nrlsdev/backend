@@ -2,21 +2,9 @@ import { Document, Schema, Model, model } from 'mongoose';
 import { MongoError } from 'mongodb';
 import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
-
-export interface ApplicationSystemUserRole {
-  userId: string;
-}
-
-export interface Application {
-  _id?: string;
-  bundleId: string;
-  name: string;
-  authorizedUsers: ApplicationSystemUserRole[];
-}
+import { Application } from '@backend/systeminterfaces';
 
 type ApplicationDocument = Application & Document;
-
-// type ApplicationSystemUserRoleDocument = ApplicationSystemUserRole & Document;
 
 const ApplicationSystemUserRoleSchema: Schema = new Schema(
   {

@@ -1,7 +1,7 @@
 import { ErrorMessage, SystemUserMessage } from '@backend/systemmessagefactory';
 import { StatusCodes } from '@backend/server';
+import { SystemUser } from '@backend/systeminterfaces';
 import { Database } from '../database/database';
-import { SystemUser } from '../database/entities/system-user-entity';
 import { MongoErrorCode } from '../database/error-codes';
 
 export async function createSystemUser(systemUser: SystemUser) {

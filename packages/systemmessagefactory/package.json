@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@backend/messagehandler": "^1.0.0",
-    "@backend/server": "^1.0.0"
+    "@backend/server": "^1.0.0",
+    "@backend/systeminterfaces": "^1.0.0"
   }
 }

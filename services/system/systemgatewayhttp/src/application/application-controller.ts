@@ -3,7 +3,8 @@ import {
   MessageQueueType,
   MessageSeverityType,
 } from '@backend/messagehandler';
-import { Request, Response } from '@backend/server';
+import { Request, Response, StatusCodes } from '@backend/server';
+import { Application } from '@backend/systeminterfaces';
 import { ApplicationMessage } from '@backend/systemmessagefactory';
 import { messageManager } from '../message-manager';
 
@@ -23,9 +24,8 @@ export async function createApplication(request: Request, response: Response) {
   response.send(responseMessage).end();
 }
 
-export async function getAllApplicationsUserHasAuthorizationFor(
+async function getAllApplicationsResponseUserHasAuthorizationFor(
   request: Request,
-  response: Response,
 ) {
   const { tokenUserId } = request.body;
 
@@ -35,6 +35,46 @@ export async function getAllApplicationsUserHasAuthorizationFor(
     ),
     MessageQueueType.SYSTEM_DBCONNECTOR,
     MessageSeverityType.APPLICATION,
+  );
+
+  return responseMessage;
+}
+
+export async function getAllApplicationsUserHasAuthorizationFor(
+  request: Request,
+  response: Response,
+) {
+  const responseMessage: ResponseMessage = await getAllApplicationsResponseUserHasAuthorizationFor(
+    request,
+  );
+
+  response.status(responseMessage.meta.statusCode);
+  response.send(responseMessage).end();
+}
+
+export async function getApplicationById(request: Request, response: Response) {
+  const responseDatabaseMessage: ResponseMessage = await getAllApplicationsResponseUserHasAuthorizationFor(
+    request,
+  );
+  const { data }: any = responseDatabaseMessage.body;
+
+  if (!data) {
+    return;
+  }
+
+  const id: string = request.params.id as string;
+  const applications = data.applications as Application[];
+  let application: Application | null = null;
+
+  applications.forEach((app) => {
+    if (app._id === id) {
+      application = app;
+    }
+  });
+
+  const responseMessage: ResponseMessage = ApplicationMessage.getApplicationByIdResponse(
+    StatusCodes.OK,
+    application,
   );
 
   response.status(responseMessage.meta.statusCode);

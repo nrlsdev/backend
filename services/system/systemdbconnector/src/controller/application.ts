@@ -3,8 +3,8 @@ import {
   ApplicationMessage,
   ErrorMessage,
 } from '@backend/systemmessagefactory';
+import { Application } from '@backend/systeminterfaces';
 import { Database } from '../database/database';
-import { Application } from '../database/entities/application-entity';
 import { MongoErrorCode } from '../database/error-codes';
 
 export async function createApplication(application: Application) {

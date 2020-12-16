@@ -11,6 +11,7 @@ import {
   ApplicationMessage,
 } from '@backend/systemmessagefactory';
 import { SystemConfiguration } from '@backend/systemconfiguration';
+import { SystemUser, Application } from '@backend/systeminterfaces';
 import { Database } from './database/database';
 import {
   createSystemUser,
@@ -21,8 +22,6 @@ import {
   createApplication,
   getAllApplicationsUserHasAuthorizationFor,
 } from './controller/application';
-import { SystemUser } from './database/entities/system-user-entity';
-import { Application } from './database/entities/application-entity';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
