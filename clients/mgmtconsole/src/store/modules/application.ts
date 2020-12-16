@@ -9,7 +9,7 @@ import { store } from '@/store';
 import {
   createApplication,
   getAllApplicationsUserIsAuthorizedFor,
-} from '@/api/appication';
+} from '@/api/application';
 
 export interface ApplicationData {
   _id: string;

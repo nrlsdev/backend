@@ -30,3 +30,17 @@ export async function getAllApplicationsUserIsAuthorizedFor() {
 
   return applications as ApplicationData[];
 }
+
+export async function getApplicationById(id: string) {
+  const response = await systemAPI.get(`/application?id=${id}`);
+  const responseMessage: ResponseMessage = response.data as ResponseMessage;
+  const { error } = responseMessage.body;
+
+  if (error || response.status !== 200) {
+    return null;
+  }
+
+  const { application } = responseMessage.body.data as any;
+
+  return application as ApplicationData;
+}
