@@ -20,3 +20,19 @@ export async function inviteUserToTeam(id: string, email: string) {
     invitationCode!,
   );
 }
+
+export async function acceptInvitation(userId: string, invitationCode: string) {
+  const invitationAccepted = await Database.applicationEntity.acceptInvitation(
+    userId,
+    invitationCode,
+  );
+
+  if (!invitationAccepted) {
+    return ApplicationTeamMessage.invitedUserToTeamResponse(
+      StatusCodes.NOT_FOUND,
+      'Invalid or unknown invitation code.',
+    );
+  }
+
+  return ApplicationTeamMessage.invitedUserToTeamResponse(StatusCodes.OK);
+}

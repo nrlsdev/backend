@@ -24,6 +24,8 @@ export async function inviteUserToTeam(request: Request, response: Response) {
       .status(responseMessage.meta.statusCode)
       .send(responseMessage)
       .end();
+
+    return;
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
@@ -43,6 +45,30 @@ export async function inviteUserToTeam(request: Request, response: Response) {
       }:${port}/application/team/accept/${invitationCode}">Click</a> here to accept the invitation.</div>`,
     });
   }
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
+
+export async function acceptInvitation(request: Request, response: Response) {
+  const { invitationCode } = request.params;
+  const { tokenUserId } = request.body;
+
+  if (!invitationCode || !tokenUserId) {
+    const responseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+    response
+      .status(responseMessage.meta.statusCode)
+      .send(responseMessage)
+      .end();
+
+    return;
+  }
+
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationTeamMessage.acceptInvitationRequest(tokenUserId, invitationCode),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }

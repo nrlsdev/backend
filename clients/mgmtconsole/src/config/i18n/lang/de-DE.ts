@@ -14,6 +14,9 @@ export const deDE = {
   StrDatabase: 'Datenbank',
   StrDone: 'Fertig',
   StrEmail: 'E-Mail',
+  StrErrorAcceptingInvitation: 'Fehler beim akzeptieren der Einladung.',
+  StrErrorAskForReInvite:
+    'Bitten Sie einen autorisierten Benutzer, Sie erneut einzuladen.',
   StrErrorPasswordsDoNotMatch:
     'Die Passwörter, die du eingegeben hast, stimmen nicht überein.',
   StrFileStorage: 'Datenspeicher',

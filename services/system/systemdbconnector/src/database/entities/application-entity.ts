@@ -91,8 +91,9 @@ export class ApplicationEntity {
   }
 
   // team
+  // invite
   public async inviteUserToTeam(id: string, email: string) {
-    const invitationCode: string = uuid().toString();
+    const invitationCode: string = uuid().toString(); // ToDo: generate jwt to verify date
 
     try {
       const application = await ApplicationModel.findById(id);
@@ -119,5 +120,30 @@ export class ApplicationEntity {
     }
 
     return { error: null, invitationCode };
+  }
+
+  // accept invitation
+  public async acceptInvitation(userId: string, invitationCode: string) {
+    const application = await ApplicationModel.findOne({})
+      .where('invitedUsers')
+      .elemMatch({ userId, invitationCode });
+
+    if (!application) {
+      return false;
+    }
+
+    application.invitedUsers = application.invitedUsers.filter(
+      (invitedUser) =>
+        invitedUser.userId !== userId &&
+        invitedUser.invitationCode !== invitationCode,
+    );
+
+    application.authorizedUsers.push({
+      userId,
+    });
+
+    application.save();
+
+    return true;
   }
 }
