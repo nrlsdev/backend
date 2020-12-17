@@ -55,5 +55,14 @@ function getSystemConfiguration(development: boolean) {
       host: process.env.SYSTEMMGMTCONSOLE_HOST || '',
       port: (process.env.SYSTEMMGMTCONSOLE_PORT || 0) as number,
     },
+    mail: {
+      noreply: {
+        host: process.env.MAIL_NOREPLY_HOST || '',
+        port: (process.env.MAIL_NOREPLY_PORT || 0) as number,
+        email: process.env.MAIL_NOREPLY_EMAIL || '',
+        user: process.env.MAIL_NOREPLY_USER || '',
+        password: process.env.MAIL_NOREPLY_PASSWORD || '',
+      },
+    },
   };
 }
