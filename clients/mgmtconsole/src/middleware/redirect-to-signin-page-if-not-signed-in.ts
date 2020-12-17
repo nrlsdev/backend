@@ -10,7 +10,9 @@ const redirectToSignInPageIfNotSignedIn: Middleware = async (
     return;
   }
 
-  context.redirect('/account/signin');
+  const redirectPath: string = context.route.path;
+
+  context.redirect(`/account/signin?redirect=${redirectPath}`);
 };
 
 export default redirectToSignInPageIfNotSignedIn;

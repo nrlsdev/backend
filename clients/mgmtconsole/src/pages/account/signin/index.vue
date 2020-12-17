@@ -57,7 +57,9 @@ export default class AccountSignInPage extends Vue {
     this.errorMessage = error;
 
     if (!error) {
-      this.$router.push('/');
+      const redirectUrl: string = (this.$route.query.redirect as string) || '/';
+
+      this.$router.push(redirectUrl);
     }
   }
 }
