@@ -3,13 +3,21 @@ import { MongoError } from 'mongodb';
 import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
 import { Application } from '@backend/systeminterfaces';
-import { Database } from '../database';
+import { SystemUserEntity } from './system-user-entity';
 
 type ApplicationDocument = Application & Document;
 
 const ApplicationSystemUserRoleSchema: Schema = new Schema(
   {
     userId: { type: String, required: true, unique: true },
+  },
+  { _id: false },
+);
+
+const ApplicationInvitedSystemUserSchema: Schema = new Schema(
+  {
+    userId: { type: String, required: true, unique: true },
+    invitationCode: { type: String, required: true, unique: true },
   },
   { _id: false },
 );
@@ -23,6 +31,11 @@ const ApplicationSchema: Schema = new Schema({
   name: { type: String, required: true, unique: false },
   authorizedUsers: {
     type: [ApplicationSystemUserRoleSchema],
+    required: false,
+    unique: false,
+  },
+  invitedUsers: {
+    type: [ApplicationInvitedSystemUserSchema],
     required: false,
     unique: false,
   },
@@ -67,7 +80,7 @@ export class ApplicationEntity {
   public async getAllApplicationsUserHasAuthorizationFor(userId: string) {
     try {
       const applications = await ApplicationModel.find({})
-        .select('-__v -authorizedUsers')
+        .select('-__v')
         .where('authorizedUsers')
         .elemMatch({ userId });
 
@@ -79,27 +92,32 @@ export class ApplicationEntity {
 
   // team
   public async inviteUserToTeam(id: string, email: string) {
+    const invitationCode: string = uuid().toString();
+
     try {
       const application = await ApplicationModel.findById(id);
 
       if (!application) {
-        return 'Invalid application id';
+        return { error: 'Invalid application id', invitationCode: null };
       }
 
-      const userId = await Database.systemUserEntity.getUserIdByEmail(email);
+      const userId = await SystemUserEntity.Instance.getUserIdByEmail(email);
 
       if (!userId) {
-        return 'Invalid email';
+        return { error: 'Invalid email', invitationCode: null };
       }
 
-      application.authorizedUsers.push({
+      application.invitedUsers.push({
         userId,
+        invitationCode,
       });
 
       application.save();
     } catch (exception) {
       this.logger.error('inviteUserToTeam', exception);
+      return { error: exception as string, invitationCode: null };
     }
-    return null;
+
+    return { error: null, invitationCode };
   }
 }

@@ -33,8 +33,8 @@ export class Mailer {
   public async sendMail(sendMailData: {
     to: string;
     subject: string;
-    text: string;
-    html: string;
+    text?: string;
+    html?: string;
   }) {
     this.mailer.sendMail(
       {

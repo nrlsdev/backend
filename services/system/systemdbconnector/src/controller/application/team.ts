@@ -6,11 +6,17 @@ import {
 import { Database } from '../../database/database';
 
 export async function inviteUserToTeam(id: string, email: string) {
-  const error = await Database.applicationEntity.inviteUserToTeam(id, email);
+  const {
+    error,
+    invitationCode,
+  } = await Database.applicationEntity.inviteUserToTeam(id, email);
 
   if (error) {
     return ErrorMessage.unprocessableEntityErrorResponse(error);
   }
 
-  return ApplicationTeamMessage.invitedUserToTeamResponse(StatusCodes.OK);
+  return ApplicationTeamMessage.invitedUserToTeamResponse(
+    StatusCodes.OK,
+    invitationCode!,
+  );
 }

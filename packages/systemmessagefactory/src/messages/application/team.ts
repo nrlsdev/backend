@@ -23,6 +23,7 @@ export class ApplicationTeamMessage {
 
   public static invitedUserToTeamResponse(
     statusCode: number,
+    invitationCode?: string,
     error?: string,
   ): ResponseMessage {
     return {
@@ -30,6 +31,9 @@ export class ApplicationTeamMessage {
         statusCode,
       },
       body: {
+        data: {
+          invitationCode,
+        },
         error,
       },
     };
