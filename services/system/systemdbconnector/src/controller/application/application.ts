@@ -4,8 +4,8 @@ import {
   ErrorMessage,
 } from '@backend/systemmessagefactory';
 import { Application } from '@backend/systeminterfaces';
-import { Database } from '../database/database';
-import { MongoErrorCode } from '../database/error-codes';
+import { Database } from '../../database/database';
+import { MongoErrorCode } from '../../database/error-codes';
 
 export async function createApplication(application: Application) {
   const error = await Database.applicationEntity.createApplication(application);

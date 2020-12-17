@@ -3,6 +3,7 @@ import { MongoError } from 'mongodb';
 import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
 import { Application } from '@backend/systeminterfaces';
+import { Database } from '../database';
 
 type ApplicationDocument = Application & Document;
 
@@ -74,5 +75,31 @@ export class ApplicationEntity {
     } catch (exception) {
       return { applications: null, error: exception as Error };
     }
+  }
+
+  // team
+  public async addUserToTeam(id: string, email: string) {
+    try {
+      const application = await ApplicationModel.findById(id);
+
+      if (!application) {
+        return 'Invalid application id';
+      }
+
+      const userId = await Database.systemUserEntity.getUserIdByEmail(email);
+
+      if (!userId) {
+        return 'Invalid email';
+      }
+
+      application.authorizedUsers.push({
+        userId,
+      });
+
+      application.save();
+    } catch (exception) {
+      this.logger.error('addUserToTeam', exception);
+    }
+    return null;
   }
 }

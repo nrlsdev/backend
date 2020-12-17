@@ -112,4 +112,16 @@ export class SystemUserEntity {
       lastname: systemUser.lastname,
     };
   }
+
+  public async getUserIdByEmail(email: string) {
+    const systemUser = await SystemUserModel.findOne({
+      email,
+    });
+
+    if (!systemUser) {
+      return null;
+    }
+
+    return systemUser._id as string;
+  }
 }
