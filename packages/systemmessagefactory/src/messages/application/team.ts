@@ -1,13 +1,16 @@
 import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
 
 export class ApplicationTeamMessage {
-  public static readonly TYPE_APPLICATION_TEAM_ADD_USER =
-    'application_team_add_user';
+  public static readonly TYPE_APPLICATION_TEAM_INVITE_USER =
+    'application_team_invite_user';
 
-  public static teamAddUserRequest(id: string, email: string): RequestMessage {
+  public static inviteUserToTeamRequest(
+    id: string,
+    email: string,
+  ): RequestMessage {
     return {
       meta: {
-        type: ApplicationTeamMessage.TYPE_APPLICATION_TEAM_ADD_USER,
+        type: ApplicationTeamMessage.TYPE_APPLICATION_TEAM_INVITE_USER,
       },
       body: {
         data: {
@@ -18,7 +21,7 @@ export class ApplicationTeamMessage {
     };
   }
 
-  public static teamAddedUserResponse(
+  public static invitedUserToTeamResponse(
     statusCode: number,
     error?: string,
   ): ResponseMessage {

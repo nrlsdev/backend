@@ -78,7 +78,7 @@ export class ApplicationEntity {
   }
 
   // team
-  public async addUserToTeam(id: string, email: string) {
+  public async inviteUserToTeam(id: string, email: string) {
     try {
       const application = await ApplicationModel.findById(id);
 
@@ -98,7 +98,7 @@ export class ApplicationEntity {
 
       application.save();
     } catch (exception) {
-      this.logger.error('addUserToTeam', exception);
+      this.logger.error('inviteUserToTeam', exception);
     }
     return null;
   }

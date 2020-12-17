@@ -3,14 +3,15 @@ import {
   MessageSeverityType,
   ResponseMessage,
 } from '@backend/messagehandler';
-import { Request, Response } from '@backend/server';
+import { Request, Response, StatusCodes } from '@backend/server';
 import {
   ApplicationTeamMessage,
   ErrorMessage,
 } from '@backend/systemmessagefactory';
+import { noreplyMailer } from '../../mail-manager';
 import { messageManager } from '../../message-manager';
 
-export async function addUserToTeam(request: Request, response: Response) {
+export async function inviteUserToTeam(request: Request, response: Response) {
   const { id, email } = request.body;
 
   if (!id || !email) {
@@ -23,10 +24,19 @@ export async function addUserToTeam(request: Request, response: Response) {
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    ApplicationTeamMessage.teamAddUserRequest(id, email),
+    ApplicationTeamMessage.inviteUserToTeamRequest(id, email),
     MessageQueueType.SYSTEM_DBCONNECTOR,
     MessageSeverityType.APPLICATION,
   );
 
-  response.status(200).send(responseMessage).end();
+  if (responseMessage.meta.statusCode === StatusCodes.OK) {
+    noreplyMailer.sendMail({
+      to: email,
+      subject: '[INVITE SUBJECT]',
+      text: '[INVITE TEXT]',
+      html: '[INVITE HTML]',
+    });
+  }
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }

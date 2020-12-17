@@ -5,12 +5,12 @@ import {
 } from '@backend/systemmessagefactory';
 import { Database } from '../../database/database';
 
-export async function addUserToTeam(id: string, email: string) {
-  const error = await Database.applicationEntity.addUserToTeam(id, email);
+export async function inviteUserToTeam(id: string, email: string) {
+  const error = await Database.applicationEntity.inviteUserToTeam(id, email);
 
   if (error) {
     return ErrorMessage.unprocessableEntityErrorResponse(error);
   }
 
-  return ApplicationTeamMessage.teamAddedUserResponse(StatusCodes.OK);
+  return ApplicationTeamMessage.invitedUserToTeamResponse(StatusCodes.OK);
 }

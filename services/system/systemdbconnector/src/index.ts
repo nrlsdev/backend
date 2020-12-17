@@ -23,7 +23,7 @@ import {
   createApplication,
   getAllApplicationsUserHasAuthorizationFor,
 } from './controller/application/application';
-import { addUserToTeam } from './controller/application/team';
+import { inviteUserToTeam } from './controller/application/team';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
@@ -110,10 +110,10 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
 
       return getAllApplicationsUserHasAuthorizationFor(data.userId);
     }
-    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_ADD_USER: {
+    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_INVITE_USER: {
       const { data }: any = requestMessage.body;
 
-      return addUserToTeam(data.id, data.email);
+      return inviteUserToTeam(data.id, data.email);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();
