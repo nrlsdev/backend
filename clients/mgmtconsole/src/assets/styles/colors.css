@@ -72,13 +72,15 @@
   --modal-background-color: var(--gray5-color);
 
   /* custom button */
-  --custom-button-font-color: var(--white-color);
-  --custom-button-positive-color: var(--primary-color);
-  --custom-button-positive-hover-color: var(--primary-hover-color);
-  --custom-button-positive-active-color: var(--primary-active-color);
-  --custom-button-negative-color: var(--gray1-color);
-  --custom-button-negative-hover-color: var(--gray2-color);
-  --custom-button-negative-active-color: var(--gray3-color);
+  --custom-button-branded-color: var(--primary-color);
+  --custom-button-branded-hover-color: var(--primary-hover-color);
+  --custom-button-branded-active-color: var(--primary-active-color);
+  --custom-button-default-color: var(--gray1-color);
+  --custom-button-default-hover-color: var(--gray2-color);
+  --custom-button-default-active-color: var(--gray3-color);
+  --custom-button-modal-color: var(--gray3-color);
+  --custom-button-modal-hover-color: var(--gray2-color);
+  --custom-button-modal-active-color: var(--gray1-color);
 
   /* custom input */
   --custom-input-border-bottom-color: var(--gray3-color);
@@ -143,13 +145,15 @@
   --modal-background-color: var(--gray5-color);
 
   /* custom button */
-  --custom-button-font-color: var(--white-color);
-  --custom-button-positive-color: var(--primary-color);
-  --custom-button-positive-hover-color: var(--primary-hover-color);
-  --custom-button-positive-active-color: var(--primary-active-color);
-  --custom-button-negative-color: var(--gray1-color);
-  --custom-button-negative-hover-color: var(--gray2-color);
-  --custom-button-negative-active-color: var(--gray3-color);
+  --custom-button-branded-color: var(--primary-color);
+  --custom-button-branded-hover-color: var(--primary-hover-color);
+  --custom-button-branded-active-color: var(--primary-active-color);
+  --custom-button-default-color: var(--gray4-color);
+  --custom-button-default-hover-color: var(--gray5-color);
+  --custom-button-default-active-color: var(--gray6-color);
+  --custom-button-modal-color: var(--gray3-color);
+  --custom-button-modal-hover-color: var(--gray4-color);
+  --custom-button-modal-active-color: var(--gray5-color);
 
   /* custom input */
   --custom-input-border-bottom-color: var(--gray4-color);

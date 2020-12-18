@@ -44,15 +44,15 @@ button {
 }
 
 .modal-btn {
-  background-color: var(--gray3-color);
+  background-color: var(--custom-button-modal-color);
 }
 
 .modal-btn:hover {
-  background-color: var(--gray4-color);
+  background-color: var(--custom-button-modal-hover-color);
 }
 
 .modal-btn:active {
-  background-color: var(--gray5-color);
+  background-color: var(--custom-button-modal-active-color);
 }
 
 .big {
