@@ -6,10 +6,9 @@
 
   /* branding */
   --primary-color: rgb(252, 100, 0);
+  --primary-opacity-50-color: rgba(252, 100, 0, 0.5);
   --primary-hover-color: rgb(226, 89, 0);
   --primary-active-color: rgb(201, 79, 0);
-  --primary-white-background-color: rgb(255, 201, 166);
-
   /* logos */
   --company-logo-color: var(--primary-color);
 }
@@ -85,6 +84,13 @@
   /* custom input */
   --custom-input-border-bottom-color: var(--gray3-color);
   --custom-input-placeholder-color: var(--gray1-color);
+
+  /* radio button */
+  --radio-button-not-checked-background-color: var(--gray3-color);
+  --radio-button-border-color: var(--gray3-color);
+  --radio-button-not-checked-box-shadow-color: var(--gray3-color);
+  --radio-button-checked-background-color: var(--primary-color);
+  --radio-button-checked-box-shadow-color: var(--primary-color);
 }
 
 .dark-mode {
@@ -158,4 +164,11 @@
   /* custom input */
   --custom-input-border-bottom-color: var(--gray4-color);
   --custom-input-placeholder-color: var(--gray2-color);
+
+  /* radio button */
+  --radio-button-not-checked-background-color: var(--gray3-color);
+  --radio-button-border-color: var(--gray3-color);
+  --radio-button-not-checked-box-shadow-color: var(--gray3-color);
+  --radio-button-checked-background-color: var(--primary-color);
+  --radio-button-checked-box-shadow-color: var(--primary-color);
 }

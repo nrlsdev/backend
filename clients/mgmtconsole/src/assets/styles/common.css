@@ -6,9 +6,8 @@
   color: var(--default-font-color);
 }
 
-input,
-text {
-  user-select: none;
+button {
+  outline: none !important;
 }
 
 picture,
