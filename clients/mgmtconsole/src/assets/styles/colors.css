@@ -8,6 +8,7 @@
   --primary-color: rgb(252, 100, 0);
   --primary-hover-color: rgb(226, 89, 0);
   --primary-active-color: rgb(201, 79, 0);
+  --primary-white-background-color: rgb(255, 201, 166);
 
   /* logos */
   --company-logo-color: var(--primary-color);
