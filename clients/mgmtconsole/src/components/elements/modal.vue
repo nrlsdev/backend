@@ -6,7 +6,7 @@
     </div>
     <div class="modal-footer-container">
       <CustomButton
-        class="block cancel"
+        class="medium modal-btn"
         @click.native="
           negativeBtnClickHandler
             ? negativeBtnClickHandler()
@@ -16,7 +16,7 @@
       >
 
       <CustomButton
-        class="block branded"
+        class="medium branded"
         @click.native="
           positiveBtnClickHandler
             ? positiveBtnClickHandler()
