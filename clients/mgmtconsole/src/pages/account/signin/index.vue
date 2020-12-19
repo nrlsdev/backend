@@ -22,7 +22,7 @@
         />
         <label class="account-error-message">{{ errorMessage }}</label>
         <div class="account-actions">
-          <CustomButton class="block branded" type="submit">
+          <CustomButton class="big branded" type="submit">
             {{ $t('StrSignIn') }}
           </CustomButton>
           <n-link class="account-link" to="/account/resetpassword" prefetch>{{

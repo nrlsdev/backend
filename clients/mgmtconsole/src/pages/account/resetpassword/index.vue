@@ -29,7 +29,7 @@
           />
         </section>
         <label class="account-error-message"></label>
-        <CustomButton class="block branded" type="submit">
+        <CustomButton class="big branded" type="submit">
           {{ $t('StrReset') }}
         </CustomButton>
       </form>

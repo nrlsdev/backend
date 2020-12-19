@@ -10,6 +10,7 @@ type ApplicationDocument = Application & Document;
 const ApplicationSystemUserRoleSchema: Schema = new Schema(
   {
     userId: { type: String, required: true, unique: true },
+    email: { type: String, required: false, unique: false },
   },
   { _id: false },
 );
@@ -17,6 +18,7 @@ const ApplicationSystemUserRoleSchema: Schema = new Schema(
 const ApplicationInvitedSystemUserSchema: Schema = new Schema(
   {
     userId: { type: String, required: true, unique: true },
+    email: { type: String, required: false, unique: false },
     invitationCode: { type: String, required: true, unique: true },
   },
   { _id: false },
@@ -83,6 +85,38 @@ export class ApplicationEntity {
         .select('-__v')
         .where('authorizedUsers')
         .elemMatch({ userId });
+
+      for (let i = 0; i < applications.length; i += 1) {
+        const application = applications[i];
+
+        for (let j = 0; j < application.authorizedUsers.length; j += 1) {
+          const authorizedUser = application.authorizedUsers[i];
+
+          if (authorizedUser === undefined) {
+            continue;
+          }
+
+          const userdata = await SystemUserEntity.Instance.getSystemuserData(
+            authorizedUser.userId,
+          );
+
+          authorizedUser.email = userdata.email!;
+        }
+
+        for (let j = 0; j < application.invitedUsers.length; j += 1) {
+          const invitedUser = application.invitedUsers[i];
+
+          if (invitedUser === undefined) {
+            continue;
+          }
+
+          const userdata = await SystemUserEntity.Instance.getSystemuserData(
+            invitedUser.userId,
+          );
+
+          invitedUser.email = userdata.email!;
+        }
+      }
 
       return { applications: applications as Application[], error: null };
     } catch (exception) {

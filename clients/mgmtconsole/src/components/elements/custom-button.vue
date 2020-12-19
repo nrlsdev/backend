@@ -43,6 +43,18 @@ button {
   background-color: var(--custom-button-branded-active-color);
 }
 
+.delete {
+  background-color: var(--custom-button-delte-color);
+}
+
+.delete:hover {
+  background-color: var(--custom-button-delte-hover-color);
+}
+
+.delete:active {
+  background-color: var(--custom-button-delte-active-color);
+}
+
 .modal-btn {
   background-color: var(--custom-button-modal-color);
 }

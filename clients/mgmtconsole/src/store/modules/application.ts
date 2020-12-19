@@ -16,6 +16,19 @@ export interface ApplicationData {
   bundleId: string;
   name: string;
   image: string;
+  authorizedUsers: [
+    {
+      userId: string;
+      email: string;
+    },
+  ];
+  invitedUsers: [
+    {
+      userId: string;
+      email: string;
+      invitationCode: string;
+    },
+  ];
 }
 
 export interface ApplicationState {

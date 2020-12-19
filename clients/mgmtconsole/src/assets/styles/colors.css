@@ -25,6 +25,8 @@
 
   /* reds */
   --red1-color: rgb(255, 59, 48);
+  --red1-hover-color: rgb(212, 50, 41);
+  --red1-active-color: rgb(173, 40, 33);
 
   /* common */
   --default-page-background-color: var(--white-color);
@@ -80,6 +82,9 @@
   --custom-button-modal-color: var(--gray3-color);
   --custom-button-modal-hover-color: var(--gray2-color);
   --custom-button-modal-active-color: var(--gray1-color);
+  --custom-button-delte-color: var(--red1-color);
+  --custom-button-delte-hover-color: var(--red1-hover-color);
+  --custom-button-delte-active-color: var(--red1-active-color);
 
   /* custom input */
   --custom-input-border-bottom-color: var(--gray3-color);
@@ -105,6 +110,8 @@
 
   /* reds */
   --red1-color: rgb(255, 69, 58);
+  --red1-hover-color: rgb(212, 50, 41);
+  --red1-active-color: rgb(173, 40, 33);
 
   /* common */
   --default-page-background-color: var(--black-color);
@@ -160,6 +167,9 @@
   --custom-button-modal-color: var(--gray3-color);
   --custom-button-modal-hover-color: var(--gray4-color);
   --custom-button-modal-active-color: var(--gray5-color);
+  --custom-button-delte-color: var(--red1-color);
+  --custom-button-delte-hover-color: var(--red1-hover-color);
+  --custom-button-delte-active-color: var(--red1-active-color);
 
   /* custom input */
   --custom-input-border-bottom-color: var(--gray4-color);

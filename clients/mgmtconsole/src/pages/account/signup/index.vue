@@ -48,7 +48,7 @@
           />
         </section>
         <label class="account-error-message">{{ errorMessage }}</label>
-        <CustomButton class="block branded" type="submit">
+        <CustomButton class="big branded" type="submit">
           {{ $t('StrSignUp') }}
         </CustomButton>
       </form>

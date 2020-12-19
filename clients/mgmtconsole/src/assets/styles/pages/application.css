@@ -1,5 +1,16 @@
 .application-section {
   display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 16px;
+  grid-template-columns: 1fr 3fr;
+  gap: 20px;
+}
+
+.application-section-separator {
+  margin: 50px 0;
+  height: 1px;
+  border: none;
+  background-color: var(--gray6-color);
+}
+
+.application-section-button {
+  margin-bottom: 25px;
 }
