@@ -1,53 +1,9 @@
-import { Document, Schema, Model, model } from 'mongoose';
 import { MongoError } from 'mongodb';
 import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
 import { Application } from '@backend/systeminterfaces';
-import { SystemUserEntity } from './system-user-entity';
-
-type ApplicationDocument = Application & Document;
-
-const ApplicationSystemUserRoleSchema: Schema = new Schema(
-  {
-    userId: { type: String, required: true, unique: true },
-    email: { type: String, required: false, unique: false },
-  },
-  { _id: false },
-);
-
-const ApplicationInvitedSystemUserSchema: Schema = new Schema(
-  {
-    userId: { type: String, required: true, unique: true },
-    email: { type: String, required: false, unique: false },
-    invitationCode: { type: String, required: true, unique: true },
-  },
-  { _id: false },
-);
-
-const ApplicationSchema: Schema = new Schema({
-  _id: {
-    type: String,
-    default: uuid,
-  },
-  bundleId: { type: String, required: true, unique: true },
-  name: { type: String, required: true, unique: false },
-  authorizedUsers: {
-    type: [ApplicationSystemUserRoleSchema],
-    required: false,
-    unique: false,
-  },
-  invitedUsers: {
-    type: [ApplicationInvitedSystemUserSchema],
-    required: false,
-    unique: false,
-  },
-  image: { type: String, required: false, unique: false },
-});
-
-const ApplicationModel: Model<
-  ApplicationDocument,
-  {}
-> = model<ApplicationDocument>('Application', ApplicationSchema);
+import { SystemUserEntity } from '../systemuser/system-user-entity';
+import { ApplicationModel } from './application-schema';
 
 export class ApplicationEntity {
   private logger: Logger = new Logger('ApplicationEntity');
@@ -64,9 +20,7 @@ export class ApplicationEntity {
 
   public async createApplication(application: Application) {
     try {
-      const dbApplication: ApplicationDocument = new ApplicationModel(
-        application,
-      );
+      const dbApplication = await ApplicationModel.create(application);
 
       await dbApplication.save();
     } catch (exception) {
@@ -101,6 +55,10 @@ export class ApplicationEntity {
           );
 
           authorizedUser.email = userdata.email!;
+        }
+
+        if (application.invitedUsers === undefined) {
+          continue;
         }
 
         for (let j = 0; j < application.invitedUsers.length; j += 1) {
@@ -142,7 +100,7 @@ export class ApplicationEntity {
         return { error: 'Invalid email', invitationCode: null };
       }
 
-      application.invitedUsers.push({
+      application.invitedUsers?.push({
         userId,
         invitationCode,
       });
@@ -166,7 +124,7 @@ export class ApplicationEntity {
       return false;
     }
 
-    application.invitedUsers = application.invitedUsers.filter(
+    application.invitedUsers = application.invitedUsers?.filter(
       (invitedUser) =>
         invitedUser.userId !== userId &&
         invitedUser.invitationCode !== invitationCode,

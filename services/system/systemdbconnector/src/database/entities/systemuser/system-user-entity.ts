@@ -1,28 +1,9 @@
-import { Document, Schema, Model, model } from 'mongoose';
 import { MongoError } from 'mongodb';
-import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
 import { hash, compare } from 'bcryptjs';
 import { Constants } from '@backend/constants';
 import { SystemUser } from '@backend/systeminterfaces';
-
-type SystemUserDocument = SystemUser & Document;
-
-const SystemUserSchema: Schema = new Schema({
-  _id: {
-    type: String,
-    default: uuid,
-  },
-  email: { type: String, required: true, unique: true },
-  firstname: { type: String, required: true, unique: false },
-  lastname: { type: String, required: true, unique: false },
-  password: { type: String, required: true, unique: false },
-});
-
-const SystemUserModel: Model<
-  SystemUserDocument,
-  {}
-> = model<SystemUserDocument>('SystemUser', SystemUserSchema);
+import { SystemUserModel } from './system-user-schema';
 
 export class SystemUserEntity {
   private logger: Logger = new Logger('SystemUserEntity');
@@ -47,9 +28,7 @@ export class SystemUserEntity {
     sytemUserToCreate.password = hashedPassword;
 
     try {
-      const dbSystemUser: SystemUserDocument = new SystemUserModel(
-        sytemUserToCreate,
-      );
+      const dbSystemUser = await SystemUserModel.create(sytemUserToCreate);
 
       await dbSystemUser.save();
     } catch (exception) {

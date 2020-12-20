@@ -6,8 +6,8 @@ import {
   connection,
 } from 'mongoose';
 import { ConnectionState } from './connection-state';
-import { ApplicationEntity } from './entities/application-entity';
-import { SystemUserEntity } from './entities/system-user-entity';
+import { ApplicationEntity } from './entities/application/application-entity';
+import { SystemUserEntity } from './entities/systemuser/system-user-entity';
 
 export class Database {
   private static logger: Logger = new Logger('Database');
