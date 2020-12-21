@@ -4,8 +4,8 @@ import { SystemUser } from '@backend/systeminterfaces';
 import { Database } from '../database/database';
 import { MongoErrorCode } from '../database/error-codes';
 
-export async function createSystemUser(systemUser: SystemUser) {
-  const error = await Database.systemUserEntity.createSystemUser(systemUser);
+export async function signUp(systemUser: SystemUser) {
+  const error = await Database.systemUserEntity.signUp(systemUser);
 
   if (error) {
     if (error.code === MongoErrorCode.DUPLICATE_KEY) {
@@ -20,11 +20,8 @@ export async function createSystemUser(systemUser: SystemUser) {
   return SystemUserMessage.createdSystemUserResponse(StatusCodes.OK);
 }
 
-export async function signInSystemUser(email: string, password: string) {
-  const result = await Database.systemUserEntity.signInSystemUser(
-    email,
-    password,
-  );
+export async function signIn(email: string, password: string) {
+  const result = await Database.systemUserEntity.signIn(email, password);
 
   if (result.error) {
     return ErrorMessage.unauthorizedErrorResponse(result.error.message);
@@ -41,16 +38,17 @@ export async function getSystemuserData(systemUserId: string) {
   const result = await Database.systemUserEntity.getSystemuserData(
     systemUserId,
   );
-  const { error } = result;
 
-  if (error) {
+  const { error, systemUser } = result;
+
+  if (error || !systemUser) {
     return ErrorMessage.unauthorizedErrorResponse(error);
   }
 
   return SystemUserMessage.getSystemUserDataResponse(
     StatusCodes.OK,
-    result.email!,
-    result.firstname!,
-    result.lastname!,
+    systemUser.email,
+    systemUser.firstname,
+    systemUser.lastname,
   );
 }

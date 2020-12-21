@@ -13,11 +13,7 @@ import {
 import { SystemConfiguration } from '@backend/systemconfiguration';
 import { SystemUser, Application } from '@backend/systeminterfaces';
 import { Database } from './database/database';
-import {
-  createSystemUser,
-  signInSystemUser,
-  getSystemuserData,
-} from './controller/system-user';
+import { signUp, signIn, getSystemuserData } from './controller/system-user';
 import {
   createApplication,
   getAllApplicationsUserHasAuthorizationFor,
@@ -74,12 +70,12 @@ async function onSystemUserMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case SystemUserMessage.TYPE_SYSTEM_USER_CREATE: {
-      return createSystemUser(requestMessage.body.data as SystemUser);
+      return signUp(requestMessage.body.data as SystemUser);
     }
     case SystemUserMessage.TYPE_SYSTEM_USER_SIGN_IN: {
       const { data }: any = requestMessage.body;
 
-      return signInSystemUser(data.email, data.password);
+      return signIn(data.email, data.password);
     }
     case SystemUserMessage.TYPE_SYSTEM_USER_DATA: {
       const { data }: any = requestMessage.body;
