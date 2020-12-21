@@ -1,7 +1,6 @@
 import { SystemUser } from '@backend/systeminterfaces';
 import {
   getModelForClass,
-  plugin,
   modelOptions,
   prop,
   ReturnModelType,
@@ -11,7 +10,6 @@ import { compare, hash } from 'bcryptjs';
 import { Constants } from '@backend/constants';
 import { Logger } from '@backend/logger';
 import { MongoError } from 'mongodb';
-import uniqueValidator from 'mongoose-unique-validator';
 
 @modelOptions({
   options: {
@@ -19,7 +17,6 @@ import uniqueValidator from 'mongoose-unique-validator';
     allowMixed: Severity.ALLOW,
   },
 })
-@plugin(uniqueValidator)
 export class SystemUserSchema implements SystemUser {
   private static readonly logger: Logger = new Logger('SystemUserSchema');
 

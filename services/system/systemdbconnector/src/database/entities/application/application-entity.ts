@@ -1,11 +1,6 @@
-import { MongoError } from 'mongodb';
-import { Logger } from '@backend/logger';
-import { Application } from '@backend/systeminterfaces';
 import { ApplicationModel } from './application-schema';
 
 export class ApplicationEntity {
-  private logger: Logger = new Logger('ApplicationEntity');
-
   private static instance: ApplicationEntity;
 
   private constructor() {
@@ -16,28 +11,25 @@ export class ApplicationEntity {
     return ApplicationEntity.instance || new ApplicationEntity();
   }
 
-  public async createApplication(application: Application) {
-    try {
-      const dbApplication = await ApplicationModel.create(application);
+  public async createApplication(
+    bundleId: string,
+    name: string,
+    ownerId: string,
+  ) {
+    const result = await ApplicationModel.createApplication(
+      bundleId,
+      name,
+      ownerId,
+    );
 
-      await dbApplication.save();
-    } catch (exception) {
-      this.logger.error('createApplication', exception);
-      return exception as MongoError;
-    }
-
-    this.logger.debug('createApplication', 'Successfully created application');
-
-    return null;
+    return result;
   }
 
-  public async getAllApplicationsUserHasAuthorizationFor(_userId: string) {
-    try {
-      const applications = await ApplicationModel.find({});
+  public async getAllApplicationsUserHasAuthorizationFor(userId: string) {
+    const result = await ApplicationModel.getAllApplicationsUserHasAuthorizationFor(
+      userId,
+    );
 
-      return { applications: applications as Application[], error: null };
-    } catch (exception) {
-      return { applications: null, error: exception as Error };
-    }
+    return result;
   }
 }

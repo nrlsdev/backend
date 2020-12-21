@@ -11,7 +11,7 @@ import {
   ApplicationMessage,
 } from '@backend/systemmessagefactory';
 import { SystemConfiguration } from '@backend/systemconfiguration';
-import { SystemUser, Application } from '@backend/systeminterfaces';
+import { SystemUser } from '@backend/systeminterfaces';
 import { Database } from './database/database';
 import { signUp, signIn, getSystemuserData } from './controller/system-user';
 import {
@@ -97,7 +97,10 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case ApplicationMessage.TYPE_APPLICATION_CREATE: {
-      return createApplication(requestMessage.body.data as Application);
+      const { data }: any = requestMessage.body;
+      const { bundleId, name, ownerId } = data;
+
+      return createApplication(bundleId, name, ownerId);
     }
     case ApplicationMessage.TYPE_APPLICATION_GET_ALL_APPLICATIONS_USER_HAS_AUTHORIZATION_FOR: {
       const { data }: any = requestMessage.body;

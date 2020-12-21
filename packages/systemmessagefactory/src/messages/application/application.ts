@@ -11,6 +11,7 @@ export class ApplicationMessage {
   public static createApplicationRequest(
     bundleId: string,
     name: string,
+    ownerId: string,
   ): RequestMessage {
     return {
       meta: {
@@ -20,6 +21,7 @@ export class ApplicationMessage {
         data: {
           bundleId,
           name,
+          ownerId,
         },
       },
     };
