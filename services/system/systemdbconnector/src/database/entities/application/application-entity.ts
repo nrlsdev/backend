@@ -1,8 +1,6 @@
 import { MongoError } from 'mongodb';
-import { v4 as uuid } from 'uuid';
 import { Logger } from '@backend/logger';
 import { Application } from '@backend/systeminterfaces';
-import { SystemUserEntity } from '../systemuser/system-user-entity';
 import { ApplicationModel } from './application-schema';
 
 export class ApplicationEntity {
@@ -33,109 +31,13 @@ export class ApplicationEntity {
     return null;
   }
 
-  public async getAllApplicationsUserHasAuthorizationFor(userId: string) {
+  public async getAllApplicationsUserHasAuthorizationFor(_userId: string) {
     try {
-      const applications = await ApplicationModel.find({})
-        .select('-__v')
-        .where('authorizedUsers')
-        .elemMatch({ userId });
-
-      for (let i = 0; i < applications.length; i += 1) {
-        const application = applications[i];
-
-        for (let j = 0; j < application.authorizedUsers.length; j += 1) {
-          const authorizedUser = application.authorizedUsers[i];
-
-          if (authorizedUser === undefined) {
-            continue;
-          }
-
-          const userdata = await SystemUserEntity.Instance.getSystemuserData(
-            authorizedUser.userId,
-          );
-
-          authorizedUser.email = userdata.email!;
-        }
-
-        if (application.invitedUsers === undefined) {
-          continue;
-        }
-
-        for (let j = 0; j < application.invitedUsers.length; j += 1) {
-          const invitedUser = application.invitedUsers[i];
-
-          if (invitedUser === undefined) {
-            continue;
-          }
-
-          const userdata = await SystemUserEntity.Instance.getSystemuserData(
-            invitedUser.userId,
-          );
-
-          invitedUser.email = userdata.email!;
-        }
-      }
+      const applications = await ApplicationModel.find({});
 
       return { applications: applications as Application[], error: null };
     } catch (exception) {
       return { applications: null, error: exception as Error };
     }
-  }
-
-  // team
-  // invite
-  public async inviteUserToTeam(id: string, email: string) {
-    const invitationCode: string = uuid().toString(); // ToDo: generate jwt to verify date
-
-    try {
-      const application = await ApplicationModel.findById(id);
-
-      if (!application) {
-        return { error: 'Invalid application id', invitationCode: null };
-      }
-
-      const userId = await SystemUserEntity.Instance.getUserIdByEmail(email);
-
-      if (!userId) {
-        return { error: 'Invalid email', invitationCode: null };
-      }
-
-      application.invitedUsers?.push({
-        userId,
-        invitationCode,
-      });
-
-      application.save();
-    } catch (exception) {
-      this.logger.error('inviteUserToTeam', exception);
-      return { error: exception as string, invitationCode: null };
-    }
-
-    return { error: null, invitationCode };
-  }
-
-  // accept invitation
-  public async acceptInvitation(userId: string, invitationCode: string) {
-    const application = await ApplicationModel.findOne({})
-      .where('invitedUsers')
-      .elemMatch({ userId, invitationCode });
-
-    if (!application) {
-      return false;
-    }
-
-    application.invitedUsers = application.invitedUsers?.filter(
-      (invitedUser) =>
-        invitedUser.userId !== userId &&
-        invitedUser.invitationCode !== invitationCode,
-    );
-
-    application.authorizedUsers.push({
-      userId,
-    });
-
-    application.save();
-
-    return true;
   }
 }

@@ -3,6 +3,4 @@ export interface Application {
   bundleId: string;
   name: string;
   image?: string;
-  authorizedUsers: any[];
-  invitedUsers?: any[];
 }

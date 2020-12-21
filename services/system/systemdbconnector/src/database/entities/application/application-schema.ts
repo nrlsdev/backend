@@ -21,12 +21,6 @@ export class ApplicationSchema implements Application {
 
   @prop({ required: false, unique: false })
   image?: string;
-
-  @prop({ required: false, unique: false })
-  authorizedUsers!: any[];
-
-  @prop({ required: false, unique: false })
-  invitedUsers?: any[];
 }
 
 export const ApplicationModel = getModelForClass(ApplicationSchema);

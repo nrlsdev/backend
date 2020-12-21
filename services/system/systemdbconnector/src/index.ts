@@ -9,7 +9,6 @@ import {
   SystemUserMessage,
   ErrorMessage,
   ApplicationMessage,
-  ApplicationTeamMessage,
 } from '@backend/systemmessagefactory';
 import { SystemConfiguration } from '@backend/systemconfiguration';
 import { SystemUser, Application } from '@backend/systeminterfaces';
@@ -23,10 +22,6 @@ import {
   createApplication,
   getAllApplicationsUserHasAuthorizationFor,
 } from './controller/application/application';
-import {
-  inviteUserToTeam,
-  acceptInvitation,
-} from './controller/application/team';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
@@ -112,16 +107,6 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return getAllApplicationsUserHasAuthorizationFor(data.userId);
-    }
-    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_INVITE_USER: {
-      const { data }: any = requestMessage.body;
-
-      return inviteUserToTeam(data.id, data.email);
-    }
-    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_ACCEPT_INVITATION: {
-      const { data }: any = requestMessage.body;
-
-      return acceptInvitation(data.userId, data.invitationCode);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();

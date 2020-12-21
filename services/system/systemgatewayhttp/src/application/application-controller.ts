@@ -9,11 +9,9 @@ import { ApplicationMessage } from '@backend/systemmessagefactory';
 import { messageManager } from '../message-manager';
 
 export async function createApplication(request: Request, response: Response) {
-  const { bundleId, name, tokenUserId } = request.body;
+  const { bundleId, name } = request.body;
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    ApplicationMessage.createApplicationRequest(bundleId, name, {
-      userId: tokenUserId,
-    }),
+    ApplicationMessage.createApplicationRequest(bundleId, name),
     MessageQueueType.SYSTEM_DBCONNECTOR,
     MessageSeverityType.APPLICATION,
   );

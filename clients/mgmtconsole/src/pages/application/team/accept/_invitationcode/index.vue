@@ -12,7 +12,6 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
-import { acceptInvitationCode } from '../../../../../api/application';
 
 @Component
 export default class ApplicationTeamAcceptInvitationCodePage extends Vue {
@@ -25,7 +24,7 @@ export default class ApplicationTeamAcceptInvitationCodePage extends Vue {
   }
 
   protected async fetch() {
-    const accepted: boolean = await acceptInvitationCode(this.invitationCode);
+    const accepted: boolean = false;
 
     if (!accepted) {
       this.showError = true;

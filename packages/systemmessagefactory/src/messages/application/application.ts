@@ -1,8 +1,5 @@
 import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
-import {
-  Application,
-  ApplicationSystemUserRole,
-} from '@backend/systeminterfaces';
+import { Application } from '@backend/systeminterfaces';
 
 export class ApplicationMessage {
   public static readonly TYPE_APPLICATION_CREATE = 'application_create';
@@ -14,7 +11,6 @@ export class ApplicationMessage {
   public static createApplicationRequest(
     bundleId: string,
     name: string,
-    authorizedUsers: ApplicationSystemUserRole,
   ): RequestMessage {
     return {
       meta: {
@@ -24,7 +20,6 @@ export class ApplicationMessage {
         data: {
           bundleId,
           name,
-          authorizedUsers,
         },
       },
     };

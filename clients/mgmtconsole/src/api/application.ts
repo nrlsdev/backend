@@ -44,17 +44,3 @@ export async function getApplicationById(id: string) {
 
   return application as ApplicationData;
 }
-
-export async function acceptInvitationCode(invitationCode: string) {
-  const response = await systemAPI.post(
-    `/application/team/accept/${invitationCode}`,
-  );
-  const responseMessage: ResponseMessage = response.data as ResponseMessage;
-  const { error } = responseMessage.body;
-
-  if (error || response.status !== 200) {
-    return false;
-  }
-
-  return true;
-}
