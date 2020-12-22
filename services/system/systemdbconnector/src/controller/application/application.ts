@@ -41,11 +41,41 @@ export async function getAllApplicationsUserHasAuthorizationFor(
   );
 
   if (error || !applications) {
-    return ErrorMessage.unprocessableEntityErrorResponse();
+    return ApplicationMessage.getAllApplicationsUserHasAuthorizationForResponse(
+      StatusCodes.NOT_FOUND,
+      [],
+      'No applications found.',
+    );
   }
 
   return ApplicationMessage.getAllApplicationsUserHasAuthorizationForResponse(
     StatusCodes.OK,
     applications,
+  );
+}
+
+export async function getApplicationByIdUserHasAuthorizationFor(
+  applicationId: string,
+  userId: string,
+) {
+  const {
+    error,
+    application,
+  } = await Database.applicationEntity.getApplicationByIdUserHasAuthorizationFor(
+    applicationId,
+    userId,
+  );
+
+  if (error || !application) {
+    return ApplicationMessage.getApplicationByIdResponse(
+      StatusCodes.NOT_FOUND,
+      undefined,
+      'No applications found',
+    );
+  }
+
+  return ApplicationMessage.getApplicationByIdResponse(
+    StatusCodes.OK,
+    application,
   );
 }

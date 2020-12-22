@@ -17,6 +17,7 @@ import { signUp, signIn, getSystemuserData } from './controller/system-user';
 import {
   createApplication,
   getAllApplicationsUserHasAuthorizationFor,
+  getApplicationByIdUserHasAuthorizationFor,
 } from './controller/application/application';
 
 const logger: Logger = new Logger('systemdbconnector::index');
@@ -106,6 +107,14 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return getAllApplicationsUserHasAuthorizationFor(data.userId);
+    }
+    case ApplicationMessage.TYPE_APPLICATION_GET_APPLICATION_BY_APPLICATION_ID_USER_HAS_AUTHORIZATION_FOR: {
+      const { data }: any = requestMessage.body;
+
+      return getApplicationByIdUserHasAuthorizationFor(
+        data.applicationId,
+        data.userId,
+      );
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();

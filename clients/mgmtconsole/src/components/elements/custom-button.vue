@@ -71,8 +71,4 @@ button {
   padding: 10px;
   font-weight: bold;
 }
-
-.medium {
-  padding: 5px 10px;
-}
 </style>

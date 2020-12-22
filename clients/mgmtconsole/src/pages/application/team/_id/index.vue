@@ -8,7 +8,7 @@
       </div>
       <div class="application-section-content">
         <CustomButton
-          class="medium default application-section-button"
+          class="default application-section-button"
           @click.native="onInviteUserBtnClicked"
         >
           {{ $t('StrInviteUser') }}</CustomButton
@@ -19,7 +19,6 @@
             :key="invitedUser.userId"
           >
             <label>{{ invitedUser.email }}</label>
-            <!-- ToDo: Show Role -->
             <label>[ROLE]</label>
             <CustomButton class="delete">{{ $t('StrDelete') }}</CustomButton>
           </div>
@@ -35,11 +34,10 @@
         <div class="application-team-list">
           <div
             v-for="authorizedUser in application.authorizedUsers"
-            :key="authorizedUser.userId"
+            :key="authorizedUser.user.userId"
           >
-            <label>{{ authorizedUser.email }}</label>
-            <!-- ToDo: Show Role -->
-            <label>[ROLE]</label>
+            <label>{{ authorizedUser.user.email }}</label>
+            <label>{{ authorizedUser.role }}</label>
             <CustomButton class="default">{{ $t('StrEdit') }}</CustomButton>
           </div>
         </div>

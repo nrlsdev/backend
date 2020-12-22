@@ -7,6 +7,9 @@ export class ApplicationMessage {
   public static readonly TYPE_APPLICATION_GET_ALL_APPLICATIONS_USER_HAS_AUTHORIZATION_FOR =
     'get_all_applications_user_has_authorization_for';
 
+  public static readonly TYPE_APPLICATION_GET_APPLICATION_BY_APPLICATION_ID_USER_HAS_AUTHORIZATION_FOR =
+    'get_application_by_application_id_user_has_authorization_for';
+
   // create application
   public static createApplicationRequest(
     bundleId: string,
@@ -91,6 +94,24 @@ export class ApplicationMessage {
           application,
         },
         error,
+      },
+    };
+  }
+
+  public static getApplicationByIdRequest(
+    applicationId: string,
+    userId: string,
+  ) {
+    return {
+      meta: {
+        type:
+          ApplicationMessage.TYPE_APPLICATION_GET_APPLICATION_BY_APPLICATION_ID_USER_HAS_AUTHORIZATION_FOR,
+      },
+      body: {
+        data: {
+          applicationId,
+          userId,
+        },
       },
     };
   }

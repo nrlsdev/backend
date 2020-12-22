@@ -10,6 +10,7 @@ import {
   createApplication,
   getAllApplicationsUserIsAuthorizedFor,
 } from '@/api/application';
+import { SystemUser } from '@backend/systeminterfaces';
 
 export interface ApplicationData {
   _id: string;
@@ -18,15 +19,8 @@ export interface ApplicationData {
   image: string;
   authorizedUsers: [
     {
-      userId: string;
-      email: string;
-    },
-  ];
-  invitedUsers: [
-    {
-      userId: string;
-      email: string;
-      invitationCode: string;
+      user: SystemUser;
+      role: number;
     },
   ];
 }

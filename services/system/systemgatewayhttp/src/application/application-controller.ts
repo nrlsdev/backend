@@ -32,8 +32,9 @@ export async function createApplication(request: Request, response: Response) {
   response.send(responseMessage).end();
 }
 
-async function getAllApplicationsResponseUserHasAuthorizationFor(
+export async function getAllApplicationsUserHasAuthorizationFor(
   request: Request,
+  response: Response,
 ) {
   const { userId } = request.body;
 
@@ -43,15 +44,18 @@ async function getAllApplicationsResponseUserHasAuthorizationFor(
     MessageSeverityType.APPLICATION,
   );
 
-  return responseMessage;
+  response.status(responseMessage.meta.statusCode);
+  response.send(responseMessage).end();
 }
 
-export async function getAllApplicationsUserHasAuthorizationFor(
-  request: Request,
-  response: Response,
-) {
-  const responseMessage: ResponseMessage = await getAllApplicationsResponseUserHasAuthorizationFor(
-    request,
+export async function getApplicationById(request: Request, response: Response) {
+  const { userId } = request.body;
+  const { applicationId } = request.params;
+
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationMessage.getApplicationByIdRequest(applicationId, userId),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
   );
 
   response.status(responseMessage.meta.statusCode);

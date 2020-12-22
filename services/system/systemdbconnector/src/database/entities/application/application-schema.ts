@@ -88,6 +88,27 @@ export class ApplicationSchema implements Application {
       return { applications: null, error: exception as Error };
     }
   }
+
+  public static async getApplicationByIdUserHasAuthorizationFor(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+    userId: string,
+  ) {
+    try {
+      const application = await this.findOne({
+        'authorizedUsers.user': userId,
+        '_id': applicationId,
+      });
+
+      return { application: application as Application, error: null };
+    } catch (exception) {
+      ApplicationSchema.logger.error(
+        'getApplicationByIdUserHasAuthorizationFor',
+        exception,
+      );
+      return { application: null, error: exception as Error };
+    }
+  }
 }
 
 export const ApplicationModel = getModelForClass(ApplicationSchema);

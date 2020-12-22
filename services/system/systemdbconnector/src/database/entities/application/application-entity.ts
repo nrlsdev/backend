@@ -32,4 +32,16 @@ export class ApplicationEntity {
 
     return result;
   }
+
+  public async getApplicationByIdUserHasAuthorizationFor(
+    applicationId: string,
+    userId: string,
+  ) {
+    const result = await ApplicationModel.getApplicationByIdUserHasAuthorizationFor(
+      applicationId,
+      userId,
+    );
+
+    return result;
+  }
 }

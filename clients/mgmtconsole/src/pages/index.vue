@@ -1,13 +1,5 @@
 <template>
   <div>
-    <div class="application-overview-header">
-      <h1 class="system-large-title-font">{{ $t('StrApplications') }}</h1>
-      <Icon
-        @click.native="onCreateApplicationClicked"
-        class="application-overview-icon"
-        icon="plus"
-      />
-    </div>
     <Modal
       :id="applicationOverviewModalId"
       :title="$t('StrCreateApplication')"
@@ -28,12 +20,24 @@
         />
       </div>
     </Modal>
-    <div class="common-wrapper application-overview-container" :class="$mq">
-      <Application
-        v-for="application in applications"
-        :key="application.bundleId"
-        :application="application"
-      />
+    <div class="common-wrapper">
+      <div class="application-overview-header">
+        <h1 class="system-large-title-font">{{ $t('StrApplications') }}</h1>
+        <CustomButton
+          class="default application-overview-add-button"
+          @click.native="onCreateApplicationClicked"
+        >
+          <Icon class="application-overview-icon" icon="plus" />
+          Add Application
+        </CustomButton>
+      </div>
+      <div class="application-overview-container" :class="$mq">
+        <Application
+          v-for="application in applications"
+          :key="application.bundleId"
+          :application="application"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -87,35 +91,34 @@ export default class IndexPage extends Vue {
 
 <style lang="postcss" scoped>
 .application-overview-header {
+  margin-bottom: 20px;
   display: grid;
   grid-template-columns: 1fr auto;
-  padding: 20px;
-  align-items: center;
+  gap: 20px;
+}
+
+.application-overview-add-button {
+  display: grid;
+  grid-template-columns: auto 1fr;
   gap: 16px;
-  border-bottom: 1px solid var(--applications-overview-header-border-line-color);
+  align-items: center;
 }
 
 .application-overview-icon {
-  width: 2em;
-  height: 2em;
+  width: 1em;
+  height: 1em;
   fill: var(--default-icon-color);
-  cursor: pointer;
 }
 
 .application-overview-icon:hover {
   fill: var(--default-icon-hover-color);
 }
 
-.application-overview-modal-input {
-  display: grid;
-  grid-template-rows: auto;
-  gap: 8px;
-}
-
 .application-overview-container {
   display: grid;
   gap: 40px;
   text-align: center;
+
   &.xs,
   &.sm {
     grid-template-columns: repeat(2, 1fr);
@@ -127,5 +130,11 @@ export default class IndexPage extends Vue {
   &.xl {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+.application-overview-modal-input {
+  display: grid;
+  grid-template-rows: auto;
+  gap: 8px;
 }
 </style>

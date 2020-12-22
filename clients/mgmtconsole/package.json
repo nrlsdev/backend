@@ -18,6 +18,7 @@
     "@backend/messagehandler": "^1.0.0",
     "@backend/server": "^1.0.0",
     "@backend/systemconfiguration": "^1.0.0",
+    "@backend/systeminterfaces": "^1.0.0",
     "@nuxt/types": "^2.14.9",
     "@nuxt/typescript-runtime": "^0.4.10",
     "@nuxtjs/axios": "^5.12.1",
