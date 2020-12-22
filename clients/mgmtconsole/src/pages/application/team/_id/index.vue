@@ -13,7 +13,10 @@
         >
           {{ $t('StrInviteUser') }}</CustomButton
         >
-        <div class="application-team-list">
+        <div
+          class="application-team-list"
+          v-if="application.invitedUsers.length > 0"
+        >
           <div
             v-for="invitedUser in application.invitedUsers"
             :key="invitedUser.user._id"
@@ -28,6 +31,9 @@
               >{{ $t('StrDelete') }}</CustomButton
             >
           </div>
+        </div>
+        <div v-else>
+          <label> {{ $t('StrNoInvitedUsers') }} </label>
         </div>
       </div>
     </section>

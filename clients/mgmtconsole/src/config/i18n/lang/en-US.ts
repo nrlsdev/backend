@@ -31,6 +31,7 @@ export const enUS = {
   StrInvitedUser: 'Invited User',
   StrLastname: 'Lastname',
   StrNewPassword: 'New Password',
+  StrNoInvitedUsers: 'No invited users',
   StrOverview: 'Overview',
   StrOwner: 'Owner',
   StrSettings: 'Settings',

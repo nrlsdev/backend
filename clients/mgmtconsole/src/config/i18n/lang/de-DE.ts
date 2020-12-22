@@ -33,6 +33,7 @@ export const deDE = {
   StrInvitedUser: 'Eingeladene Benutzer',
   StrLastname: 'Nachname',
   StrNewPassword: 'Neues Passwort',
+  StrNoInvitedUsers: 'Keine eingeladenen Benutzer',
   StrOverview: 'Übersicht',
   StrOwner: 'Inhaber',
   StrSettings: 'Einstellungen',
