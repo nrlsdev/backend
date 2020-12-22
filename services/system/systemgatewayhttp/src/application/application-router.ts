@@ -4,6 +4,7 @@ import {
   getApplicationById,
   getAllApplicationsUserHasAuthorizationFor,
 } from './application-controller';
+import { applicationTeamRouter } from './team/team-router';
 
 const applicationRouter: Router = Router();
 
@@ -11,6 +12,8 @@ applicationRouter.post('/create', createApplication);
 
 applicationRouter.get('/', getAllApplicationsUserHasAuthorizationFor);
 
-applicationRouter.use('/:applicationId', getApplicationById);
+applicationRouter.get('/:applicationId', getApplicationById);
+
+applicationRouter.use('/team', applicationTeamRouter);
 
 export { applicationRouter };

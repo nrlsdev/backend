@@ -16,10 +16,10 @@
         <div class="application-team-list">
           <div
             v-for="invitedUser in application.invitedUsers"
-            :key="invitedUser.userId"
+            :key="invitedUser.user._id"
           >
-            <label>{{ invitedUser.email }}</label>
-            <label>[ROLE]</label>
+            <label>{{ invitedUser.user.email }}</label>
+            <label>{{ getRoleName(invitedUser.role) }}</label>
             <CustomButton class="delete">{{ $t('StrDelete') }}</CustomButton>
           </div>
         </div>
@@ -34,10 +34,10 @@
         <div class="application-team-list">
           <div
             v-for="authorizedUser in application.authorizedUsers"
-            :key="authorizedUser.user.userId"
+            :key="authorizedUser.user._id"
           >
             <label>{{ authorizedUser.user.email }}</label>
-            <label>{{ authorizedUser.role }}</label>
+            <label>{{ getRoleName(authorizedUser.role) }}</label>
             <CustomButton class="default">{{ $t('StrEdit') }}</CustomButton>
           </div>
         </div>
@@ -47,6 +47,7 @@
     <Modal
       :id="inviteUserModalId"
       :title="$t('StrInviteUser')"
+      :error="invitedUserModalError"
       positiveBtnText="StrInvite"
       :positiveBtnClickHandler="onInviteUser"
     >
@@ -66,8 +67,10 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
-import { getApplicationById } from '../../../../api/application';
+import { getApplicationById } from '../../../../api/application/application';
 import { ApplicationData } from '../../../../store/modules/application';
+import { inviteUserToTeam } from '../../../../api/application/team';
+import Modal from '../../../../components/elements/modal.vue';
 
 @Component
 export default class ApplicationTeamPage extends Vue {
@@ -77,23 +80,27 @@ export default class ApplicationTeamPage extends Vue {
 
   protected userToAddEmail: string = '';
 
-  protected selectedInvitUserRole: number = 1;
+  protected selectedInvitUserRole: number = 0;
+
+  protected applicationId: string = '';
+
+  protected invitedUserModalError: string = '';
 
   protected inviteUserRoleItems = [
     {
       id: 'invite-user-administrator-role',
       text: 'StrAdministrator',
-      value: 3,
+      value: 2,
     },
     {
       id: 'invite-user-editor-role',
       text: 'StrEditor',
-      value: 2,
+      value: 1,
     },
     {
       id: 'invite-user-reader-role',
       text: 'StrReader',
-      value: 1,
+      value: 0,
     },
   ];
 
@@ -102,15 +109,47 @@ export default class ApplicationTeamPage extends Vue {
   }
 
   protected async fetch() {
-    this.application = await getApplicationById(this.$route.params.id);
+    this.applicationId = this.$route.params.id;
+    this.application = await getApplicationById(this.applicationId);
   }
 
   protected onInviteUserBtnClicked() {
-    this.$root.$emit('bv::show::modal', this.inviteUserModalId);
+    Modal.setVisible(this.$root, this.inviteUserModalId, true);
   }
 
-  protected onInviteUser() {
-    console.log(this.userToAddEmail + ', ' + this.selectedInvitUserRole);
+  protected async onInviteUser() {
+    const error = await inviteUserToTeam(
+      this.userToAddEmail,
+      this.selectedInvitUserRole,
+      this.applicationId,
+    );
+
+    if (error) {
+      this.invitedUserModalError = error;
+      return;
+    }
+
+    Modal.setVisible(this.$root, this.inviteUserModalId, false);
+  }
+
+  protected getRoleName(role: number) {
+    switch (role) {
+      case 0: {
+        return this.$t('StrReader');
+      }
+      case 1: {
+        return this.$t('StrEditor');
+      }
+      case 2: {
+        return this.$t('StrAdministrator');
+      }
+      case 3: {
+        return this.$t('StrOwner');
+      }
+      default: {
+        return null;
+      }
+    }
   }
 }
 </script>

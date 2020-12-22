@@ -44,4 +44,28 @@ export class ApplicationEntity {
 
     return result;
   }
+
+  // team
+  public async inviteUserToTeam(
+    email: string,
+    role: number,
+    applicationId: string,
+  ) {
+    const result = await ApplicationModel.inviteUserToTeam(
+      email,
+      role,
+      applicationId,
+    );
+
+    return result;
+  }
+
+  public async acceptInvitation(invitationCode: string, userId: string) {
+    const result = await ApplicationModel.acceptInvitation(
+      invitationCode,
+      userId,
+    );
+
+    return result;
+  }
 }

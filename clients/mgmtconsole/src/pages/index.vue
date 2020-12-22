@@ -44,6 +44,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import Modal from '../components/elements/modal.vue';
 import {
   ApplicationData,
   ApplicationModule,
@@ -70,7 +71,7 @@ export default class IndexPage extends Vue {
   }
 
   protected onCreateApplicationClicked() {
-    this.$root.$emit('bv::show::modal', this.applicationOverviewModalId);
+    Modal.setVisible(this.$root, this.applicationOverviewModalId, true);
   }
 
   protected async onCreateApplicationBtnClicked() {
@@ -84,7 +85,7 @@ export default class IndexPage extends Vue {
       return;
     }
 
-    this.$root.$emit('bv::hide::modal', this.applicationOverviewModalId);
+    Modal.setVisible(this.$root, this.applicationOverviewModalId, false);
   }
 }
 </script>

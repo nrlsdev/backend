@@ -32,6 +32,7 @@ export const enUS = {
   StrLastname: 'Lastname',
   StrNewPassword: 'New Password',
   StrOverview: 'Overview',
+  StrOwner: 'Owner',
   StrSettings: 'Settings',
   StrSignIn: 'Sign In',
   StrSignOut: 'Sign Out',

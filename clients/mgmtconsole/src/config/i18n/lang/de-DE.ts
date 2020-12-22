@@ -34,6 +34,7 @@ export const deDE = {
   StrLastname: 'Nachname',
   StrNewPassword: 'Neues Passwort',
   StrOverview: 'Übersicht',
+  StrOwner: 'Inhaber',
   StrSettings: 'Einstellungen',
   StrSignIn: 'Anmelden',
   StrSignOut: 'Abmelden',

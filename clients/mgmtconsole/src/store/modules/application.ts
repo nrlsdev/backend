@@ -6,11 +6,11 @@ import {
   MutationAction,
 } from 'vuex-module-decorators';
 import { store } from '@/store';
+import { SystemUser } from '@backend/systeminterfaces';
 import {
   createApplication,
   getAllApplicationsUserIsAuthorizedFor,
-} from '@/api/application';
-import { SystemUser } from '@backend/systeminterfaces';
+} from '@/api/application/application';
 
 export interface ApplicationData {
   _id: string;
