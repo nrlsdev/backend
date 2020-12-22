@@ -42,8 +42,8 @@ export const checkToken = (
 
   const { _id, email } = decode(token) as any;
 
-  request.body.tokenUserId = _id;
-  request.body.tokenEmail = email;
+  request.body.userId = _id;
+  request.body.userEmail = email;
 
   next();
 };

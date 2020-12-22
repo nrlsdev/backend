@@ -11,9 +11,9 @@ export async function onGetSystemuserData(
   request: Request,
   response: Response,
 ) {
-  const { tokenUserId } = request.body;
+  const { userId } = request.body;
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    SystemUserMessage.getSystemUserDataRequest(tokenUserId),
+    SystemUserMessage.getSystemUserDataRequest(userId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
     MessageSeverityType.SYSTEM_USER,
   );
