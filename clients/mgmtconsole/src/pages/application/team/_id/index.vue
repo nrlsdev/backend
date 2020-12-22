@@ -119,6 +119,10 @@ export default class ApplicationTeamPage extends Vue {
 
   protected async fetch() {
     this.applicationId = this.$route.params.id;
+    await this.loadApplication();
+  }
+
+  protected async loadApplication() {
     this.application = await getApplicationById(this.applicationId);
   }
 
@@ -127,9 +131,14 @@ export default class ApplicationTeamPage extends Vue {
   }
 
   protected async onDeleteInvitedUserBtnClicked(userId: string) {
-    const xxx = await deleteInvitedUser(this.applicationId, userId);
+    const success = await deleteInvitedUser(this.applicationId, userId);
 
-    console.log(xxx);
+    if (!success) {
+      // ToDo: Show Error?
+      return;
+    }
+
+    await this.loadApplication();
   }
 
   protected async onInviteUser() {
@@ -144,6 +153,7 @@ export default class ApplicationTeamPage extends Vue {
       return;
     }
 
+    await this.loadApplication();
     Modal.setVisible(this.$root, this.inviteUserModalId, false);
   }
 

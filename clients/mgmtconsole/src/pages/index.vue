@@ -65,6 +65,10 @@ export default class IndexPage extends Vue {
   protected applications: ApplicationData[] = [];
 
   protected async fetch() {
+    await this.loadApplications();
+  }
+
+  protected async loadApplications() {
     await ApplicationModule.loadApplications();
 
     this.applications = ApplicationModule.applications;
@@ -84,7 +88,7 @@ export default class IndexPage extends Vue {
       this.createApplicationError = error;
       return;
     }
-
+    await this.loadApplications();
     Modal.setVisible(this.$root, this.applicationOverviewModalId, false);
   }
 }
