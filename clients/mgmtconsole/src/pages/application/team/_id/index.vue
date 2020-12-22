@@ -20,7 +20,13 @@
           >
             <label>{{ invitedUser.user.email }}</label>
             <label>{{ getRoleName(invitedUser.role) }}</label>
-            <CustomButton class="delete">{{ $t('StrDelete') }}</CustomButton>
+            <CustomButton
+              class="delete"
+              @click.native="
+                onDeleteInvitedUserBtnClicked(invitedUser.user._id)
+              "
+              >{{ $t('StrDelete') }}</CustomButton
+            >
           </div>
         </div>
       </div>
@@ -69,7 +75,10 @@
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
 import { ApplicationData } from '../../../../store/modules/application';
-import { inviteUserToTeam } from '../../../../api/application/team';
+import {
+  deleteInvitedUser,
+  inviteUserToTeam,
+} from '../../../../api/application/team';
 import Modal from '../../../../components/elements/modal.vue';
 
 @Component
@@ -115,6 +124,12 @@ export default class ApplicationTeamPage extends Vue {
 
   protected onInviteUserBtnClicked() {
     Modal.setVisible(this.$root, this.inviteUserModalId, true);
+  }
+
+  protected async onDeleteInvitedUserBtnClicked(userId: string) {
+    const xxx = await deleteInvitedUser(this.applicationId, userId);
+
+    console.log(xxx);
   }
 
   protected async onInviteUser() {

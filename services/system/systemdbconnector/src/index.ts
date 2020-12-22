@@ -23,6 +23,7 @@ import {
 import {
   inviteUserToTeam,
   acceptInvitation,
+  deleteInvitation,
 } from './controller/application/team';
 
 const logger: Logger = new Logger('systemdbconnector::index');
@@ -130,6 +131,11 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return acceptInvitation(data.invitationCode, data.userId);
+    }
+    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_DELETE_INVITATION: {
+      const { data }: any = requestMessage.body;
+
+      return deleteInvitation(data.applicationId, data.userId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();

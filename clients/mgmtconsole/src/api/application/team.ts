@@ -34,3 +34,17 @@ export async function acceptInvitation(invitationCode: string) {
 
   return true;
 }
+
+export async function deleteInvitedUser(applicationId: string, userId: string) {
+  const response = await systemAPI.delete(
+    `/application/team/invite/${applicationId}/${userId}`,
+  );
+  const responseMessage: ResponseMessage = response.data as ResponseMessage;
+  const { error } = responseMessage.body;
+
+  if (error || response.status !== 200) {
+    return false;
+  }
+
+  return true;
+}

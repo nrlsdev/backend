@@ -132,7 +132,6 @@ export class ApplicationSchema implements Application {
       new Date().getTime() +
       1000 * 60 * 60 * 24
     ).toString()}`; // ToDo: constant
-
     const invitedUser = await SystemUserModel.findUserByEmail(email);
 
     if (!invitedUser) {
@@ -218,19 +217,21 @@ export class ApplicationSchema implements Application {
 
     if (!application || !application.invitedUsers) {
       return {
-        statusCode: StatusCodes.BAD_REQUEST,
-        error: 'Something went wrong.',
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No application found.',
       };
     }
 
-    const invitedUsers = application.invitedUsers.filter((user) => {
-      const systemUser: SystemUser = user.user as SystemUser;
+    const invitedUsers = application.invitedUsers.filter(
+      (user: InvitedUserSchema) => {
+        const systemUser: SystemUser = user.user as SystemUser;
 
-      return (
-        systemUser._id.toString() === userId &&
-        user.invitationCode === invitationCode
-      );
-    });
+        return (
+          systemUser._id.toString() === userId &&
+          user.invitationCode === invitationCode
+        );
+      },
+    );
 
     if (invitedUsers.length <= 0) {
       return {
@@ -243,14 +244,16 @@ export class ApplicationSchema implements Application {
     const { role } = invitedUser;
     const systemUserObject = invitedUser.user as SystemUser;
 
-    application.invitedUsers = application.invitedUsers.filter((user) => {
-      const systemUser: SystemUser = user.user as SystemUser;
+    application.invitedUsers = application.invitedUsers.filter(
+      (user: InvitedUserSchema) => {
+        const systemUser: SystemUser = user.user as SystemUser;
 
-      return (
-        systemUser._id.toString() !== userId &&
-        user.invitationCode !== invitationCode
-      );
-    });
+        return (
+          systemUser._id.toString() !== userId &&
+          user.invitationCode !== invitationCode
+        );
+      },
+    );
 
     application.authorizedUsers?.push({
       user: Types.ObjectId(systemUserObject._id!),
@@ -261,6 +264,47 @@ export class ApplicationSchema implements Application {
       application.save();
     } catch (exception) {
       ApplicationSchema.logger.error('acceptInvitation', exception);
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        invitationCode: null,
+        error: 'Something went wrong.',
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
+  // delete invitation
+  public static async deleteInvitation(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+    userId: string,
+  ) {
+    const application = await this.getApplicationById(applicationId);
+
+    if (!application || !application.invitedUsers) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        invitationCode: null,
+        error: 'No application found.',
+      };
+    }
+
+    application.invitedUsers = application.invitedUsers.filter(
+      (user: InvitedUserSchema) => {
+        const systemUser: SystemUser = user.user as SystemUser;
+
+        return systemUser._id.toString() !== userId;
+      },
+    );
+
+    try {
+      application.save();
+    } catch (exception) {
+      ApplicationSchema.logger.error('deleteInvitation', exception);
       return {
         statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
         invitationCode: null,

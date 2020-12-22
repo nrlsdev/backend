@@ -39,3 +39,12 @@ export async function acceptInvitation(invitationCode: string, userId: string) {
 
   return ApplicationTeamMessage.acceptInvitationResponse(statusCode, error);
 }
+
+export async function deleteInvitation(applicationId: string, userId: string) {
+  const {
+    statusCode,
+    error,
+  } = await Database.applicationEntity.deleteInvitation(applicationId, userId);
+
+  return ApplicationTeamMessage.deleteInvitationResponse(statusCode, error);
+}

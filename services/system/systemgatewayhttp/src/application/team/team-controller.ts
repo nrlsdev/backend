@@ -72,3 +72,24 @@ export async function acceptInvitation(request: Request, response: Response) {
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
+
+export async function deleteInvitation(request: Request, response: Response) {
+  const { applicationId, userId } = request.params;
+
+  if (!applicationId || !userId) {
+    const responseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+    response
+      .status(responseMessage.meta.statusCode)
+      .send(responseMessage)
+      .end();
+  }
+
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationTeamMessage.deleteInvitationRequest(applicationId, userId),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}

@@ -68,4 +68,13 @@ export class ApplicationEntity {
 
     return result;
   }
+
+  public async deleteInvitation(applicationId: string, userId: string) {
+    const result = await ApplicationModel.deleteInvitation(
+      applicationId,
+      userId,
+    );
+
+    return result;
+  }
 }
