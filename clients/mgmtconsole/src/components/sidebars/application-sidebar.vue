@@ -11,13 +11,6 @@
         <Icon icon="chart-bar" />
         <label>{{ $t('StrStatistics') }}</label>
       </n-link>
-      <n-link
-        :to="createApplicationNuxtLink('team')"
-        class="application-sidebar-item"
-      >
-        <Icon icon="team" />
-        <label>{{ $t('StrTeam') }}</label>
-      </n-link>
     </div>
     <div class="application-sidebar-header">
       <label>{{ $t('StrApplicationSettings') }}</label>
@@ -29,6 +22,13 @@
       >
         <Icon icon="gear" />
         <label>{{ $t('StrGeneral') }}</label>
+      </n-link>
+      <n-link
+        :to="createApplicationNuxtLink('team')"
+        class="application-sidebar-item"
+      >
+        <Icon icon="team" />
+        <label>{{ $t('StrTeam') }}</label>
       </n-link>
       <n-link
         :to="createApplicationNuxtLink('authentication')"

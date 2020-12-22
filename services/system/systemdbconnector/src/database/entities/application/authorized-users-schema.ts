@@ -24,7 +24,7 @@ export class AuthorizedUserSchema implements AuthorizedUser {
     unique: false,
     type: SystemUserSchema,
     ref: SystemUserSchema,
-    autopopulate: true,
+    autopopulate: { select: '-password' },
   })
   user!: Ref<SystemUserSchema>;
 

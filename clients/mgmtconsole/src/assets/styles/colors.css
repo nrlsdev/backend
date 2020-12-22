@@ -68,6 +68,9 @@
   );
   --application-sidebar-header-font-color: var(--primary-color);
 
+  /* application team settings */
+  --no-invited-users-text-color: var(--gray2-color);
+
   /* modal */
   --modal-header-border-color: var(--modal-background-color);
   --modal-background-color: var(--gray5-color);
@@ -152,6 +155,9 @@
     --primary-active-color
   );
   --application-sidebar-header-font-color: var(--primary-color);
+
+  /* application team settings */
+  --no-invited-users-text-color: var(--gray2-color);
 
   /* modal */
   --modal-header-border-color: var(--modal-background-color);

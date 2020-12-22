@@ -33,7 +33,9 @@
           </div>
         </div>
         <div v-else>
-          <label> {{ $t('StrNoInvitedUsers') }} </label>
+          <label class="application-team-list-no-invited-users-text">
+            {{ $t('StrNoInvitedUsers') }}
+          </label>
         </div>
       </div>
     </section>
@@ -50,7 +52,11 @@
           >
             <label>{{ authorizedUser.user.email }}</label>
             <label>{{ getRoleName(authorizedUser.role) }}</label>
-            <CustomButton class="default">{{ $t('StrEdit') }}</CustomButton>
+            <CustomButton
+              class="default"
+              @click.native="onEditAuthorizedUserBtnClicked(authorizedUser)"
+              >{{ $t('StrEdit') }}</CustomButton
+            >
           </div>
         </div>
       </div>
@@ -69,7 +75,7 @@
         :placeholder="$t('StrEmail')"
       />
       <RadioButtonGroup
-        v-model="selectedInvitUserRole"
+        v-model="selectedInvitedUserRole"
         name="invite-user-role-radio-group"
         :items="inviteUserRoleItems"
       />
@@ -86,20 +92,27 @@ import {
   inviteUserToTeam,
 } from '../../../../api/application/team';
 import Modal from '../../../../components/elements/modal.vue';
+import { AuthorizedUser } from '@backend/systeminterfaces';
 
 @Component
 export default class ApplicationTeamPage extends Vue {
+  protected applicationId: string = '';
+
   protected application: ApplicationData | null = null;
 
   private inviteUserModalId: string = 'application-team-invite-user';
 
   protected userToAddEmail: string = '';
 
-  protected selectedInvitUserRole: number = 0;
-
-  protected applicationId: string = '';
+  protected selectedInvitedUserRole: number = 0;
 
   protected invitedUserModalError: string = '';
+
+  private editUserModalId: string = 'application-team-edit-user';
+
+  protected selectedEditUserRole: number = 0;
+
+  protected editUserModalError: string = '';
 
   protected inviteUserRoleItems = [
     {
@@ -147,10 +160,21 @@ export default class ApplicationTeamPage extends Vue {
     await this.loadApplication();
   }
 
+  protected async onEditAuthorizedUserBtnClicked(
+    authorizedUser: AuthorizedUser,
+  ) {
+    console.log(authorizedUser); // ToDo
+    Modal.setVisible(this.$root, this.editUserModalId, true);
+  }
+
+  protected async onEditedUser() {
+    // ToDo
+  }
+
   protected async onInviteUser() {
     const error = await inviteUserToTeam(
       this.userToAddEmail,
-      this.selectedInvitUserRole,
+      this.selectedInvitedUserRole,
       this.applicationId,
     );
 
@@ -198,5 +222,9 @@ export default class ApplicationTeamPage extends Vue {
 
 .application-team-list > div:last-of-type {
   border-bottom: none;
+}
+
+.application-team-list-no-invited-users-text {
+  color: var(--no-invited-users-text-color);
 }
 </style>
