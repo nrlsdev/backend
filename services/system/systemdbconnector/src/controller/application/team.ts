@@ -48,3 +48,20 @@ export async function deleteInvitation(applicationId: string, userId: string) {
 
   return ApplicationTeamMessage.deleteInvitationResponse(statusCode, error);
 }
+
+export async function updateAuthorizedUser(
+  applicationId: string,
+  role: number,
+  userId: string,
+) {
+  const {
+    statusCode,
+    error,
+  } = await Database.applicationEntity.updateAuthorizedUser(
+    applicationId,
+    role,
+    userId,
+  );
+
+  return ApplicationTeamMessage.updateAuthorizedUserResponse(statusCode, error);
+}

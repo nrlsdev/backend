@@ -77,4 +77,18 @@ export class ApplicationEntity {
 
     return result;
   }
+
+  public async updateAuthorizedUser(
+    applicationId: string,
+    role: number,
+    userId: string,
+  ) {
+    const result = await ApplicationModel.updateAuthorizedUser(
+      applicationId,
+      role,
+      userId,
+    );
+
+    return result;
+  }
 }

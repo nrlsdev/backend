@@ -93,3 +93,32 @@ export async function deleteInvitation(request: Request, response: Response) {
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
+
+export async function updateAuthorizedUser(
+  request: Request,
+  response: Response,
+) {
+  const { applicationId, userId } = request.params;
+  const { role } = request.body;
+
+  if (!applicationId || !userId || !role) {
+    const responseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+    response
+      .status(responseMessage.meta.statusCode)
+      .send(responseMessage)
+      .end();
+  }
+
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationTeamMessage.updateAuthorizedUserRequest(
+      applicationId,
+      role,
+      userId,
+    ),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}

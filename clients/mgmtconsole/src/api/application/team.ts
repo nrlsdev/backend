@@ -48,3 +48,24 @@ export async function deleteInvitedUser(applicationId: string, userId: string) {
 
   return true;
 }
+
+export async function editAuthorizedUser(
+  applicationId: string,
+  role: number,
+  userId: string,
+) {
+  const response = await systemAPI.put(
+    `/application/team/${applicationId}/${userId}`,
+    {
+      role,
+    },
+  );
+  const responseMessage: ResponseMessage = response.data as ResponseMessage;
+  const { error } = responseMessage.body;
+
+  if (error || response.status !== 200) {
+    return error;
+  }
+
+  return null;
+}

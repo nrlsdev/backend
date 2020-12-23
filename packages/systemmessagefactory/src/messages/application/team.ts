@@ -10,6 +10,9 @@ export class ApplicationTeamMessage {
   public static readonly TYPE_APPLICATION_TEAM_DELETE_INVITATION =
     'application_team_delete_invitation';
 
+  public static readonly TYPE_APPLICATION_TEAM_UPDATE_AUTHORIZED_USER =
+    'application_team_update_authorizedUser';
+
   // invite user
   public static inviteUserToTeamRequest(
     email: string,
@@ -99,6 +102,41 @@ export class ApplicationTeamMessage {
   }
 
   public static deleteInvitationResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
+
+  // update authorized user
+  public static updateAuthorizedUserRequest(
+    applicationId: string,
+    role: number,
+    userId: string,
+  ): RequestMessage {
+    return {
+      meta: {
+        type:
+          ApplicationTeamMessage.TYPE_APPLICATION_TEAM_UPDATE_AUTHORIZED_USER,
+      },
+      body: {
+        data: {
+          applicationId,
+          role,
+          userId,
+        },
+      },
+    };
+  }
+
+  public static updateAuthorizedUserResponse(
     statusCode: number,
     error?: string,
   ): ResponseMessage {

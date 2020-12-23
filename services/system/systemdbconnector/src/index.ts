@@ -24,6 +24,7 @@ import {
   inviteUserToTeam,
   acceptInvitation,
   deleteInvitation,
+  updateAuthorizedUser,
 } from './controller/application/team';
 
 const logger: Logger = new Logger('systemdbconnector::index');
@@ -136,6 +137,11 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return deleteInvitation(data.applicationId, data.userId);
+    }
+    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_UPDATE_AUTHORIZED_USER: {
+      const { data }: any = requestMessage.body;
+
+      return updateAuthorizedUser(data.applicationId, data.role, data.userId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();

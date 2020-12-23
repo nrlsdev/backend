@@ -8,6 +8,7 @@
         :checked="value === item.value"
         :name="name"
         :value="item.value"
+        :disabled="item.disabled"
         @change="onRadioButtonChanged(item)"
       />
       <label class="radio-btn-label" :for="item.id">{{ $t(item.text) }}</label>
@@ -35,7 +36,9 @@ export default class CustomRadioGroup extends Vue {
     required: true,
     default: [],
   })
-  protected items!: [{ id: string; text: string; value: any }];
+  protected items!: [
+    { id: string; text: string; value: any; disabled?: boolean },
+  ];
 
   protected onRadioButtonChanged(item: { text: string; value: any }) {
     this.$emit('input', item.value);

@@ -1,5 +1,5 @@
 <template>
-  <div class="common-wrapper" v-if="application">
+  <div v-if="application">
     <h1 class="system-large-title-font">{{ $t('StrTeam') }}</h1>
 
     <section class="application-section">
@@ -77,7 +77,27 @@
       <RadioButtonGroup
         v-model="selectedInvitedUserRole"
         name="invite-user-role-radio-group"
-        :items="inviteUserRoleItems"
+        :items="userRoleItems"
+      />
+    </Modal>
+
+    <Modal
+      :id="editUserModalId"
+      :title="$t('StrEditUser')"
+      :error="editUserModalError"
+      positiveBtnText="StrEdit"
+      :positiveBtnClickHandler="onEditedUser"
+    >
+      <CustomInput
+        v-model="selectedEditUserEmail"
+        type="email"
+        :placeholder="$t('StrEmail')"
+        readonly
+      />
+      <RadioButtonGroup
+        v-model="selectedEditUserRole"
+        name="edit-user-role-radio-group"
+        :items="userRoleItems"
       />
     </Modal>
   </div>
@@ -89,10 +109,11 @@ import { getApplicationById } from '../../../../api/application/application';
 import { ApplicationData } from '../../../../store/modules/application';
 import {
   deleteInvitedUser,
+  editAuthorizedUser,
   inviteUserToTeam,
 } from '../../../../api/application/team';
 import Modal from '../../../../components/elements/modal.vue';
-import { AuthorizedUser } from '@backend/systeminterfaces';
+import { AuthorizedUser, SystemUser } from '@backend/systeminterfaces';
 
 @Component
 export default class ApplicationTeamPage extends Vue {
@@ -110,23 +131,33 @@ export default class ApplicationTeamPage extends Vue {
 
   private editUserModalId: string = 'application-team-edit-user';
 
+  protected selectedEditUserId: string = '';
+
+  protected selectedEditUserEmail: string = '';
+
   protected selectedEditUserRole: number = 0;
 
   protected editUserModalError: string = '';
 
-  protected inviteUserRoleItems = [
+  protected userRoleItems = [
     {
-      id: 'invite-user-administrator-role',
+      id: 'user-owner-role',
+      text: 'StrOwner',
+      value: 3,
+      disabled: true,
+    },
+    {
+      id: 'user-administrator-role',
       text: 'StrAdministrator',
       value: 2,
     },
     {
-      id: 'invite-user-editor-role',
+      id: 'user-editor-role',
       text: 'StrEditor',
       value: 1,
     },
     {
-      id: 'invite-user-reader-role',
+      id: 'user-reader-role',
       text: 'StrReader',
       value: 0,
     },
@@ -163,12 +194,29 @@ export default class ApplicationTeamPage extends Vue {
   protected async onEditAuthorizedUserBtnClicked(
     authorizedUser: AuthorizedUser,
   ) {
-    console.log(authorizedUser); // ToDo
+    const selectedUser = authorizedUser.user as SystemUser;
+
+    this.selectedEditUserId = selectedUser._id;
+    this.selectedEditUserEmail = selectedUser.email;
+    this.selectedEditUserRole = authorizedUser.role;
     Modal.setVisible(this.$root, this.editUserModalId, true);
   }
 
   protected async onEditedUser() {
-    // ToDo
+    const error = await editAuthorizedUser(
+      this.applicationId,
+      this.selectedEditUserRole,
+      this.selectedEditUserId,
+    );
+
+    if (error) {
+      this.editUserModalError = error;
+      return;
+    }
+
+    this.loadApplication();
+
+    Modal.setVisible(this.$root, this.editUserModalId, false);
   }
 
   protected async onInviteUser() {

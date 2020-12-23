@@ -3,6 +3,7 @@ import {
   inviteUserToTeam,
   acceptInvitation,
   deleteInvitation,
+  updateAuthorizedUser,
 } from './team-controller';
 
 const applicationTeamRouter: Router = Router();
@@ -13,6 +14,8 @@ applicationTeamRouter.delete(
   '/invite/:applicationId/:userId',
   deleteInvitation,
 );
+
+applicationTeamRouter.put('/:applicationId/:userId', updateAuthorizedUser);
 
 applicationTeamRouter.post('/accept', acceptInvitation);
 

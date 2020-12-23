@@ -169,7 +169,7 @@ export class ApplicationSchema implements Application {
       };
     }
 
-    application = await this.getApplicationById(applicationId);
+    application = await this.findApplicationById(applicationId);
 
     if (application === null) {
       return {
@@ -283,7 +283,7 @@ export class ApplicationSchema implements Application {
     applicationId: string,
     userId: string,
   ) {
-    const application = await this.getApplicationById(applicationId);
+    const application = await this.findApplicationById(applicationId);
 
     if (!application || !application.invitedUsers) {
       return {
@@ -318,8 +318,53 @@ export class ApplicationSchema implements Application {
     };
   }
 
+  public static async updateAuthorizedUser(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+    role: number,
+    userId: string,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No application found.',
+      };
+    }
+
+    let userIndex = -1;
+    for (let i = 0; i < application.authorizedUsers!.length; i += 1) {
+      const systemUser = application.authorizedUsers![i].user as SystemUser;
+
+      userIndex = i;
+
+      if (systemUser._id!.toString() === userId) {
+        break;
+      }
+    }
+
+    application.authorizedUsers![userIndex].role = role;
+
+    try {
+      application.save();
+    } catch (exception) {
+      ApplicationSchema.logger.error('updateAuthorizedUser', exception);
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        invitationCode: null,
+        error: 'Something went wrong.',
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
   // helper
-  public static async getApplicationById(
+  public static async findApplicationById(
     this: ReturnModelType<typeof ApplicationSchema>,
     applicationId: string,
   ) {
