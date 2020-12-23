@@ -141,24 +141,19 @@ export default class ApplicationTeamPage extends Vue {
 
   protected userRoleItems = [
     {
-      id: 'user-owner-role',
+      id: 'owner-role',
       text: 'StrOwner',
-      value: 3,
+      value: 2,
       disabled: true,
     },
     {
-      id: 'user-administrator-role',
+      id: 'administrator-role',
       text: 'StrAdministrator',
-      value: 2,
-    },
-    {
-      id: 'user-editor-role',
-      text: 'StrEditor',
       value: 1,
     },
     {
-      id: 'user-reader-role',
-      text: 'StrReader',
+      id: 'user-role',
+      text: 'StrUser',
       value: 0,
     },
   ];
@@ -238,15 +233,12 @@ export default class ApplicationTeamPage extends Vue {
   protected getRoleName(role: number) {
     switch (role) {
       case 0: {
-        return this.$t('StrReader');
+        return this.$t('StrUser');
       }
       case 1: {
-        return this.$t('StrEditor');
-      }
-      case 2: {
         return this.$t('StrAdministrator');
       }
-      case 3: {
+      case 2: {
         return this.$t('StrOwner');
       }
       default: {
