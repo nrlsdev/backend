@@ -9,19 +9,23 @@ import {
   SystemUserMessage,
   ErrorMessage,
   ApplicationMessage,
+  ApplicationTeamMessage,
 } from '@backend/systemmessagefactory';
 import { SystemConfiguration } from '@backend/systemconfiguration';
-import { SystemUser, Application } from '@backend/systeminterfaces';
+import { SystemUser } from '@backend/systeminterfaces';
 import { Database } from './database/database';
-import {
-  createSystemUser,
-  signInSystemUser,
-  getSystemuserData,
-} from './controller/system-user';
+import { signUp, signIn, getSystemuserData } from './controller/system-user';
 import {
   createApplication,
   getAllApplicationsUserHasAuthorizationFor,
-} from './controller/application';
+  getApplicationByIdUserHasAuthorizationFor,
+} from './controller/application/application';
+import {
+  inviteUserToTeam,
+  acceptInvitation,
+  deleteInvitation,
+  updateAuthorizedUser,
+} from './controller/application/team';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
@@ -74,12 +78,12 @@ async function onSystemUserMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case SystemUserMessage.TYPE_SYSTEM_USER_CREATE: {
-      return createSystemUser(requestMessage.body.data as SystemUser);
+      return signUp(requestMessage.body.data as SystemUser);
     }
     case SystemUserMessage.TYPE_SYSTEM_USER_SIGN_IN: {
       const { data }: any = requestMessage.body;
 
-      return signInSystemUser(data.email, data.password);
+      return signIn(data.email, data.password);
     }
     case SystemUserMessage.TYPE_SYSTEM_USER_DATA: {
       const { data }: any = requestMessage.body;
@@ -101,12 +105,43 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case ApplicationMessage.TYPE_APPLICATION_CREATE: {
-      return createApplication(requestMessage.body.data as Application);
+      const { data }: any = requestMessage.body;
+      const { bundleId, name, ownerId } = data;
+
+      return createApplication(bundleId, name, ownerId);
     }
     case ApplicationMessage.TYPE_APPLICATION_GET_ALL_APPLICATIONS_USER_HAS_AUTHORIZATION_FOR: {
       const { data }: any = requestMessage.body;
 
       return getAllApplicationsUserHasAuthorizationFor(data.userId);
+    }
+    case ApplicationMessage.TYPE_APPLICATION_GET_APPLICATION_BY_APPLICATION_ID_USER_HAS_AUTHORIZATION_FOR: {
+      const { data }: any = requestMessage.body;
+
+      return getApplicationByIdUserHasAuthorizationFor(
+        data.applicationId,
+        data.userId,
+      );
+    }
+    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_INVITE_USER_TO_TEAM: {
+      const { data }: any = requestMessage.body;
+
+      return inviteUserToTeam(data.email, data.role, data.applicationId);
+    }
+    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_ACCEPT_INVITATION: {
+      const { data }: any = requestMessage.body;
+
+      return acceptInvitation(data.invitationCode, data.userId);
+    }
+    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_DELETE_INVITATION: {
+      const { data }: any = requestMessage.body;
+
+      return deleteInvitation(data.applicationId, data.userId);
+    }
+    case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_UPDATE_AUTHORIZED_USER: {
+      const { data }: any = requestMessage.body;
+
+      return updateAuthorizedUser(data.applicationId, data.role, data.userId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse();

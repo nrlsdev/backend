@@ -1,13 +1,5 @@
 <template>
   <div>
-    <div class="application-overview-header">
-      <h1 class="system-large-title-font">{{ $t('StrApplications') }}</h1>
-      <Icon
-        @click.native="onCreateApplicationClicked"
-        class="application-overview-icon"
-        icon="plus"
-      />
-    </div>
     <Modal
       :id="applicationOverviewModalId"
       :title="$t('StrCreateApplication')"
@@ -28,18 +20,31 @@
         />
       </div>
     </Modal>
-    <div class="common-wrapper application-overview-container" :class="$mq">
-      <Application
-        v-for="application in applications"
-        :key="application.bundleId"
-        :application="application"
-      />
+    <div class="common-wrapper">
+      <div class="application-overview-header">
+        <h1 class="system-large-title-font">{{ $t('StrApplications') }}</h1>
+        <CustomButton
+          class="default application-overview-add-button"
+          @click.native="onCreateApplicationClicked"
+        >
+          <Icon class="application-overview-icon" icon="plus" />
+          Add Application
+        </CustomButton>
+      </div>
+      <div class="application-overview-container" :class="$mq">
+        <Application
+          v-for="application in applications"
+          :key="application.bundleId"
+          :application="application"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import Modal from '../components/elements/modal.vue';
 import {
   ApplicationData,
   ApplicationModule,
@@ -60,13 +65,17 @@ export default class IndexPage extends Vue {
   protected applications: ApplicationData[] = [];
 
   protected async fetch() {
+    await this.loadApplications();
+  }
+
+  protected async loadApplications() {
     await ApplicationModule.loadApplications();
 
     this.applications = ApplicationModule.applications;
   }
 
   protected onCreateApplicationClicked() {
-    this.$root.$emit('bv::show::modal', 'application-overview-modal');
+    Modal.setVisible(this.$root, this.applicationOverviewModalId, true);
   }
 
   protected async onCreateApplicationBtnClicked() {
@@ -79,43 +88,42 @@ export default class IndexPage extends Vue {
       this.createApplicationError = error;
       return;
     }
-
-    this.$root.$emit('bv::hide::modal', this.applicationOverviewModalId);
+    await this.loadApplications();
+    Modal.setVisible(this.$root, this.applicationOverviewModalId, false);
   }
 }
 </script>
 
 <style lang="postcss" scoped>
 .application-overview-header {
+  margin-bottom: 20px;
   display: grid;
   grid-template-columns: 1fr auto;
-  padding: 20px;
-  align-items: center;
+  gap: 20px;
+}
+
+.application-overview-add-button {
+  display: grid;
+  grid-template-columns: auto 1fr;
   gap: 16px;
-  border-bottom: 1px solid var(--applications-overview-header-border-line-color);
+  align-items: center;
 }
 
 .application-overview-icon {
-  width: 2em;
-  height: 2em;
+  width: 1em;
+  height: 1em;
   fill: var(--default-icon-color);
-  cursor: pointer;
 }
 
 .application-overview-icon:hover {
   fill: var(--default-icon-hover-color);
 }
 
-.application-overview-modal-input {
-  display: grid;
-  grid-template-rows: auto;
-  gap: 8px;
-}
-
 .application-overview-container {
   display: grid;
   gap: 40px;
   text-align: center;
+
   &.xs,
   &.sm {
     grid-template-columns: repeat(2, 1fr);
@@ -127,5 +135,11 @@ export default class IndexPage extends Vue {
   &.xl {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+.application-overview-modal-input {
+  display: grid;
+  grid-template-rows: auto;
+  gap: 8px;
 }
 </style>

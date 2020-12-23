@@ -6,9 +6,9 @@
 
   /* branding */
   --primary-color: rgb(252, 100, 0);
+  --primary-opacity-50-color: rgba(252, 100, 0, 0.5);
   --primary-hover-color: rgb(226, 89, 0);
   --primary-active-color: rgb(201, 79, 0);
-
   /* logos */
   --company-logo-color: var(--primary-color);
 }
@@ -25,6 +25,8 @@
 
   /* reds */
   --red1-color: rgb(255, 59, 48);
+  --red1-hover-color: rgb(212, 50, 41);
+  --red1-active-color: rgb(173, 40, 33);
 
   /* common */
   --default-page-background-color: var(--white-color);
@@ -66,22 +68,37 @@
   );
   --application-sidebar-header-font-color: var(--primary-color);
 
+  /* application team settings */
+  --no-invited-users-text-color: var(--gray2-color);
+
   /* modal */
   --modal-header-border-color: var(--modal-background-color);
   --modal-background-color: var(--gray5-color);
 
   /* custom button */
-  --custom-button-font-color: var(--white-color);
-  --custom-button-positive-color: var(--primary-color);
-  --custom-button-positive-hover-color: var(--primary-hover-color);
-  --custom-button-positive-active-color: var(--primary-active-color);
-  --custom-button-negative-color: var(--gray1-color);
-  --custom-button-negative-hover-color: var(--gray2-color);
-  --custom-button-negative-active-color: var(--gray3-color);
+  --custom-button-branded-color: var(--primary-color);
+  --custom-button-branded-hover-color: var(--primary-hover-color);
+  --custom-button-branded-active-color: var(--primary-active-color);
+  --custom-button-default-color: var(--gray1-color);
+  --custom-button-default-hover-color: var(--gray2-color);
+  --custom-button-default-active-color: var(--gray3-color);
+  --custom-button-modal-color: var(--gray3-color);
+  --custom-button-modal-hover-color: var(--gray2-color);
+  --custom-button-modal-active-color: var(--gray1-color);
+  --custom-button-delte-color: var(--red1-color);
+  --custom-button-delte-hover-color: var(--red1-hover-color);
+  --custom-button-delte-active-color: var(--red1-active-color);
 
   /* custom input */
   --custom-input-border-bottom-color: var(--gray3-color);
   --custom-input-placeholder-color: var(--gray1-color);
+
+  /* radio button */
+  --radio-button-not-checked-background-color: var(--gray3-color);
+  --radio-button-border-color: var(--gray3-color);
+  --radio-button-not-checked-box-shadow-color: var(--gray3-color);
+  --radio-button-checked-background-color: var(--primary-color);
+  --radio-button-checked-box-shadow-color: var(--primary-color);
 }
 
 .dark-mode {
@@ -96,6 +113,8 @@
 
   /* reds */
   --red1-color: rgb(255, 69, 58);
+  --red1-hover-color: rgb(212, 50, 41);
+  --red1-active-color: rgb(173, 40, 33);
 
   /* common */
   --default-page-background-color: var(--black-color);
@@ -137,20 +156,35 @@
   );
   --application-sidebar-header-font-color: var(--primary-color);
 
+  /* application team settings */
+  --no-invited-users-text-color: var(--gray2-color);
+
   /* modal */
   --modal-header-border-color: var(--modal-background-color);
   --modal-background-color: var(--gray5-color);
 
   /* custom button */
-  --custom-button-font-color: var(--white-color);
-  --custom-button-positive-color: var(--primary-color);
-  --custom-button-positive-hover-color: var(--primary-hover-color);
-  --custom-button-positive-active-color: var(--primary-active-color);
-  --custom-button-negative-color: var(--gray1-color);
-  --custom-button-negative-hover-color: var(--gray2-color);
-  --custom-button-negative-active-color: var(--gray3-color);
+  --custom-button-branded-color: var(--primary-color);
+  --custom-button-branded-hover-color: var(--primary-hover-color);
+  --custom-button-branded-active-color: var(--primary-active-color);
+  --custom-button-default-color: var(--gray4-color);
+  --custom-button-default-hover-color: var(--gray5-color);
+  --custom-button-default-active-color: var(--gray6-color);
+  --custom-button-modal-color: var(--gray3-color);
+  --custom-button-modal-hover-color: var(--gray4-color);
+  --custom-button-modal-active-color: var(--gray5-color);
+  --custom-button-delte-color: var(--red1-color);
+  --custom-button-delte-hover-color: var(--red1-hover-color);
+  --custom-button-delte-active-color: var(--red1-active-color);
 
   /* custom input */
   --custom-input-border-bottom-color: var(--gray4-color);
   --custom-input-placeholder-color: var(--gray2-color);
+
+  /* radio button */
+  --radio-button-not-checked-background-color: var(--gray3-color);
+  --radio-button-border-color: var(--gray3-color);
+  --radio-button-not-checked-box-shadow-color: var(--gray3-color);
+  --radio-button-checked-background-color: var(--primary-color);
+  --radio-button-checked-box-shadow-color: var(--primary-color);
 }

@@ -6,7 +6,7 @@
     </div>
     <div class="modal-footer-container">
       <CustomButton
-        class="block cancel"
+        class="modal-btn"
         @click.native="
           negativeBtnClickHandler
             ? negativeBtnClickHandler()
@@ -16,7 +16,7 @@
       >
 
       <CustomButton
-        class="block branded"
+        class="branded"
         @click.native="
           positiveBtnClickHandler
             ? positiveBtnClickHandler()
@@ -82,7 +82,15 @@ export default class Modal extends Vue {
   protected defaultPositiveBtnClickHandler() {}
 
   protected defaultNegativeBtnClickHandler() {
-    this.$root.$emit('bv::hide::modal', this.id);
+    Modal.setVisible(this.$root, this.id, false);
+  }
+
+  public static setVisible(vue: Vue, id: string, visibile: boolean) {
+    if (visibile) {
+      vue.$root.$emit('bv::show::modal', id);
+    } else {
+      vue.$root.$emit('bv::hide::modal', id);
+    }
   }
 }
 </script>

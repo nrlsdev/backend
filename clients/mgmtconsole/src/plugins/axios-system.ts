@@ -37,9 +37,12 @@ function axiosSystem(
         return Promise.reject(error);
       }
 
-      config.data = config.data === undefined ? {} : config.data;
+      config.data = config.data === undefined ? {} : JSON.parse(config.data);
 
-      if (response!.status === 403 && !config.data.retry) {
+      if (
+        response!.status === 401 ||
+        (response!.status === 403 && !config.data.retry)
+      ) {
         config.data.retry = true;
         await refreshToken(context);
 

@@ -1,8 +1,5 @@
 import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
-import {
-  Application,
-  ApplicationSystemUserRole,
-} from '@backend/systeminterfaces';
+import { Application } from '@backend/systeminterfaces';
 
 export class ApplicationMessage {
   public static readonly TYPE_APPLICATION_CREATE = 'application_create';
@@ -10,11 +7,14 @@ export class ApplicationMessage {
   public static readonly TYPE_APPLICATION_GET_ALL_APPLICATIONS_USER_HAS_AUTHORIZATION_FOR =
     'get_all_applications_user_has_authorization_for';
 
+  public static readonly TYPE_APPLICATION_GET_APPLICATION_BY_APPLICATION_ID_USER_HAS_AUTHORIZATION_FOR =
+    'get_application_by_application_id_user_has_authorization_for';
+
   // create application
   public static createApplicationRequest(
     bundleId: string,
     name: string,
-    authorizedUsers: ApplicationSystemUserRole,
+    ownerId: string,
   ): RequestMessage {
     return {
       meta: {
@@ -24,7 +24,7 @@ export class ApplicationMessage {
         data: {
           bundleId,
           name,
-          authorizedUsers,
+          ownerId,
         },
       },
     };
@@ -94,6 +94,24 @@ export class ApplicationMessage {
           application,
         },
         error,
+      },
+    };
+  }
+
+  public static getApplicationByIdRequest(
+    applicationId: string,
+    userId: string,
+  ) {
+    return {
+      meta: {
+        type:
+          ApplicationMessage.TYPE_APPLICATION_GET_APPLICATION_BY_APPLICATION_ID_USER_HAS_AUTHORIZATION_FOR,
+      },
+      body: {
+        data: {
+          applicationId,
+          userId,
+        },
       },
     };
   }

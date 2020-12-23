@@ -22,7 +22,7 @@
         />
         <label class="account-error-message">{{ errorMessage }}</label>
         <div class="account-actions">
-          <CustomButton class="block branded" type="submit">
+          <CustomButton class="big branded" type="submit">
             {{ $t('StrSignIn') }}
           </CustomButton>
           <n-link class="account-link" to="/account/resetpassword" prefetch>{{
@@ -57,7 +57,9 @@ export default class AccountSignInPage extends Vue {
     this.errorMessage = error;
 
     if (!error) {
-      this.$router.push('/');
+      const redirectUrl: string = (this.$route.query.redirect as string) || '/';
+
+      this.$router.push(redirectUrl);
     }
   }
 }

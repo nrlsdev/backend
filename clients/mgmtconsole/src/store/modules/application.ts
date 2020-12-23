@@ -6,16 +6,23 @@ import {
   MutationAction,
 } from 'vuex-module-decorators';
 import { store } from '@/store';
+import { SystemUser } from '@backend/systeminterfaces';
 import {
   createApplication,
   getAllApplicationsUserIsAuthorizedFor,
-} from '@/api/application';
+} from '@/api/application/application';
 
 export interface ApplicationData {
   _id: string;
   bundleId: string;
   name: string;
   image: string;
+  authorizedUsers: [
+    {
+      user: SystemUser;
+      role: number;
+    },
+  ];
 }
 
 export interface ApplicationState {

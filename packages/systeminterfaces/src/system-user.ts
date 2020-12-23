@@ -1,5 +1,5 @@
 export interface SystemUser {
-  _id?: string;
+  _id?: any;
   email: string;
   firstname: string;
   lastname: string;
