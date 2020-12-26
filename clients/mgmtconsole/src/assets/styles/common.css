@@ -6,7 +6,8 @@
   color: var(--default-font-color);
 }
 
-button {
+button,
+input {
   outline: none !important;
 }
 

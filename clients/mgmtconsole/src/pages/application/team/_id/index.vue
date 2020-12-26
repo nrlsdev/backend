@@ -2,10 +2,10 @@
   <div v-if="application">
     <h1 class="system-large-title-font">{{ $t('StrTeam') }}</h1>
     <section class="application-section">
-      <div class="application-section-header">
+      <div>
         <h2 class="system-title-two-font">{{ $t('StrInvitedUser') }}</h2>
       </div>
-      <div class="application-section-content">
+      <div>
         <CustomButton
           class="default application-section-button"
           @click.native="onInviteUserBtnClicked"
@@ -40,10 +40,10 @@
     </section>
     <hr class="application-section-separator" />
     <section class="application-section">
-      <div class="application-section-header">
+      <div>
         <h2 class="system-title-two-font">{{ $t('StrUser') }}</h2>
       </div>
-      <div class="application-section-content">
+      <div>
         <div class="application-team-list">
           <div
             v-for="authorizedUser in application.authorizedUsers"
