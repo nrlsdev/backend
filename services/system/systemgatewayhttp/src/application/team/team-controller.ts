@@ -13,7 +13,8 @@ import { noreplyMailer } from '../../mail-manager';
 import { messageManager } from '../../message-manager';
 
 export async function inviteUserToTeam(request: Request, response: Response) {
-  const { email, role, applicationId } = request.body;
+  const { email, role } = request.body;
+  const { applicationId } = request.params;
   const { protocol, host, port } = SystemConfiguration.systemMgmtConsole;
 
   if (!email || !role || !applicationId) {
@@ -23,6 +24,8 @@ export async function inviteUserToTeam(request: Request, response: Response) {
       .status(responseMessage.meta.statusCode)
       .send(responseMessage)
       .end();
+
+    return;
   }
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationTeamMessage.inviteUserToTeamRequest(email, role, applicationId),
@@ -62,6 +65,8 @@ export async function acceptInvitation(request: Request, response: Response) {
       .status(responseMessage.meta.statusCode)
       .send(responseMessage)
       .end();
+
+    return;
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
@@ -83,6 +88,8 @@ export async function deleteInvitation(request: Request, response: Response) {
       .status(responseMessage.meta.statusCode)
       .send(responseMessage)
       .end();
+
+    return;
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
@@ -108,6 +115,8 @@ export async function updateAuthorizedUser(
       .status(responseMessage.meta.statusCode)
       .send(responseMessage)
       .end();
+
+    return;
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(

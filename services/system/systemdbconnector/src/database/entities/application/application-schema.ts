@@ -1,6 +1,10 @@
 import { Logger } from '@backend/logger';
 import { StatusCodes } from '@backend/server';
-import { Application, SystemUser } from '@backend/systeminterfaces';
+import {
+  Application,
+  ApplicationRole,
+  SystemUser,
+} from '@backend/systeminterfaces';
 import {
   getModelForClass,
   modelOptions,
@@ -40,6 +44,7 @@ export class ApplicationSchema implements Application {
     required: false,
     unique: false,
     default: [],
+    _id: false,
     type: AuthorizedUserSchema,
   })
   authorizedUsers?: AuthorizedUserSchema[];
@@ -48,6 +53,7 @@ export class ApplicationSchema implements Application {
     required: false,
     unique: false,
     default: [],
+    _id: false,
     type: InvitedUserSchema,
   })
   invitedUsers?: InvitedUserSchema[];
@@ -65,7 +71,7 @@ export class ApplicationSchema implements Application {
         authorizedUsers: [
           {
             user: Types.ObjectId(ownerId),
-            role: 3,
+            role: ApplicationRole.OWNER,
           },
         ],
       });
@@ -359,6 +365,46 @@ export class ApplicationSchema implements Application {
 
     return {
       statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
+  // application role
+  public static async getUserApplicationRole(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+    userId: string,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        role: undefined,
+        error: 'No application found.',
+      };
+    }
+
+    let role: number = -1;
+    application.authorizedUsers?.forEach((user: AuthorizedUserSchema) => {
+      const systemUser: SystemUser = user.user as SystemUser;
+
+      if (systemUser._id.toString() === userId) {
+        role = user.role;
+      }
+    });
+
+    if (role === -1) {
+      return {
+        statusCode: StatusCodes.FORBIDDEN,
+        role: undefined,
+        error: 'User is not authorized.',
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      role,
       error: undefined,
     };
   }

@@ -1,7 +1,6 @@
 <template>
   <div v-if="application">
     <h1 class="system-large-title-font">{{ $t('StrTeam') }}</h1>
-
     <section class="application-section">
       <div class="application-section-header">
         <h2 class="system-title-two-font">{{ $t('StrInvitedUser') }}</h2>
@@ -113,10 +112,16 @@ import {
   inviteUserToTeam,
 } from '../../../../api/application/team';
 import Modal from '../../../../components/elements/modal.vue';
-import { AuthorizedUser, SystemUser } from '@backend/systeminterfaces';
+import {
+  AuthorizedUser,
+  SystemUser,
+  ApplicationRole,
+} from '@backend/systeminterfaces';
 
 @Component
 export default class ApplicationTeamPage extends Vue {
+  private Role = ApplicationRole;
+
   protected applicationId: string = '';
 
   protected application: ApplicationData | null = null;
@@ -125,7 +130,7 @@ export default class ApplicationTeamPage extends Vue {
 
   protected userToAddEmail: string = '';
 
-  protected selectedInvitedUserRole: number = 0;
+  protected selectedInvitedUserRole: number = this.Role.USER;
 
   protected invitedUserModalError: string = '';
 
@@ -135,31 +140,26 @@ export default class ApplicationTeamPage extends Vue {
 
   protected selectedEditUserEmail: string = '';
 
-  protected selectedEditUserRole: number = 0;
+  protected selectedEditUserRole: number = this.Role.USER;
 
   protected editUserModalError: string = '';
 
   protected userRoleItems = [
     {
-      id: 'user-owner-role',
+      id: 'owner-role',
       text: 'StrOwner',
-      value: 3,
+      value: this.Role.OWNER,
       disabled: true,
     },
     {
-      id: 'user-administrator-role',
+      id: 'administrator-role',
       text: 'StrAdministrator',
-      value: 2,
+      value: this.Role.ADMINISTRATOR,
     },
     {
-      id: 'user-editor-role',
-      text: 'StrEditor',
-      value: 1,
-    },
-    {
-      id: 'user-reader-role',
-      text: 'StrReader',
-      value: 0,
+      id: 'user-role',
+      text: 'StrUser',
+      value: this.Role.USER,
     },
   ];
 
@@ -237,16 +237,13 @@ export default class ApplicationTeamPage extends Vue {
 
   protected getRoleName(role: number) {
     switch (role) {
-      case 0: {
-        return this.$t('StrReader');
+      case this.Role.USER: {
+        return this.$t('StrUser');
       }
-      case 1: {
-        return this.$t('StrEditor');
-      }
-      case 2: {
+      case this.Role.ADMINISTRATOR: {
         return this.$t('StrAdministrator');
       }
-      case 3: {
+      case this.Role.OWNER: {
         return this.$t('StrOwner');
       }
       default: {

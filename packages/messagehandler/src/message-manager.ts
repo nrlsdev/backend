@@ -57,7 +57,10 @@ export class MessageManager {
       rpcQueueType,
       rpcSeverityType,
     );
-    MessageManager.logger.debug('createRPCClient', 'Created rpc client');
+    MessageManager.logger.debug(
+      'createRPCClient',
+      `Created rpc client (${rpcQueueType} - ${rpcSeverityType})`,
+    );
     return client;
   }
 
@@ -71,7 +74,10 @@ export class MessageManager {
       rpcSeverityType,
     );
     const responseMessage: ResponseMessage = await client.sendMessage(message);
-    MessageManager.logger.debug('sendReplyToMessage', 'Sent reply to message');
+    MessageManager.logger.debug(
+      'sendReplyToMessage',
+      `Sent reply to message (${message.meta.type})`,
+    );
     await client.close();
     return responseMessage;
   }

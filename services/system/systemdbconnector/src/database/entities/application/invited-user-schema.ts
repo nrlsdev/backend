@@ -1,4 +1,4 @@
-import { InvitedUser } from '@backend/systeminterfaces';
+import { ApplicationRole, InvitedUser } from '@backend/systeminterfaces';
 import {
   getModelForClass,
   modelOptions,
@@ -28,8 +28,8 @@ export class InvitedUserSchema implements InvitedUser {
   })
   user!: Ref<SystemUserSchema>;
 
-  @prop({ required: true, unique: false })
-  role!: number;
+  @prop({ required: true, unique: false, enum: ApplicationRole })
+  role!: ApplicationRole;
 
   @prop({ required: true, unique: false })
   invitationCode!: string;

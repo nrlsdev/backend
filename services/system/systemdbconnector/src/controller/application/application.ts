@@ -79,3 +79,23 @@ export async function getApplicationByIdUserHasAuthorizationFor(
     application,
   );
 }
+
+export async function getUserApplicationRole(
+  applicationId: string,
+  userId: string,
+) {
+  const {
+    error,
+    role,
+    statusCode,
+  } = await Database.applicationEntity.getUserApplicationRole(
+    applicationId,
+    userId,
+  );
+
+  if (error || statusCode !== StatusCodes.OK) {
+    return ErrorMessage.errorResponse(statusCode, error);
+  }
+
+  return ApplicationMessage.getUserApplicationRoleResponse(statusCode, role!);
+}

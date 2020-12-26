@@ -19,6 +19,7 @@ import {
   createApplication,
   getAllApplicationsUserHasAuthorizationFor,
   getApplicationByIdUserHasAuthorizationFor,
+  getUserApplicationRole,
 } from './controller/application/application';
 import {
   inviteUserToTeam,
@@ -122,6 +123,11 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
         data.applicationId,
         data.userId,
       );
+    }
+    case ApplicationMessage.TYPE_APPLICATION_GET_USER_ROLE_FOR_APPLICATION: {
+      const { data }: any = requestMessage.body;
+
+      return getUserApplicationRole(data.applicationId, data.userId);
     }
     case ApplicationTeamMessage.TYPE_APPLICATION_TEAM_INVITE_USER_TO_TEAM: {
       const { data }: any = requestMessage.body;

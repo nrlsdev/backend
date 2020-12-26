@@ -10,6 +10,9 @@ export class ApplicationMessage {
   public static readonly TYPE_APPLICATION_GET_APPLICATION_BY_APPLICATION_ID_USER_HAS_AUTHORIZATION_FOR =
     'get_application_by_application_id_user_has_authorization_for';
 
+  public static readonly TYPE_APPLICATION_GET_USER_ROLE_FOR_APPLICATION =
+    'get_user_role_for_application';
+
   // create application
   public static createApplicationRequest(
     bundleId: string,
@@ -101,7 +104,7 @@ export class ApplicationMessage {
   public static getApplicationByIdRequest(
     applicationId: string,
     userId: string,
-  ) {
+  ): RequestMessage {
     return {
       meta: {
         type:
@@ -112,6 +115,42 @@ export class ApplicationMessage {
           applicationId,
           userId,
         },
+      },
+    };
+  }
+
+  // user application role
+  public static getUserApplicationRoleRequest(
+    applicationId: string,
+    userId: string,
+  ): RequestMessage {
+    return {
+      meta: {
+        type: ApplicationMessage.TYPE_APPLICATION_GET_USER_ROLE_FOR_APPLICATION,
+      },
+      body: {
+        data: {
+          applicationId,
+          userId,
+        },
+      },
+    };
+  }
+
+  public static getUserApplicationRoleResponse(
+    statusCode: number,
+    role: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          role,
+        },
+        error,
       },
     };
   }

@@ -6,11 +6,13 @@ export async function inviteUserToTeam(
   role: number,
   applicationId: string,
 ) {
-  const response = await systemAPI.post('/application/team/invite', {
-    email,
-    role,
-    applicationId,
-  });
+  const response = await systemAPI.post(
+    `/application/${applicationId}/team/invite`,
+    {
+      email,
+      role,
+    },
+  );
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
   const { error } = responseMessage.body;
 
@@ -21,10 +23,16 @@ export async function inviteUserToTeam(
   return null;
 }
 
-export async function acceptInvitation(invitationCode: string) {
-  const response = await systemAPI.post('/application/team/accept', {
-    invitationCode,
-  });
+export async function acceptInvitation(
+  applicationId: string,
+  invitationCode: string,
+) {
+  const response = await systemAPI.post(
+    `/application/${applicationId}/team/accept`,
+    {
+      invitationCode,
+    },
+  );
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
   const { error } = responseMessage.body;
 
@@ -37,7 +45,7 @@ export async function acceptInvitation(invitationCode: string) {
 
 export async function deleteInvitedUser(applicationId: string, userId: string) {
   const response = await systemAPI.delete(
-    `/application/team/invite/${applicationId}/${userId}`,
+    `/application/${applicationId}/team/invite/${userId}`,
   );
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
   const { error } = responseMessage.body;
@@ -55,7 +63,7 @@ export async function editAuthorizedUser(
   userId: string,
 ) {
   const response = await systemAPI.put(
-    `/application/team/${applicationId}/${userId}`,
+    `/application/${applicationId}/team/${userId}`,
     {
       role,
     },

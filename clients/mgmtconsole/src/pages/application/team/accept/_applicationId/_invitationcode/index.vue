@@ -12,16 +12,21 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
-import { acceptInvitation } from '../../../../../api/application/team';
+import { acceptInvitation } from '../../../../../../api/application/team';
 
 @Component
 export default class ApplicationTeamAcceptInvitationCodePage extends Vue {
+  protected applicationId: string = '';
+
   protected invitationCode: string = '';
 
   protected showError: boolean = false;
 
   protected async fetch() {
-    const success: boolean = await acceptInvitation(this.invitationCode);
+    const success: boolean = await acceptInvitation(
+      this.applicationId,
+      this.invitationCode,
+    );
 
     if (!success) {
       this.showError = true;
@@ -29,6 +34,7 @@ export default class ApplicationTeamAcceptInvitationCodePage extends Vue {
   }
 
   protected created() {
+    this.applicationId = this.$route.params.applicationId;
     this.invitationCode = this.$route.params.invitationcode;
   }
 

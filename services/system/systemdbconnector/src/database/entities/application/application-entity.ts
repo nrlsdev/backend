@@ -45,6 +45,16 @@ export class ApplicationEntity {
     return result;
   }
 
+  // application role
+  public async getUserApplicationRole(applicationId: string, userId: string) {
+    const result = await ApplicationModel.getUserApplicationRole(
+      applicationId,
+      userId,
+    );
+
+    return result;
+  }
+
   // team
   public async inviteUserToTeam(
     email: string,

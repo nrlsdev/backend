@@ -1,4 +1,6 @@
 import { Router } from '@backend/server';
+import { ApplicationRole } from '@backend/systeminterfaces';
+import { checkApplicationAuthorization } from '../application-authorization-checker';
 import {
   inviteUserToTeam,
   acceptInvitation,
@@ -6,16 +8,25 @@ import {
   updateAuthorizedUser,
 } from './team-controller';
 
-const applicationTeamRouter: Router = Router();
+const applicationTeamRouter: Router = Router({ mergeParams: true });
 
-applicationTeamRouter.post('/invite', inviteUserToTeam);
+applicationTeamRouter.post(
+  '/invite',
+  checkApplicationAuthorization(ApplicationRole.ADMINISTRATOR),
+  inviteUserToTeam,
+);
 
 applicationTeamRouter.delete(
-  '/invite/:applicationId/:userId',
+  '/invite/:userId',
+  checkApplicationAuthorization(ApplicationRole.ADMINISTRATOR),
   deleteInvitation,
 );
 
-applicationTeamRouter.put('/:applicationId/:userId', updateAuthorizedUser);
+applicationTeamRouter.put(
+  '/:userId',
+  checkApplicationAuthorization(ApplicationRole.ADMINISTRATOR),
+  updateAuthorizedUser,
+);
 
 applicationTeamRouter.post('/accept', acceptInvitation);
 
