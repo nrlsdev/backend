@@ -25,8 +25,18 @@ export default class CustomInput extends Vue {
   })
   protected placeholder!: string;
 
+  @Prop({
+    type: Function,
+    required: false,
+  })
+  protected change!: Function;
+
   protected updateInput(value: string) {
     this.$emit('input', value);
+
+    if (this.change) {
+      this.change();
+    }
   }
 }
 </script>

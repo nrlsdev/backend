@@ -6,10 +6,23 @@
         <h2 class="system-title-two-font">{{ $t('StrInfo') }}</h2>
       </div>
       <div class="application-general-info-container">
-        <img
-          class="application-general-image"
-          src="/application-placeholder.png"
-        />
+        <div @click="onImagePickerClicked">
+          <input
+            class="application-general-image-picker"
+            type="file"
+            accept="image/*"
+            ref="applicationGeneralImagePicker"
+            @change="onApplicationImageSelected"
+          />
+          <img
+            class="application-general-image"
+            src="/application-placeholder.png"
+            ref="applicationGeneralImage"
+          />
+          <div class="application-general-image-edit-container">
+            <Icon class="application-general-image-edit-icon" icon="pencil" />
+          </div>
+        </div>
         <div>
           <CustomInput
             class="block readonly"
@@ -17,13 +30,18 @@
             :value="application.bundleId"
             readonly
           />
-          <CustomInput class="block" type="text" :value="application.name" />
+          <CustomInput
+            class="block"
+            type="text"
+            :value="application.name"
+            :change="onInfoSectionChanged"
+          />
         </div>
       </div>
-      <div class="application-change-actions">
-        <CustomButton class="default">{{ $t('StrCancel') }}</CustomButton>
-        <CustomButton class="branded">{{ $t('StrSave') }}</CustomButton>
-      </div>
+      <ApplicationChangeActions
+        v-model="showInfoSectionActionButtons"
+        :onSaveBtnClicked="onInfoSecitonSaveBtnClicked"
+      />
     </section>
   </div>
 </template>
@@ -39,6 +57,8 @@ export default class ApplicationGeneralPage extends Vue {
 
   protected application: ApplicationData | null = null;
 
+  protected showInfoSectionActionButtons: boolean = false;
+
   protected layout() {
     return 'application';
   }
@@ -50,6 +70,56 @@ export default class ApplicationGeneralPage extends Vue {
 
   protected async loadApplication() {
     this.application = await getApplicationById(this.applicationId);
+  }
+
+  // image picker
+  protected getImagePicker() {
+    const imagePicker = this.$refs
+      .applicationGeneralImagePicker as HTMLInputElement;
+    if (!(imagePicker instanceof HTMLInputElement)) {
+      return null;
+    }
+    return imagePicker;
+  }
+
+  protected onImagePickerClicked() {
+    const imagePicker = this.getImagePicker();
+
+    if (!imagePicker) {
+      return;
+    }
+
+    imagePicker.click();
+  }
+
+  protected onApplicationImageSelected() {
+    const imagePicker = this.getImagePicker();
+
+    if (!imagePicker) {
+      return;
+    }
+
+    const { files } = imagePicker;
+
+    if (!files || files.length <= 0) {
+      return;
+    }
+
+    const imgElement = this.$refs.applicationGeneralImage as HTMLImageElement;
+    const image = files[0];
+
+    imgElement.src = URL.createObjectURL(image);
+    this.showInfoSectionActionButtons = true;
+  }
+
+  // general info
+
+  protected onInfoSecitonSaveBtnClicked() {
+    console.log('Not implemented yet!');
+  }
+
+  protected onInfoSectionChanged() {
+    this.showInfoSectionActionButtons = true;
   }
 }
 </script>
@@ -63,17 +133,62 @@ export default class ApplicationGeneralPage extends Vue {
   gap: 20px;
 }
 
+.application-general-info-container > div:first-of-type {
+  height: 128px;
+}
+
+.application-general-image-picker {
+  display: none;
+}
+
 .application-general-image {
   width: 128px;
   height: 128px;
 }
 
-.application-change-actions {
-  margin-left: auto;
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(2, auto);
-  grid-column: span 2;
-  gap: 20px;
+.application-general-image-edit-container {
+  top: -128px;
+  padding: 32px;
+  position: relative;
+  background-color: var(--transparent-color);
+  fill: var(--transparent-color);
+  transition: 0.25s ease;
 }
+
+.application-general-image-edit-container:hover {
+  background-color: var(--transparent50-color);
+  display: inherit;
+  transition: 0.25s ease;
+}
+
+.application-general-image-edit-container:hover
+  > .application-general-image-edit-icon {
+  fill: var(--white-color);
+}
+
+.application-general-image-edit-icon {
+  width: 64px;
+  height: 64px;
+  background-color: var(--transparent-color);
+  fill: var(--transparent-color);
+}
+
+/*
+.application-general-image-edit-icon {
+  width: 128px;
+  height: 128px;
+  top: -128px;
+  position: relative;
+  background-color: var(--transparent-color);
+  fill: var(--transparent-color);
+  transition: 0.25s ease;
+}
+
+.application-general-image-edit-icon:hover {
+  background-color: var(--transparent50-color);
+  fill: var(--white-color);
+  display: inherit;
+  transition: 0.25s ease;
+}
+*/
 </style>

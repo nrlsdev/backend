@@ -1,6 +1,7 @@
 :root {
   /* common */
   --transparent-color: rgba(0, 0, 0, 0);
+  --transparent50-color: rgba(0, 0, 0, 0.5);
   --black-color: rgb(0, 0, 0);
   --white-color: rgb(255, 255, 255);
 
