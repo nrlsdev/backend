@@ -20,6 +20,8 @@ export async function createApplication(request: Request, response: Response) {
       .status(responseMessage.meta.statusCode)
       .send(responseMessage)
       .end();
+
+    return;
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(

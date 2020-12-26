@@ -40,6 +40,7 @@ export class ApplicationSchema implements Application {
     required: false,
     unique: false,
     default: [],
+    _id: false,
     type: AuthorizedUserSchema,
   })
   authorizedUsers?: AuthorizedUserSchema[];
@@ -48,6 +49,7 @@ export class ApplicationSchema implements Application {
     required: false,
     unique: false,
     default: [],
+    _id: false,
     type: InvitedUserSchema,
   })
   invitedUsers?: InvitedUserSchema[];
