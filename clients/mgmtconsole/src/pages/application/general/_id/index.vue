@@ -16,7 +16,11 @@
           />
           <img
             class="application-general-image"
-            src="/application-placeholder.png"
+            :src="
+              application.image
+                ? application.image
+                : '/application-placeholder.png'
+            "
             ref="applicationGeneralImage"
           />
           <div class="application-general-image-edit-container">
@@ -30,16 +34,11 @@
             :value="application.bundleId"
             readonly
           />
-          <CustomInput
-            class="block"
-            type="text"
-            :value="application.name"
-            :change="onInfoSectionChanged"
-          />
+          <CustomInput class="block" type="text" v-model="application.name" />
         </div>
       </div>
       <ApplicationChangeActions
-        v-model="showInfoSectionActionButtons"
+        v-model="ShowInfoSectionActionButtons"
         :onSaveBtnClicked="onInfoSecitonSaveBtnClicked"
       />
     </section>
@@ -50,14 +49,24 @@
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
 import { ApplicationData } from '../../../../store/modules/application';
+import { objectEquals } from '@backend/systeminterfaces';
 
 @Component
 export default class ApplicationGeneralPage extends Vue {
   protected applicationId: string = '';
 
+  protected originalApplication: ApplicationData | null = null;
+
   protected application: ApplicationData | null = null;
 
   protected showInfoSectionActionButtons: boolean = false;
+
+  protected get ShowInfoSectionActionButtons() {
+    return (
+      !objectEquals(this.application, this.originalApplication) ||
+      this.showInfoSectionActionButtons
+    );
+  }
 
   protected layout() {
     return 'application';
@@ -69,7 +78,11 @@ export default class ApplicationGeneralPage extends Vue {
   }
 
   protected async loadApplication() {
-    this.application = await getApplicationById(this.applicationId);
+    this.originalApplication = await getApplicationById(this.applicationId);
+
+    if (this.originalApplication) {
+      this.application = { ...this.originalApplication };
+    }
   }
 
   // image picker
@@ -113,13 +126,8 @@ export default class ApplicationGeneralPage extends Vue {
   }
 
   // general info
-
   protected onInfoSecitonSaveBtnClicked() {
     console.log('Not implemented yet!');
-  }
-
-  protected onInfoSectionChanged() {
-    this.showInfoSectionActionButtons = true;
   }
 }
 </script>
@@ -172,23 +180,4 @@ export default class ApplicationGeneralPage extends Vue {
   background-color: var(--transparent-color);
   fill: var(--transparent-color);
 }
-
-/*
-.application-general-image-edit-icon {
-  width: 128px;
-  height: 128px;
-  top: -128px;
-  position: relative;
-  background-color: var(--transparent-color);
-  fill: var(--transparent-color);
-  transition: 0.25s ease;
-}
-
-.application-general-image-edit-icon:hover {
-  background-color: var(--transparent50-color);
-  fill: var(--white-color);
-  display: inherit;
-  transition: 0.25s ease;
-}
-*/
 </style>
