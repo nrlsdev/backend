@@ -8,7 +8,7 @@
       <form>
         <section class="account-section">
           <CustomInput
-            class="account-input"
+            class="borderless"
             type="email"
             :placeholder="$t('StrEmail')"
             required
@@ -16,13 +16,13 @@
         </section>
         <section class="account-section">
           <CustomInput
-            class="account-input"
+            class="borderless"
             type="password"
             :placeholder="$t('StrNewPassword')"
             required
           />
           <CustomInput
-            class="account-input"
+            class="borderless"
             type="password"
             :placeholder="$t('StrVerifyPassword')"
             required

@@ -1,6 +1,5 @@
 <template>
   <input
-    class="custom-input"
     :type="type"
     :placeholder="placeholder"
     @input="updateInput($event.target.value)"
@@ -33,7 +32,24 @@ export default class CustomInput extends Vue {
 </script>
 
 <style scoped>
-.custom-input {
+input {
+  border-color: var(--custom-input-border-color) !important;
+}
+
+input::placeholder {
+  color: var(--custom-input-placeholder-color);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--default-font-color) !important;
+  box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
+  -webkit-box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
+}
+
+.borderless {
   width: 100%;
   margin-bottom: 16px;
   padding-bottom: 5px;
@@ -41,20 +57,24 @@ export default class CustomInput extends Vue {
   border-radius: 0;
   outline: none;
   background-color: var(--transparent-color);
-  border-bottom: 1px solid var(--custom-input-border-bottom-color);
+  border-bottom: 1px solid;
   color: var(--default-font-color);
 }
 
-.custom-input::placeholder {
-  color: var(--custom-input-placeholder-color);
+.block {
+  width: 100%;
+  padding: 5px 10px;
+  border: 1px solid var(--gray5-color);
+  border-radius: 5px;
+  background-color: var(--gray6-color);
+  color: var(--white);
 }
 
-.custom-input:-webkit-autofill,
-.custom-input:-webkit-autofill:hover,
-.custom-input:-webkit-autofill:active,
-.custom-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--default-font-color) !important;
-  box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
-  -webkit-box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
+.block + .block {
+  margin-top: 20px;
+}
+
+.readonly {
+  color: var(--gray3-color);
 }
 </style>

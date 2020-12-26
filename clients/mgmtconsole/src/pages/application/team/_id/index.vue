@@ -69,6 +69,7 @@
       :positiveBtnClickHandler="onInviteUser"
     >
       <CustomInput
+        class="borderless"
         v-model="userToAddEmail"
         type="email"
         :placeholder="$t('StrEmail')"
@@ -88,6 +89,7 @@
       :positiveBtnClickHandler="onEditedUser"
     >
       <CustomInput
+        class="borderless"
         v-model="selectedEditUserEmail"
         type="email"
         :placeholder="$t('StrEmail')"

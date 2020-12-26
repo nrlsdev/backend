@@ -11,13 +11,13 @@
           src="/application-placeholder.png"
         />
         <div>
-          <input
-            class="todo-input readonly"
+          <CustomInput
+            class="block readonly"
             type="text"
             :value="application.bundleId"
             readonly
           />
-          <input class="todo-input" type="text" :value="application.name" />
+          <CustomInput class="block" type="text" :value="application.name" />
         </div>
       </div>
       <div class="application-change-actions">
@@ -29,15 +29,15 @@
 </template>
 
 <script lang="ts">
-import { Application } from '@backend/systeminterfaces';
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
+import { ApplicationData } from '../../../../store/modules/application';
 
 @Component
 export default class ApplicationGeneralPage extends Vue {
-  protected applicationId!: string;
+  protected applicationId: string = '';
 
-  protected application!: Application;
+  protected application: ApplicationData | null = null;
 
   protected layout() {
     return 'application';
@@ -66,23 +66,6 @@ export default class ApplicationGeneralPage extends Vue {
 .application-general-image {
   width: 128px;
   height: 128px;
-}
-
-.todo-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--gray5-color);
-  border-radius: 5px;
-  background-color: var(--gray6-color);
-  color: var(--white);
-}
-
-.todo-input + .todo-input {
-  margin-top: 20px;
-}
-
-.readonly {
-  color: var(--gray3-color);
 }
 
 .application-change-actions {

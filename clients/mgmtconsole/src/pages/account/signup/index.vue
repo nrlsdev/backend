@@ -8,7 +8,7 @@
       <form method="POST" @submit.prevent="onSignUpButtonClicked">
         <section class="account-section">
           <CustomInput
-            class="account-input"
+            class="borderless"
             type="email"
             :placeholder="$t('StrEmail')"
             v-model="email"
@@ -17,14 +17,14 @@
         </section>
         <section class="account-section">
           <CustomInput
-            class="account-input"
+            class="borderless"
             type="text"
             :placeholder="$t('StrFirstname')"
             v-model="firstname"
             required
           />
           <CustomInput
-            class="account-input"
+            class="borderless"
             type="text"
             :placeholder="$t('StrLastname')"
             v-model="lastname"
@@ -33,14 +33,14 @@
         </section>
         <section class="account-section">
           <CustomInput
-            class="account-input"
+            class="borderless"
             type="password"
             :placeholder="$t('StrPassword')"
             v-model="password"
             required
           />
           <CustomInput
-            class="account-input"
+            class="borderless"
             type="password"
             :placeholder="$t('StrVerifyPassword')"
             v-model="verifyPassword"

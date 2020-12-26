@@ -9,11 +9,13 @@
     >
       <div class="application-overview-modal-input">
         <CustomInput
+          class="borderless"
           type="text"
           :placeholder="$t('StrApplicationBundleIdentifier')"
           v-model="createApplicationBundleId"
         />
         <CustomInput
+          class="borderless"
           type="text"
           :placeholder="$t('StrApplicationName')"
           v-model="createApplicationName"
