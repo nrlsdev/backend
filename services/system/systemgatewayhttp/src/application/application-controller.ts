@@ -30,8 +30,7 @@ export async function createApplication(request: Request, response: Response) {
     MessageSeverityType.APPLICATION,
   );
 
-  response.status(responseMessage.meta.statusCode);
-  response.send(responseMessage).end();
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
 
 export async function getAllApplicationsUserHasAuthorizationFor(
@@ -46,8 +45,7 @@ export async function getAllApplicationsUserHasAuthorizationFor(
     MessageSeverityType.APPLICATION,
   );
 
-  response.status(responseMessage.meta.statusCode);
-  response.send(responseMessage).end();
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
 
 export async function getApplicationById(request: Request, response: Response) {
@@ -60,6 +58,5 @@ export async function getApplicationById(request: Request, response: Response) {
     MessageSeverityType.APPLICATION,
   );
 
-  response.status(responseMessage.meta.statusCode);
-  response.send(responseMessage).end();
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }

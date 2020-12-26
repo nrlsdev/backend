@@ -369,6 +369,46 @@ export class ApplicationSchema implements Application {
     };
   }
 
+  // application role
+  public static async getUserApplicationRole(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+    userId: string,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        role: undefined,
+        error: 'No application found.',
+      };
+    }
+
+    let role: number = -1;
+    application.authorizedUsers?.forEach((user: AuthorizedUserSchema) => {
+      const systemUser: SystemUser = user.user as SystemUser;
+
+      if (systemUser._id.toString() === userId) {
+        role = user.role;
+      }
+    });
+
+    if (role === -1) {
+      return {
+        statusCode: StatusCodes.FORBIDDEN,
+        role: undefined,
+        error: 'User is not authorized.',
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      role,
+      error: undefined,
+    };
+  }
+
   // helper
   public static async findApplicationById(
     this: ReturnModelType<typeof ApplicationSchema>,

@@ -1,4 +1,6 @@
 import { Router } from '@backend/server';
+import { ApplicationRole } from '../../../../../packages/systemmessagefactory/node_modules/@backend/systeminterfaces';
+import { checkApplicationAuthorization } from './application-authorization-checker';
 import {
   createApplication,
   getAllApplicationsUserHasAuthorizationFor,
@@ -13,7 +15,11 @@ applicationRouter.post('/create', createApplication);
 
 applicationRouter.get('/all', getAllApplicationsUserHasAuthorizationFor);
 
-authorizedApplicationRouter.get('/', getApplicationById);
+authorizedApplicationRouter.get(
+  '/',
+  checkApplicationAuthorization(ApplicationRole.USER),
+  getApplicationById,
+);
 
 authorizedApplicationRouter.use('/team', applicationTeamRouter);
 
