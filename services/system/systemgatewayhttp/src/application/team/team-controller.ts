@@ -17,7 +17,7 @@ export async function inviteUserToTeam(request: Request, response: Response) {
   const { applicationId } = request.params;
   const { protocol, host, port } = SystemConfiguration.systemMgmtConsole;
 
-  if (!email || role === undefined || !applicationId) {
+  if (!email || !role || !applicationId) {
     const responseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
 
     response

@@ -1,4 +1,4 @@
-import { AuthorizedUser } from '@backend/systeminterfaces';
+import { ApplicationRole, AuthorizedUser } from '@backend/systeminterfaces';
 import {
   getModelForClass,
   modelOptions,
@@ -28,8 +28,8 @@ export class AuthorizedUserSchema implements AuthorizedUser {
   })
   user!: Ref<SystemUserSchema>;
 
-  @prop({ required: true, unique: false })
-  role!: number;
+  @prop({ required: true, unique: false, enum: ApplicationRole })
+  role!: ApplicationRole;
 }
 
 export const AuthorizedUserModel = getModelForClass(AuthorizedUserSchema);

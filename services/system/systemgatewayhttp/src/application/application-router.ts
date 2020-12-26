@@ -1,19 +1,22 @@
 import { Router } from '@backend/server';
 import {
   createApplication,
-  getApplicationById,
   getAllApplicationsUserHasAuthorizationFor,
+  getApplicationById,
 } from './application-controller';
 import { applicationTeamRouter } from './team/team-router';
 
 const applicationRouter: Router = Router();
+const authorizedApplicationRouter: Router = Router({ mergeParams: true });
 
 applicationRouter.post('/create', createApplication);
 
-applicationRouter.get('/', getAllApplicationsUserHasAuthorizationFor);
+applicationRouter.get('/all', getAllApplicationsUserHasAuthorizationFor);
 
-applicationRouter.get('/:applicationId', getApplicationById);
+authorizedApplicationRouter.get('/', getApplicationById);
 
-applicationRouter.use('/team', applicationTeamRouter);
+authorizedApplicationRouter.use('/team', applicationTeamRouter);
+
+applicationRouter.use('/:applicationId', authorizedApplicationRouter);
 
 export { applicationRouter };

@@ -18,7 +18,7 @@ export async function createApplication(bundleId: string, name: string) {
 }
 
 export async function getAllApplicationsUserIsAuthorizedFor() {
-  const response = await systemAPI.get('/application');
+  const response = await systemAPI.get('/application/all');
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
   const { error } = responseMessage.body;
 

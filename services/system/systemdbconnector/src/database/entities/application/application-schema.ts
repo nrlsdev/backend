@@ -1,6 +1,10 @@
 import { Logger } from '@backend/logger';
 import { StatusCodes } from '@backend/server';
-import { Application, SystemUser } from '@backend/systeminterfaces';
+import {
+  Application,
+  ApplicationRole,
+  SystemUser,
+} from '@backend/systeminterfaces';
 import {
   getModelForClass,
   modelOptions,
@@ -67,7 +71,7 @@ export class ApplicationSchema implements Application {
         authorizedUsers: [
           {
             user: Types.ObjectId(ownerId),
-            role: 3,
+            role: ApplicationRole.OWNER,
           },
         ],
       });

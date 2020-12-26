@@ -6,16 +6,13 @@ import {
   updateAuthorizedUser,
 } from './team-controller';
 
-const applicationTeamRouter: Router = Router();
+const applicationTeamRouter: Router = Router({ mergeParams: true });
 
 applicationTeamRouter.post('/invite', inviteUserToTeam);
 
-applicationTeamRouter.delete(
-  '/invite/:applicationId/:userId',
-  deleteInvitation,
-);
+applicationTeamRouter.delete('/invite/:userId', deleteInvitation);
 
-applicationTeamRouter.put('/:applicationId/:userId', updateAuthorizedUser);
+applicationTeamRouter.put('/:userId', updateAuthorizedUser);
 
 applicationTeamRouter.post('/accept', acceptInvitation);
 
