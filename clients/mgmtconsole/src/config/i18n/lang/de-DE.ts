@@ -16,6 +16,7 @@ export const deDE = {
   StrDelete: 'Löschen',
   StrDone: 'Fertig',
   StrEdit: 'Bearbeiten',
+  StrEditUser: 'Benutzer bearbeiten',
   StrEmail: 'E-Mail',
   StrErrorAcceptingInvitation: 'Fehler beim akzeptieren der Einladung.',
   StrErrorAskForReInvite:
@@ -40,6 +41,7 @@ export const deDE = {
   StrSignOut: 'Abmelden',
   StrSignUp: 'Registrieren',
   StrStatistics: 'Statistiken',
+  StrStatus: 'Status',
   StrSubscriptions: 'Abonnements',
   StrTeam: 'Team',
   StrUser: 'Benutzer',

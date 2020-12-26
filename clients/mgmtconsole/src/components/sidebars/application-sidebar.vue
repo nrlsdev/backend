@@ -11,6 +11,13 @@
         <Icon icon="chart-bar" />
         <label>{{ $t('StrStatistics') }}</label>
       </n-link>
+      <n-link
+        :to="createApplicationNuxtLink('status')"
+        class="application-sidebar-item"
+      >
+        <Icon icon="heart-monitor" />
+        <label>{{ $t('StrStatus') }}</label>
+      </n-link>
     </div>
     <div class="application-sidebar-header">
       <label>{{ $t('StrApplicationSettings') }}</label>
