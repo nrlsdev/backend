@@ -1,13 +1,35 @@
 export const enUS = {
+  StrActivate: 'Activate',
   StrAdministrator: 'Administrator',
   StrAds: 'Ads',
   StrAlreadyGotAnAccount: 'Already have an Account',
+  StrAPIKey: 'API key',
+  StrAPISecret: 'API secret',
   StrApple: 'Apple',
+  StrAppId: 'App ID',
+  StrAppleTeamId: 'Apple team ID',
+  StrAppSecret: 'App secret',
   StrApplications: 'Applications',
   StrApplicationBundleIdentifier: 'Application Bundle-ID',
+  StrApplicationId: 'Application ID',
   StrApplicationName: 'Application Name',
+  StrApplicationSecret: 'Application secret',
   StrApplicationSettings: 'Application Settings',
   StrAuthentication: 'Authentication',
+  StrAuthenticationMethodAppleExplanation:
+    'Allow your users to sign in with their Apple account.',
+  StrAuthenticationMethodEmailAndPasswordExplanation:
+    'Allow your users to sign in with their E-Mail and password.',
+  StrAuthenticationMethodFacebookExplanation:
+    'Allow your users to sign in with their Facebook account.',
+  StrAuthenticationMethodGoogleExplanation:
+    'Allow your users to sign in with their Google account.',
+  StrAuthenticationMethodInstagramExplanation:
+    'Allow your users to sign in with their Instagram account.',
+  StrAuthenticationMethodMicrosoftExplanation:
+    'Allow your users to sign in with their Microsoft account.',
+  StrAuthenticationMethodTwitterExplanation:
+    'Allow your users to sign in with their Twitter account.',
   StrAuthenticationMethods: 'Authentication Methods',
   StrBackToSignInPage: 'Back to Sign In Page',
   StrCancel: 'Cancel',
@@ -36,6 +58,7 @@ export const enUS = {
   StrInvite: 'Invite',
   StrInviteUser: 'Invite User',
   StrInvitedUser: 'Invited User',
+  StrKeyId: 'Key ID',
   StrLastname: 'Lastname',
   StrMicrosoft: 'Microsoft',
   StrNewPassword: 'New Password',
@@ -43,6 +66,7 @@ export const enUS = {
   StrOverview: 'Overview',
   StrOwner: 'Owner',
   StrSave: 'Save',
+  StrServicesId: 'Services ID',
   StrSettings: 'Settings',
   StrSignIn: 'Sign In',
   StrSignOut: 'Sign Out',
@@ -55,8 +79,11 @@ export const enUS = {
   StrUser: 'User',
   StrPassword: 'Password',
   StrSecurityAndPrivacy: 'Security & Privacy',
+  StrPrivateKey: 'Private key',
   StrPushNotifications: 'Push Notifications',
   StrReset: 'Reset',
   StrResetPassword: 'Reset Password',
+  StrWebClientId: 'Web client ID',
+  StrWebClientSecret: 'Web client secret',
   StrVerifyPassword: 'Verify Password',
 };

@@ -75,6 +75,6 @@ export default class Collapse extends Vue {
 .collapse-content {
   margin-top: 10px;
   padding-top: 20px;
-  border-top: 1px solid var(--gray5-color); /* ToDo */
+  border-top: 1px solid var(--collapse-separator-line-color);
 }
 </style>

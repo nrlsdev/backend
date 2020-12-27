@@ -1,13 +1,35 @@
 export const deDE = {
+  StrActivate: 'Aktivieren',
   StrAdministrator: 'Administrator',
   StrAds: 'Werbungen',
   StrAlreadyGotAnAccount: 'Haben sie bereits ein Konto',
+  StrAPIKey: 'API-Schlüssel',
+  StrAPISecret: 'API-Secret',
   StrApple: 'Apple',
+  StrAppleTeamId: 'Apple-Team-ID',
+  StrAppId: 'App-ID',
+  StrAppSecret: 'App-Secret',
   StrApplications: 'Anwendungen',
   StrApplicationBundleIdentifier: 'Anwendungs Bundle-ID',
+  StrApplicationId: 'Anwendungs-ID',
   StrApplicationName: 'Anwendungsname',
+  StrApplicationSecret: 'App-Secret',
   StrApplicationSettings: 'Anwendungseinstellungen',
   StrAuthentication: 'Authentifizierung',
+  StrAuthenticationMethodAppleExplanation:
+    'Erlauben Sie Ihren Benutzern, sich mit Ihrem Apple Konto anzumelden.',
+  StrAuthenticationMethodEmailAndPasswordExplanation:
+    'Erlauben Sie Ihren Benutzern, sich mit E-Mail und Passwort anzumelden.',
+  StrAuthenticationMethodFacebookExplanation:
+    'Erlauben Sie Ihren Benutzern, sich mit Ihrem Facebook Konto anzumelden.',
+  StrAuthenticationMethodGoogleExplanation:
+    'Erlauben Sie Ihren Benutzern, sich mit Ihrem Google Konto anzumelden.',
+  StrAuthenticationMethodInstagramExplanation:
+    'Erlauben Sie Ihren Benutzern, sich mit Ihrem Instagram Konto anzumelden.',
+  StrAuthenticationMethodMicrosoftExplanation:
+    'Erlauben Sie Ihren Benutzern, sich mit Ihrem Microsoft Konto anzumelden.',
+  StrAuthenticationMethodTwitterExplanation:
+    'Erlauben Sie Ihren Benutzern, sich mit Ihrem Twitter Konto anzumelden.',
   StrAuthenticationMethods: 'Authentifizierungsmethoden',
   StrBackToSignInPage: 'Zurück zur Anmeldeseite',
   StrCancel: 'Abbrechen',
@@ -38,6 +60,7 @@ export const deDE = {
   StrInvite: 'Einladen',
   StrInviteUser: 'Benutzer einladen',
   StrInvitedUser: 'Eingeladene Benutzer',
+  StrKeyId: 'Schlüssel-ID',
   StrLastname: 'Nachname',
   StrMicrosoft: 'Microsoft',
   StrNewPassword: 'Neues Passwort',
@@ -45,6 +68,7 @@ export const deDE = {
   StrOverview: 'Übersicht',
   StrOwner: 'Eigentümer',
   StrSave: 'Speichern',
+  StrServicesId: 'Services-ID',
   StrSettings: 'Einstellungen',
   StrSignIn: 'Anmelden',
   StrSignOut: 'Abmelden',
@@ -57,8 +81,11 @@ export const deDE = {
   StrUser: 'Benutzer',
   StrPassword: 'Passwort',
   StrSecurityAndPrivacy: 'Sicherheit & Privatsphäre',
+  StrPrivateKey: 'Privater Schlüssel',
   StrPushNotifications: 'Mitteilungen',
   StrReset: 'Zurücksetzen',
   StrResetPassword: 'Passwort zurücksetzen',
+  StrWebClientId: 'Web-Client-ID',
+  StrWebClientSecret: 'Web-Clientschlüssel',
   StrVerifyPassword: 'Passwort verifizieren',
 };

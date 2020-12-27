@@ -103,6 +103,7 @@
 
   /* collapse */
   --collapse-background-color: var(--gray6-color);
+  --collapse-separator-line-color: var(--gray5-color);
 
   /* toggle switch */
   --toggle-switch-not-checked-background-color: var(--gray4-color);
@@ -199,6 +200,7 @@
 
   /* collapse */
   --collapse-background-color: var(--gray6-color);
+  --collapse-separator-line-color: var(--gray5-color);
 
   /* toggle switch */
   --toggle-switch-not-checked-background-color: var(--gray4-color);
