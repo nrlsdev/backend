@@ -2,12 +2,16 @@
   <div class="collapse-container">
     <div class="collapse-header" @click="onCollapseClicked">
       <Icon :icon="icon ? icon : ''" />
-      <label class="collapse-header-title">{{ title }}</label>
+      <label class="system-headline-font collapse-header-title">{{
+        title
+      }}</label>
       <Icon :icon="showStatusIcon ? statusIcon : ''" />
       <Icon :icon="collapsed ? 'arrow-up' : 'arrow-down'" />
     </div>
-    <b-collapse class="collapse-content" v-model="collapsed">
-      <slot />
+    <b-collapse v-model="collapsed">
+      <div class="collapse-content">
+        <slot />
+      </div>
     </b-collapse>
   </div>
 </template>
@@ -47,13 +51,13 @@ export default class Collapse extends Vue {
 
 <style scoped>
 .collapse-container {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border-radius: 5px;
-  background-color: rgb(36, 36, 36);
+  background-color: var(--collapse-background-color);
 }
 
 .collapse-container + .collapse-container {
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 .collapse-header {
@@ -66,5 +70,11 @@ export default class Collapse extends Vue {
 .collapse-header-title {
   cursor: pointer;
   margin: 0;
+}
+
+.collapse-content {
+  margin-top: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--gray5-color); /* ToDo */
 }
 </style>

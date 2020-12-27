@@ -11,6 +11,10 @@ input {
   outline: none !important;
 }
 
+label {
+  margin: 0;
+}
+
 picture,
 source,
 img,

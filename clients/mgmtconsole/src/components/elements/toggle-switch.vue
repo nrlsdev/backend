@@ -1,8 +1,11 @@
 <template>
-  <label class="toggle-switch">
-    <input type="checkbox" :checked="value" @change="onToggleSwitchChanged" />
-    <span class="toggle-switch-slider toggle-switch-round"></span>
-  </label>
+  <div class="toggle-switch-container">
+    <label class="toggle-switch">
+      <input type="checkbox" :checked="value" @change="onToggleSwitchChanged" />
+      <span class="toggle-switch-slider toggle-switch-round"></span>
+    </label>
+    <label class="toggle-switch-text">{{ text }}</label>
+  </div>
 </template>
 
 <script lang="ts">
@@ -11,11 +14,18 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator';
 @Component
 export default class ToggleSwitch extends Vue {
   @Prop({
-    required: true,
+    required: false,
     type: Boolean,
     default: false,
   })
   protected value!: boolean;
+
+  @Prop({
+    required: false,
+    type: String,
+    default: '',
+  })
+  protected text!: boolean;
 
   @Prop({
     type: Function,
@@ -34,17 +44,22 @@ export default class ToggleSwitch extends Vue {
 </script>
 
 <style scoped>
+.toggle-switch-container {
+  display: grid;
+  grid-template-columns: 2em auto;
+  gap: 8px;
+  align-items: center;
+}
+
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 24px;
-  height: 12px;
+  width: 2em;
+  height: 1em;
 }
 
 .toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+  display: none;
 }
 
 .toggle-switch-slider {
@@ -54,7 +69,7 @@ export default class ToggleSwitch extends Vue {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgb(77, 77, 77);
+  background-color: var(--toggle-switch-not-checked-background-color);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -62,29 +77,31 @@ export default class ToggleSwitch extends Vue {
 .toggle-switch-slider:before {
   position: absolute;
   content: '';
-  height: 12px;
-  width: 12px;
-  background-color: rgb(255, 255, 255);
+  height: 0.9em;
+  width: 0.9em;
+  top: 0.05em;
+  left: 0.05em;
+  background-color: var(--toggle-switch-slider-color);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
 input:checked + .toggle-switch-slider {
-  background-color: rgb(224, 101, 0);
-  box-shadow: 0 0 3px rgb(224, 101, 0);
+  background-color: var(--toggle-switch-checked-background-color);
+  box-shadow: 0 0 3px var(--toggle-switch-checked-background-color);
 }
 
 input:checked + .toggle-switch-slider:before {
-  -webkit-transform: translateX(12px);
-  -ms-transform: translateX(12px);
-  transform: translateX(12px);
+  -webkit-transform: translateX(1em);
+  -ms-transform: translateX(1em);
+  transform: translateX(1em);
 }
 
 .toggle-switch-slider.toggle-switch-round {
-  border-radius: 34px;
+  border-radius: 16px;
 }
 
 .toggle-switch-slider.toggle-switch-round:before {
-  border-radius: 50%;
+  border-radius: 100%;
 }
 </style>

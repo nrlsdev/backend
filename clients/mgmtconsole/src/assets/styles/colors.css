@@ -100,6 +100,14 @@
   --radio-button-not-checked-box-shadow-color: var(--gray3-color);
   --radio-button-checked-background-color: var(--primary-color);
   --radio-button-checked-box-shadow-color: var(--primary-color);
+
+  /* collapse */
+  --collapse-background-color: var(--gray6-color);
+
+  /* toggle switch */
+  --toggle-switch-not-checked-background-color: var(--gray4-color);
+  --toggle-switch-slider-color: var(--white-color);
+  --toggle-switch-checked-background-color: var(--primary-color);
 }
 
 .dark-mode {
@@ -188,4 +196,12 @@
   --radio-button-not-checked-box-shadow-color: var(--gray3-color);
   --radio-button-checked-background-color: var(--primary-color);
   --radio-button-checked-box-shadow-color: var(--primary-color);
+
+  /* collapse */
+  --collapse-background-color: var(--gray6-color);
+
+  /* toggle switch */
+  --toggle-switch-not-checked-background-color: var(--gray4-color);
+  --toggle-switch-slider-color: var(--white-color);
+  --toggle-switch-checked-background-color: var(--primary-color);
 }
