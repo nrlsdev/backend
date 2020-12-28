@@ -1,9 +1,18 @@
 <template>
   <input
+    v-if="type !== 'textarea'"
     :type="type"
+    :value="value"
     :placeholder="placeholder"
     @input="updateInput($event.target.value)"
   />
+  <textarea
+    v-else
+    :value="value"
+    :placeholder="placeholder"
+    rows="15"
+    @input="updateInput($event.target.value)"
+  ></textarea>
 </template>
 
 <script lang="ts">
@@ -11,6 +20,9 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator';
 
 @Component
 export default class CustomInput extends Vue {
+  @Prop()
+  protected value!: any;
+
   @Prop({
     type: String,
     required: false,
@@ -42,18 +54,23 @@ export default class CustomInput extends Vue {
 </script>
 
 <style scoped>
-input {
+input,
+textarea {
   border-color: var(--custom-input-border-color) !important;
 }
 
-input::placeholder {
+input,
+textarea::placeholder {
   color: var(--custom-input-placeholder-color);
 }
 
 input:-webkit-autofill,
+textarea:-webkit-autofill,
 input:-webkit-autofill:hover,
+textarea:-webkit-autofill:hover,
 input:-webkit-autofill:active,
-input:-webkit-autofill:focus {
+textarea:-webkit-autofill:active,
+input:-webkit-autofill:focus textarea:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--default-font-color) !important;
   box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
   -webkit-box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
@@ -86,5 +103,9 @@ input:-webkit-autofill:focus {
 
 .readonly {
   color: var(--gray3-color);
+}
+
+textarea {
+  resize: none;
 }
 </style>

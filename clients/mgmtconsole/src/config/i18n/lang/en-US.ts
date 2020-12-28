@@ -4,7 +4,7 @@ export const enUS = {
   StrAds: 'Ads',
   StrAlreadyGotAnAccount: 'Already have an Account',
   StrAPIKey: 'API key',
-  StrAPISecret: 'API secret',
+  StrAPISecret: 'API key secret',
   StrApple: 'Apple',
   StrAppId: 'App ID',
   StrAppleTeamId: 'Apple team ID',
