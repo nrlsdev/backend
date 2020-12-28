@@ -1,3 +1,4 @@
+import { Authentication } from './authentication/authentication';
 import { AuthorizedUser } from './authorized-user';
 
 export interface Application {
@@ -6,4 +7,5 @@ export interface Application {
   name: string;
   image?: string;
   authorizedUsers?: AuthorizedUser[] | any;
+  authentication?: Authentication;
 }

@@ -4,6 +4,7 @@ import {
   connect as connectToMongo,
   disconnect as disconnectFromMongo,
   connection,
+  Schema,
 } from 'mongoose';
 import { ConnectionState } from './connection-state';
 import { ApplicationEntity } from './entities/application/application-entity';
@@ -34,6 +35,8 @@ export class Database {
     databaseUsername: string,
     databasePassword: string,
   ) {
+    Schema.Types.String.checkRequired((value) => value != null); // MongoDB shoudl accept empty strings
+
     const parameters: string[] = [
       databaseHostname,
       databasePort.toString(),
