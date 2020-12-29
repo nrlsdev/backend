@@ -107,7 +107,6 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
-import { ApplicationData } from '../../../../store/modules/application';
 import {
   deleteInvitedUser,
   editAuthorizedUser,
@@ -118,6 +117,7 @@ import {
   AuthorizedUser,
   SystemUser,
   ApplicationRole,
+  Application,
 } from '@backend/systeminterfaces';
 
 @Component
@@ -126,7 +126,7 @@ export default class ApplicationTeamPage extends Vue {
 
   protected applicationId: string = '';
 
-  protected application: ApplicationData | null = null;
+  protected application: Application | null = null;
 
   private inviteUserModalId: string = 'application-team-invite-user';
 

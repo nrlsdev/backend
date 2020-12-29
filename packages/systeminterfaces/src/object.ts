@@ -10,3 +10,20 @@ export function objectEquals(onject1: any, onject2: any) {
   }
   return false;
 }
+
+export function minifyObject(object: any) {
+  const keys = Object.keys(object);
+  const minifiedObject = object;
+
+  keys.forEach((key: string) => {
+    const field = minifiedObject[key];
+
+    if (field === undefined || field === null || field === '') {
+      delete minifiedObject[key];
+    } else if (field instanceof Object) {
+      minifyObject(field);
+    }
+  });
+
+  return minifiedObject;
+}

@@ -6,8 +6,8 @@
 </template>
 
 <script lang="ts">
+import { Application } from '@backend/systeminterfaces';
 import { Vue, Component, Prop } from 'nuxt-property-decorator';
-import { ApplicationData } from '../../store/modules/application';
 
 @Component
 export default class Icon extends Vue {
@@ -15,7 +15,7 @@ export default class Icon extends Vue {
     type: Object,
     required: true,
   })
-  protected application!: ApplicationData;
+  protected application!: Application;
 
   protected onApplicationClicked() {
     this.$router.push(`/application/statistics/${this.application._id}`);

@@ -7,6 +7,7 @@ import {
   getApplicationById,
 } from './application-controller';
 import { applicationTeamRouter } from './team/team-router';
+import { applicationGeneralRouter } from './general/general-router';
 
 const applicationRouter: Router = Router();
 const authorizedApplicationRouter: Router = Router({ mergeParams: true });
@@ -22,6 +23,8 @@ authorizedApplicationRouter.get(
 );
 
 authorizedApplicationRouter.use('/team', applicationTeamRouter);
+
+authorizedApplicationRouter.use('/general', applicationGeneralRouter);
 
 applicationRouter.use('/:applicationId', authorizedApplicationRouter);
 

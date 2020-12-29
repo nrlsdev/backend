@@ -48,16 +48,16 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
-import { ApplicationData } from '../../../../store/modules/application';
-import { objectEquals } from '@backend/systeminterfaces';
+import { Application, objectEquals } from '@backend/systeminterfaces';
+import { updateGeneralInfo } from '../../../../api/application/general';
 
 @Component
 export default class ApplicationGeneralPage extends Vue {
   protected applicationId: string = '';
 
-  protected originalApplication: ApplicationData | null = null;
+  protected originalApplication: Application | null = null;
 
-  protected application: ApplicationData | null = null;
+  protected application: Application | null = null;
 
   protected showInfoSectionActionButtons: boolean = false;
 
@@ -83,6 +83,8 @@ export default class ApplicationGeneralPage extends Vue {
     if (this.originalApplication) {
       this.application = { ...this.originalApplication };
     }
+
+    this.showInfoSectionActionButtons = false;
   }
 
   // image picker
@@ -126,8 +128,15 @@ export default class ApplicationGeneralPage extends Vue {
   }
 
   // general info
-  protected onInfoSecitonSaveBtnClicked() {
-    console.log('Not implemented yet!');
+  protected async onInfoSecitonSaveBtnClicked() {
+    const error = await updateGeneralInfo(this.applicationId, this.application);
+
+    if (error) {
+      console.log(error); // ToDo show error
+      return;
+    }
+
+    this.loadApplication();
   }
 }
 </script>

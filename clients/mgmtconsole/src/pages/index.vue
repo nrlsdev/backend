@@ -45,12 +45,10 @@
 </template>
 
 <script lang="ts">
+import { Application } from '@backend/systeminterfaces';
 import { Vue, Component } from 'nuxt-property-decorator';
 import Modal from '../components/elements/modal.vue';
-import {
-  ApplicationData,
-  ApplicationModule,
-} from '../store/modules/application';
+import { ApplicationModule } from '../store/modules/application';
 
 @Component
 export default class IndexPage extends Vue {
@@ -64,7 +62,7 @@ export default class IndexPage extends Vue {
 
   protected createApplicationError: string = '';
 
-  protected applications: ApplicationData[] = [];
+  protected applications: Application[] = [];
 
   protected async fetch() {
     await this.loadApplications();

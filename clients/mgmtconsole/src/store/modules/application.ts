@@ -6,27 +6,14 @@ import {
   MutationAction,
 } from 'vuex-module-decorators';
 import { store } from '@/store';
-import { SystemUser } from '@backend/systeminterfaces';
 import {
   createApplication,
   getAllApplicationsUserIsAuthorizedFor,
 } from '@/api/application/application';
-
-export interface ApplicationData {
-  _id: string;
-  bundleId: string;
-  name: string;
-  image: string;
-  authorizedUsers: [
-    {
-      user: SystemUser;
-      role: number;
-    },
-  ];
-}
+import { Application as SystemApplication } from '@backend/systeminterfaces';
 
 export interface ApplicationState {
-  applications: ApplicationData[];
+  applications: SystemApplication[];
 }
 
 @Module({
@@ -35,7 +22,7 @@ export interface ApplicationState {
   name: 'application',
 })
 class Application extends VuexModule implements ApplicationState {
-  public applications: ApplicationData[] = [];
+  public applications: SystemApplication[] = [];
 
   @Action
   public async createApplication(payload: { bundleId: string; name: string }) {

@@ -203,17 +203,17 @@
 </template>
 
 <script lang="ts">
+import { Application } from '@backend/systeminterfaces';
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
-import { ApplicationData } from '../../../../store/modules/application';
 
 @Component
 export default class ApplicationAuthenticationPage extends Vue {
   protected applicationId: string = '';
 
-  protected originalApplication: ApplicationData | null = null;
+  protected originalApplication: Application | null = null;
 
-  protected application: ApplicationData | null = null;
+  protected application: Application | null = null;
 
   protected layout() {
     return 'application';

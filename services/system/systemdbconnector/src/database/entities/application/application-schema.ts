@@ -68,6 +68,40 @@ export class ApplicationSchema implements Application {
   })
   authentication?: AuthenticationSchema;
 
+  public static async updateApplicationData(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationData: Application,
+    applicationId: string,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No application found.',
+      };
+    }
+    const keysToUpdate = Object.keys(applicationData);
+
+    keysToUpdate.forEach((key: string) => {
+      const field = (applicationData as any)[key];
+      (application as any)[key] = field;
+    });
+
+    try {
+      application.save();
+    } catch (exception) {
+      ApplicationSchema.logger.error('updateApplicationData', exception);
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        invitationCode: null,
+        error: 'Something went wrong.',
+      };
+    }
+
+    return { statusCode: StatusCodes.OK, error: undefined };
+  }
+
   public static async createApplication(
     this: ReturnModelType<typeof ApplicationSchema>,
     bundleId: string,
