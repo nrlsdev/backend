@@ -1,11 +1,15 @@
 <template>
   <div class="application-change-actions" v-if="value">
-    <CustomButton class="default" @click.native="onCancelBtnClicked">{{
-      $t('StrCancel')
-    }}</CustomButton>
-    <CustomButton class="branded" @click.native="onSaveBtnClicked">{{
-      $t('StrSave')
-    }}</CustomButton>
+    <CustomButton
+      class="application-change-action-button-group default"
+      @click.native="onCancelBtnClicked"
+      >{{ $t('StrCancel') }}</CustomButton
+    >
+    <CustomButton
+      class="application-change-action-button-group branded"
+      @click.native="onSaveBtnClicked"
+      >{{ $t('StrSave') }}</CustomButton
+    >
   </div>
 </template>
 
@@ -28,11 +32,10 @@ export default class ApplicationChangeActions extends Vue {
 
 <style scoped>
 .application-change-actions {
-  margin-left: auto;
   margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(2, auto);
-  grid-column: span 2;
   gap: 20px;
+  justify-content: end;
 }
 </style>

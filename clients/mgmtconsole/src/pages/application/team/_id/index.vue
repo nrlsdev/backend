@@ -1,6 +1,8 @@
 <template>
   <div v-if="application">
-    <h1 class="system-large-title-font">{{ $t('StrTeam') }}</h1>
+    <h1 class="system-large-title-font application-page-title">
+      {{ $t('StrTeam') }}
+    </h1>
     <section class="application-section">
       <div>
         <h2 class="system-title-two-font">{{ $t('StrInvitedUser') }}</h2>

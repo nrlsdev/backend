@@ -1,8 +1,6 @@
 <template>
   <div class="application-sidebar-container">
-    <div class="application-sidebar-header">
-      <label>{{ $t('StrOverview') }}</label>
-    </div>
+    <label class="application-sidebar-header">{{ $t('StrOverview') }}</label>
     <div class="application-sidebar-content">
       <n-link
         :to="createApplicationNuxtLink('statistics')"
@@ -19,9 +17,9 @@
         <label>{{ $t('StrStatus') }}</label>
       </n-link>
     </div>
-    <div class="application-sidebar-header">
-      <label>{{ $t('StrApplicationSettings') }}</label>
-    </div>
+    <label class="application-sidebar-header">{{
+      $t('StrApplicationSettings')
+    }}</label>
     <div class="application-sidebar-content">
       <n-link
         :to="createApplicationNuxtLink('general')"
@@ -111,14 +109,11 @@ export default class ApplicationSidebar extends Vue {
 .application-sidebar-header {
   line-height: 1em;
   font-weight: 600;
-}
-
-.application-sidebar-header > label {
   color: var(--application-sidebar-header-font-color);
 }
 
 .application-sidebar-content + .application-sidebar-header {
-  margin-top: 30px;
+  margin: 30px 0 10px 0 !important;
 }
 
 .application-sidebar-item {

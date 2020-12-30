@@ -1,6 +1,8 @@
 <template>
   <div v-if="application">
-    <h1 class="system-large-title-font">{{ $t('StrAuthentication') }}</h1>
+    <h1 class="system-large-title-font application-page-title">
+      {{ $t('StrAuthentication') }}
+    </h1>
     <section class="application-section">
       <div>
         <h2 class="system-title-two-font">
@@ -25,7 +27,7 @@
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsEmailAndPasswordChangeActions"
             :onSaveBtnClicked="
-              onAuthenticationMethodsEmailAndPasswordBtnClicked
+              onAuthenticationMethodsEmailAndPasswordSaveBtnClicked
             "
           />
         </Collapse>
@@ -94,7 +96,7 @@
           />
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsGoogleChangeActions"
-            :onSaveBtnClicked="onAuthenticationMethodsGoogleBtnClicked"
+            :onSaveBtnClicked="onAuthenticationMethodsGoogleSaveBtnClicked"
           />
         </Collapse>
         <Collapse
@@ -127,7 +129,7 @@
           />
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsMicrosoftChangeActions"
-            :onSaveBtnClicked="onAuthenticationMethodsMicrosoftBtnClicked"
+            :onSaveBtnClicked="onAuthenticationMethodsMicrosoftSaveBtnClicked"
           />
         </Collapse>
         <Collapse
@@ -160,7 +162,7 @@
           />
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsFacebookChangeActions"
-            :onSaveBtnClicked="onAuthenticationMethodsFacebookBtnClicked"
+            :onSaveBtnClicked="onAuthenticationMethodsFacebookSaveBtnClicked"
           />
         </Collapse>
         <Collapse
@@ -193,7 +195,7 @@
           />
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsInstagramChangeActions"
-            :onSaveBtnClicked="onAuthenticationMethodsInstagramBtnClicked"
+            :onSaveBtnClicked="onAuthenticationMethodsInstagramSaveBtnClicked"
           />
         </Collapse>
         <Collapse
@@ -224,7 +226,7 @@
           />
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsTwitterChangeActions"
-            :onSaveBtnClicked="onAuthenticationMethodsTwitterBtnClicked"
+            :onSaveBtnClicked="onAuthenticationMethodsTwitterSaveBtnClicked"
           />
         </Collapse>
       </div>

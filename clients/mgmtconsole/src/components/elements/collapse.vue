@@ -65,16 +65,16 @@ export default class Collapse extends Vue {
   grid-template-columns: auto 1fr auto auto;
   gap: 16px;
   align-items: center;
+  cursor: pointer;
 }
 
 .collapse-header-title {
   cursor: pointer;
-  margin: 0;
 }
 
 .collapse-content {
   margin-top: 10px;
-  padding-top: 20px;
+  padding: 10px 0;
   border-top: 1px solid var(--collapse-separator-line-color);
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <div v-if="application">
-    <h1 class="system-large-title-font">{{ $t('StrGeneral') }}</h1>
+    <h1 class="system-large-title-font application-page-title">
+      {{ $t('StrGeneral') }}
+    </h1>
     <section class="application-section">
       <div>
         <h2 class="system-title-two-font">{{ $t('StrInfo') }}</h2>
@@ -36,11 +38,11 @@
           />
           <CustomInput class="block" type="text" v-model="application.name" />
         </div>
+        <ApplicationChangeActions
+          v-model="ShowGeneralInfoChangeActions"
+          :onSaveBtnClicked="onInfoSectionSaveBtnClicked"
+        />
       </div>
-      <ApplicationChangeActions
-        v-model="ShowGeneralInfoChangeActions"
-        :onSaveBtnClicked="onInfoSectionSaveBtnClicked"
-      />
     </section>
   </div>
 </template>
@@ -194,5 +196,9 @@ export default class ApplicationGeneralPage extends Vue {
   height: 64px;
   background-color: var(--transparent-color);
   fill: var(--transparent-color);
+}
+
+.application-change-actions {
+  grid-column: span 2;
 }
 </style>

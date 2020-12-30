@@ -1,3 +1,7 @@
+.application-page-title {
+  margin-bottom: 20px;
+}
+
 .application-section {
   display: grid;
   grid-template-columns: 1fr 3fr;
@@ -12,11 +16,12 @@
 }
 
 .application-description {
+  margin: 8px 0 24px 0 !important;
   color: var(--gray1-color);
 }
 
-label + .block {
-  margin-bottom: 20px;
+.block + label {
+  margin-top: 20px !important;
 }
 
 .application-section-button {
