@@ -22,6 +22,12 @@
           <p class="application-description">
             {{ $t('StrAuthenticationMethodEmailAndPasswordExplanation') }}
           </p>
+          <ApplicationChangeActions
+            v-model="ShowAuthenticationMethodsEmailAndPasswordChangeActions"
+            :onSaveBtnClicked="
+              onAuthenticationMethodsEmailAndPasswordBtnClicked
+            "
+          />
         </Collapse>
         <Collapse icon="apple" :title="$t('StrApple')" statusIcon="checkmark">
           <ToggleSwitch
@@ -59,6 +65,10 @@
             v-model="application.authentication.methods.apple.privateKey"
             :placeholder="$t('StrPrivateKey')"
           />
+          <ApplicationChangeActions
+            v-model="ShowAuthenticationMethodsAppleChangeActions"
+            :onSaveBtnClicked="onAuthenticationMethodsAppleSaveBtnClicked"
+          />
         </Collapse>
         <Collapse icon="google" :title="$t('StrGoogle')" statusIcon="checkmark">
           <ToggleSwitch
@@ -81,6 +91,10 @@
             type="text"
             v-model="application.authentication.methods.google.webClientSecret"
             :placeholder="$t('StrWebClientSecret')"
+          />
+          <ApplicationChangeActions
+            v-model="ShowAuthenticationMethodsGoogleChangeActions"
+            :onSaveBtnClicked="onAuthenticationMethodsGoogleBtnClicked"
           />
         </Collapse>
         <Collapse
@@ -111,6 +125,10 @@
             "
             :placeholder="$t('StrApplicationSecret')"
           />
+          <ApplicationChangeActions
+            v-model="ShowAuthenticationMethodsMicrosoftChangeActions"
+            :onSaveBtnClicked="onAuthenticationMethodsMicrosoftBtnClicked"
+          />
         </Collapse>
         <Collapse
           icon="facebook"
@@ -139,6 +157,10 @@
               application.authentication.methods.facebook.applicationSecret
             "
             :placeholder="$t('StrApplicationSecret')"
+          />
+          <ApplicationChangeActions
+            v-model="ShowAuthenticationMethodsFacebookChangeActions"
+            :onSaveBtnClicked="onAuthenticationMethodsFacebookBtnClicked"
           />
         </Collapse>
         <Collapse
@@ -169,6 +191,10 @@
             "
             :placeholder="$t('StrApplicationSecret')"
           />
+          <ApplicationChangeActions
+            v-model="ShowAuthenticationMethodsInstagramChangeActions"
+            :onSaveBtnClicked="onAuthenticationMethodsInstagramBtnClicked"
+          />
         </Collapse>
         <Collapse
           icon="twitter"
@@ -196,6 +222,10 @@
             v-model="application.authentication.methods.twitter.apiSecret"
             :placeholder="$t('StrAPISecret')"
           />
+          <ApplicationChangeActions
+            v-model="ShowAuthenticationMethodsTwitterChangeActions"
+            :onSaveBtnClicked="onAuthenticationMethodsTwitterBtnClicked"
+          />
         </Collapse>
       </div>
     </section>
@@ -203,6 +233,7 @@
 </template>
 
 <script lang="ts">
+import { copyObject, objectEquals } from '@backend/systeminterfaces';
 import { Application } from '@backend/systeminterfaces';
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
@@ -214,6 +245,91 @@ export default class ApplicationAuthenticationPage extends Vue {
   protected originalApplication: Application | null = null;
 
   protected application: Application | null = null;
+
+  // view state
+  protected showAuthenticationMethodsEmailAndPasswordChangeActions: boolean = false;
+
+  protected showAuthenticationMethodsAppleChangeActions: boolean = false;
+
+  protected showAuthenticationMethodsGoogleChangeActions: boolean = false;
+
+  protected showAuthenticationMethodsMicrosoftChangeActions: boolean = false;
+
+  protected showAuthenticationMethodsFacebookChangeActions: boolean = false;
+
+  protected showAuthenticationMethodsInstagramChangeActions: boolean = false;
+
+  protected showAuthenticationMethodsTwitterChangeActions: boolean = false;
+
+  protected get ShowAuthenticationMethodsEmailAndPasswordChangeActions() {
+    return (
+      this.showAuthenticationMethodsEmailAndPasswordChangeActions ||
+      !objectEquals(
+        this.application?.authentication?.methods?.emailAndPassword,
+        this.originalApplication?.authentication?.methods?.emailAndPassword,
+      )
+    );
+  }
+
+  protected get ShowAuthenticationMethodsAppleChangeActions() {
+    return (
+      this.showAuthenticationMethodsAppleChangeActions ||
+      !objectEquals(
+        this.application?.authentication?.methods?.apple,
+        this.originalApplication?.authentication?.methods?.apple,
+      )
+    );
+  }
+
+  protected get ShowAuthenticationMethodsGoogleChangeActions() {
+    return (
+      this.showAuthenticationMethodsGoogleChangeActions ||
+      !objectEquals(
+        this.application?.authentication?.methods?.google,
+        this.originalApplication?.authentication?.methods?.google,
+      )
+    );
+  }
+
+  protected get ShowAuthenticationMethodsMicrosoftChangeActions() {
+    return (
+      this.showAuthenticationMethodsMicrosoftChangeActions ||
+      !objectEquals(
+        this.application?.authentication?.methods?.microsoft,
+        this.originalApplication?.authentication?.methods?.microsoft,
+      )
+    );
+  }
+
+  protected get ShowAuthenticationMethodsFacebookChangeActions() {
+    return (
+      this.showAuthenticationMethodsFacebookChangeActions ||
+      !objectEquals(
+        this.application?.authentication?.methods?.facebook,
+        this.originalApplication?.authentication?.methods?.facebook,
+      )
+    );
+  }
+
+  protected get ShowAuthenticationMethodsInstagramChangeActions() {
+    return (
+      this.showAuthenticationMethodsInstagramChangeActions ||
+      !objectEquals(
+        this.application?.authentication?.methods?.instagram,
+        this.originalApplication?.authentication?.methods?.instagram,
+      )
+    );
+  }
+
+  protected get ShowAuthenticationMethodsTwitterChangeActions() {
+    return (
+      this.showAuthenticationMethodsAppleChangeActions ||
+      !objectEquals(
+        this.application?.authentication?.methods?.twitter,
+        this.originalApplication?.authentication?.methods?.twitter,
+      )
+    );
+  }
 
   protected layout() {
     return 'application';
@@ -228,8 +344,46 @@ export default class ApplicationAuthenticationPage extends Vue {
     this.originalApplication = await getApplicationById(this.applicationId);
 
     if (this.originalApplication) {
-      this.application = { ...this.originalApplication };
+      this.application = copyObject(this.originalApplication);
     }
+
+    this.showAuthenticationMethodsEmailAndPasswordChangeActions = false;
+  }
+
+  // AuthenticationMethods
+  // Email and Password
+  protected onAuthenticationMethodsEmailAndPasswordSaveBtnClicked() {
+    console.log('Not implemented yet!');
+  }
+
+  // Apple
+  protected onAuthenticationMethodsAppleSaveBtnClicked() {
+    console.log('Not implemented yet!');
+  }
+
+  // Google
+  protected onAuthenticationMethodsGoogleSaveBtnClicked() {
+    console.log('Not implemented yet!');
+  }
+
+  // Microsoft
+  protected onAuthenticationMethodsMicrosoftSaveBtnClicked() {
+    console.log('Not implemented yet!');
+  }
+
+  // Facebook
+  protected onAuthenticationMethodsFacebookSaveBtnClicked() {
+    console.log('Not implemented yet!');
+  }
+
+  // Instagram
+  protected onAuthenticationMethodsInstagramSaveBtnClicked() {
+    console.log('Not implemented yet!');
+  }
+
+  // Twitter
+  protected onAuthenticationMethodsTwitterSaveBtnClicked() {
+    console.log('Not implemented yet!');
   }
 }
 </script>

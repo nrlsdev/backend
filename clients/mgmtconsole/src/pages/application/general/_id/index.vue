@@ -39,7 +39,7 @@
       </div>
       <ApplicationChangeActions
         v-model="ShowGeneralInfoChangeActions"
-        :onSaveBtnClicked="onInfoSecitonSaveBtnClicked"
+        :onSaveBtnClicked="onInfoSectionSaveBtnClicked"
       />
     </section>
   </div>
@@ -134,7 +134,7 @@ export default class ApplicationGeneralPage extends Vue {
   }
 
   // general info
-  protected async onInfoSecitonSaveBtnClicked() {
+  protected async onInfoSectionSaveBtnClicked() {
     const error = await updateGeneralInfo(this.applicationId, this.application);
 
     if (error) {
