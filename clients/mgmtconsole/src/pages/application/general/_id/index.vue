@@ -38,7 +38,7 @@
         </div>
       </div>
       <ApplicationChangeActions
-        v-model="ShowInfoSectionActionButtons"
+        v-model="ShowGeneralInfoChangeActions"
         :onSaveBtnClicked="onInfoSecitonSaveBtnClicked"
       />
     </section>
@@ -48,7 +48,11 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
-import { Application, objectEquals } from '@backend/systeminterfaces';
+import {
+  Application,
+  objectEquals,
+  copyObject,
+} from '@backend/systeminterfaces';
 import { updateGeneralInfo } from '../../../../api/application/general';
 
 @Component
@@ -59,12 +63,13 @@ export default class ApplicationGeneralPage extends Vue {
 
   protected application: Application | null = null;
 
-  protected showInfoSectionActionButtons: boolean = false;
+  // view state
+  protected showGeneralInfoChangeActions: boolean = false;
 
-  protected get ShowInfoSectionActionButtons() {
+  protected get ShowGeneralInfoChangeActions() {
     return (
-      !objectEquals(this.application, this.originalApplication) ||
-      this.showInfoSectionActionButtons
+      this.showGeneralInfoChangeActions ||
+      !objectEquals(this.application, this.originalApplication)
     );
   }
 
@@ -81,10 +86,10 @@ export default class ApplicationGeneralPage extends Vue {
     this.originalApplication = await getApplicationById(this.applicationId);
 
     if (this.originalApplication) {
-      this.application = { ...this.originalApplication };
+      this.application = copyObject(this.originalApplication);
     }
 
-    this.showInfoSectionActionButtons = false;
+    this.showGeneralInfoChangeActions = false;
   }
 
   // image picker
@@ -124,7 +129,8 @@ export default class ApplicationGeneralPage extends Vue {
     const image = files[0];
 
     imgElement.src = URL.createObjectURL(image);
-    this.showInfoSectionActionButtons = true;
+
+    this.showGeneralInfoChangeActions = true;
   }
 
   // general info
