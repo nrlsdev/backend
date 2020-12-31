@@ -12,6 +12,7 @@ import {
   prop,
   ReturnModelType,
   Severity,
+  DocumentType,
 } from '@typegoose/typegoose';
 import { MongoError } from 'mongodb';
 import { Types } from 'mongoose';
@@ -68,6 +69,35 @@ export class ApplicationSchema implements Application {
   })
   authentication?: AuthenticationSchema;
 
+  public async updateAndSaveApplicationProperties(
+    this: DocumentType<ApplicationSchema>,
+    applicationUpdateData: Application,
+    current: any = this,
+    save: boolean = true,
+  ) {
+    const keys = Object.keys(applicationUpdateData);
+
+    keys.forEach(async (key: string) => {
+      const newValue = (applicationUpdateData as any)[key];
+      const updateValue = (current as any)[key];
+
+      if (newValue instanceof Object) {
+        await this.updateAndSaveApplicationProperties(
+          newValue,
+          updateValue,
+          false,
+        );
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        current[key] = newValue;
+      }
+    });
+
+    if (save) {
+      await this.save();
+    }
+  }
+
   public static async updateApplicationData(
     this: ReturnModelType<typeof ApplicationSchema>,
     applicationData: Application,
@@ -81,15 +111,9 @@ export class ApplicationSchema implements Application {
         error: 'No application found.',
       };
     }
-    const keysToUpdate = Object.keys(applicationData);
-
-    keysToUpdate.forEach((key: string) => {
-      const field = (applicationData as any)[key];
-      (application as any)[key] = field;
-    });
 
     try {
-      application.save();
+      await application.updateAndSaveApplicationProperties(applicationData);
     } catch (exception) {
       ApplicationSchema.logger.error('updateApplicationData', exception);
       return {

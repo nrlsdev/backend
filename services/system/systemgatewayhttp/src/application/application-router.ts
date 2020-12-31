@@ -8,6 +8,7 @@ import {
 } from './application-controller';
 import { applicationTeamRouter } from './team/team-router';
 import { applicationGeneralRouter } from './general/general-router';
+import { applicationAuthenticationRouter } from './authentication/authentication-router';
 
 const applicationRouter: Router = Router();
 const authorizedApplicationRouter: Router = Router({ mergeParams: true });
@@ -22,9 +23,14 @@ authorizedApplicationRouter.get(
   getApplicationById,
 );
 
+authorizedApplicationRouter.use('/general', applicationGeneralRouter);
+
 authorizedApplicationRouter.use('/team', applicationTeamRouter);
 
-authorizedApplicationRouter.use('/general', applicationGeneralRouter);
+authorizedApplicationRouter.use(
+  '/authentication',
+  applicationAuthenticationRouter,
+);
 
 applicationRouter.use('/:applicationId', authorizedApplicationRouter);
 

@@ -239,6 +239,7 @@ import { copyObject, objectEquals } from '@backend/systeminterfaces';
 import { Application } from '@backend/systeminterfaces';
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
+import { updateAuthenticationMethod } from '../../../../api/application/authentication';
 
 @Component
 export default class ApplicationAuthenticationPage extends Vue {
@@ -354,38 +355,122 @@ export default class ApplicationAuthenticationPage extends Vue {
 
   // AuthenticationMethods
   // Email and Password
-  protected onAuthenticationMethodsEmailAndPasswordSaveBtnClicked() {
-    console.log('Not implemented yet!');
+  protected async onAuthenticationMethodsEmailAndPasswordSaveBtnClicked() {
+    const error = await updateAuthenticationMethod(
+      'emailAndPassword',
+      this.applicationId,
+      this.application,
+    );
+
+    if (error) {
+      // ToDo: Error handling
+      console.error(error);
+      return;
+    }
+
+    this.loadApplication();
   }
 
   // Apple
-  protected onAuthenticationMethodsAppleSaveBtnClicked() {
-    console.log('Not implemented yet!');
+  protected async onAuthenticationMethodsAppleSaveBtnClicked() {
+    const error = await updateAuthenticationMethod(
+      'apple',
+      this.applicationId,
+      this.application,
+    );
+
+    if (error) {
+      // ToDo: Error handling
+      console.error(error);
+      return;
+    }
+
+    this.loadApplication();
   }
 
   // Google
-  protected onAuthenticationMethodsGoogleSaveBtnClicked() {
-    console.log('Not implemented yet!');
+  protected async onAuthenticationMethodsGoogleSaveBtnClicked() {
+    const error = await updateAuthenticationMethod(
+      'google',
+      this.applicationId,
+      this.application,
+    );
+
+    if (error) {
+      // ToDo: Error handling
+      console.error(error);
+      return;
+    }
+
+    this.loadApplication();
   }
 
   // Microsoft
-  protected onAuthenticationMethodsMicrosoftSaveBtnClicked() {
-    console.log('Not implemented yet!');
+  protected async onAuthenticationMethodsMicrosoftSaveBtnClicked() {
+    const error = await updateAuthenticationMethod(
+      'microsoft',
+      this.applicationId,
+      this.application,
+    );
+
+    if (error) {
+      // ToDo: Error handling
+      console.error(error);
+      return;
+    }
+
+    this.loadApplication();
   }
 
   // Facebook
-  protected onAuthenticationMethodsFacebookSaveBtnClicked() {
-    console.log('Not implemented yet!');
+  protected async onAuthenticationMethodsFacebookSaveBtnClicked() {
+    const error = await updateAuthenticationMethod(
+      'facebook',
+      this.applicationId,
+      this.application,
+    );
+
+    if (error) {
+      // ToDo: Error handling
+      console.error(error);
+      return;
+    }
+
+    this.loadApplication();
   }
 
   // Instagram
-  protected onAuthenticationMethodsInstagramSaveBtnClicked() {
-    console.log('Not implemented yet!');
+  protected async onAuthenticationMethodsInstagramSaveBtnClicked() {
+    const error = await updateAuthenticationMethod(
+      'instagram',
+      this.applicationId,
+      this.application,
+    );
+
+    if (error) {
+      // ToDo: Error handling
+      console.error(error);
+      return;
+    }
+
+    this.loadApplication();
   }
 
   // Twitter
-  protected onAuthenticationMethodsTwitterSaveBtnClicked() {
-    console.log('Not implemented yet!');
+  protected async onAuthenticationMethodsTwitterSaveBtnClicked() {
+    const error = await updateAuthenticationMethod(
+      'twitter',
+      this.applicationId,
+      this.application,
+    );
+
+    if (error) {
+      // ToDo: Error handling
+      console.error(error);
+      return;
+    }
+
+    this.loadApplication();
   }
 }
 </script>
