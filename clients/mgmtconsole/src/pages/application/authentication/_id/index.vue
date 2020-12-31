@@ -29,6 +29,7 @@
             :onSaveBtnClicked="
               onAuthenticationMethodsEmailAndPasswordSaveBtnClicked
             "
+            :error="authenticationMethodsEmailAndPasswordChangeActionsError"
           />
         </Collapse>
         <Collapse icon="apple" :title="$t('StrApple')" statusIcon="checkmark">
@@ -70,6 +71,7 @@
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsAppleChangeActions"
             :onSaveBtnClicked="onAuthenticationMethodsAppleSaveBtnClicked"
+            :error="authenticationMethodsAppleChangeActionsError"
           />
         </Collapse>
         <Collapse icon="google" :title="$t('StrGoogle')" statusIcon="checkmark">
@@ -97,6 +99,7 @@
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsGoogleChangeActions"
             :onSaveBtnClicked="onAuthenticationMethodsGoogleSaveBtnClicked"
+            :error="authenticationMethodsGoogleChangeActionsError"
           />
         </Collapse>
         <Collapse
@@ -130,6 +133,7 @@
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsMicrosoftChangeActions"
             :onSaveBtnClicked="onAuthenticationMethodsMicrosoftSaveBtnClicked"
+            :error="authenticationMethodsMicrosoftChangeActionsError"
           />
         </Collapse>
         <Collapse
@@ -163,6 +167,7 @@
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsFacebookChangeActions"
             :onSaveBtnClicked="onAuthenticationMethodsFacebookSaveBtnClicked"
+            :error="authenticationMethodsFacebookChangeActionsError"
           />
         </Collapse>
         <Collapse
@@ -196,6 +201,7 @@
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsInstagramChangeActions"
             :onSaveBtnClicked="onAuthenticationMethodsInstagramSaveBtnClicked"
+            :error="authenticationMethodsInstagramChangeActionsError"
           />
         </Collapse>
         <Collapse
@@ -227,6 +233,7 @@
           <ApplicationChangeActions
             v-model="ShowAuthenticationMethodsTwitterChangeActions"
             :onSaveBtnClicked="onAuthenticationMethodsTwitterSaveBtnClicked"
+            :error="authenticationMethodsTwitterChangeActionsError"
           />
         </Collapse>
       </div>
@@ -251,18 +258,26 @@ export default class ApplicationAuthenticationPage extends Vue {
 
   // view state
   protected showAuthenticationMethodsEmailAndPasswordChangeActions: boolean = false;
+  protected authenticationMethodsEmailAndPasswordChangeActionsError: string =
+    '';
 
   protected showAuthenticationMethodsAppleChangeActions: boolean = false;
+  protected authenticationMethodsAppleChangeActionsError: string = '';
 
   protected showAuthenticationMethodsGoogleChangeActions: boolean = false;
+  protected authenticationMethodsGoogleChangeActionsError: string = '';
 
   protected showAuthenticationMethodsMicrosoftChangeActions: boolean = false;
+  protected authenticationMethodsMicrosoftChangeActionsError: string = '';
 
   protected showAuthenticationMethodsFacebookChangeActions: boolean = false;
+  protected authenticationMethodsFacebookChangeActionsError: string = '';
 
   protected showAuthenticationMethodsInstagramChangeActions: boolean = false;
+  protected authenticationMethodsInstagramChangeActionsError: string = '';
 
   protected showAuthenticationMethodsTwitterChangeActions: boolean = false;
+  protected authenticationMethodsTwitterChangeActionsError: string = '';
 
   protected get ShowAuthenticationMethodsEmailAndPasswordChangeActions() {
     return (
@@ -363,8 +378,7 @@ export default class ApplicationAuthenticationPage extends Vue {
     );
 
     if (error) {
-      // ToDo: Error handling
-      console.error(error);
+      this.authenticationMethodsEmailAndPasswordChangeActionsError = error;
       return;
     }
 
@@ -380,8 +394,7 @@ export default class ApplicationAuthenticationPage extends Vue {
     );
 
     if (error) {
-      // ToDo: Error handling
-      console.error(error);
+      this.authenticationMethodsAppleChangeActionsError = error;
       return;
     }
 
@@ -397,8 +410,7 @@ export default class ApplicationAuthenticationPage extends Vue {
     );
 
     if (error) {
-      // ToDo: Error handling
-      console.error(error);
+      this.authenticationMethodsGoogleChangeActionsError = error;
       return;
     }
 
@@ -414,8 +426,7 @@ export default class ApplicationAuthenticationPage extends Vue {
     );
 
     if (error) {
-      // ToDo: Error handling
-      console.error(error);
+      this.authenticationMethodsMicrosoftChangeActionsError = error;
       return;
     }
 
@@ -431,8 +442,7 @@ export default class ApplicationAuthenticationPage extends Vue {
     );
 
     if (error) {
-      // ToDo: Error handling
-      console.error(error);
+      this.authenticationMethodsFacebookChangeActionsError = error;
       return;
     }
 
@@ -448,8 +458,7 @@ export default class ApplicationAuthenticationPage extends Vue {
     );
 
     if (error) {
-      // ToDo: Error handling
-      console.error(error);
+      this.authenticationMethodsInstagramChangeActionsError = error;
       return;
     }
 
@@ -465,8 +474,7 @@ export default class ApplicationAuthenticationPage extends Vue {
     );
 
     if (error) {
-      // ToDo: Error handling
-      console.error(error);
+      this.authenticationMethodsTwitterChangeActionsError = error;
       return;
     }
 

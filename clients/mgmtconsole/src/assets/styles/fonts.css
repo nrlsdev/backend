@@ -68,3 +68,7 @@
   font-weight: normal;
   color: var(--default-font-color);
 }
+
+.system-error-font {
+  color: var(--error-message-color);
+}

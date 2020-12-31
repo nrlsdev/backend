@@ -41,6 +41,7 @@
         <ApplicationChangeActions
           v-model="ShowGeneralInfoChangeActions"
           :onSaveBtnClicked="onInfoSectionSaveBtnClicked"
+          :error="generalInfoChangeActionsError"
         />
       </div>
     </section>
@@ -67,6 +68,8 @@ export default class ApplicationGeneralPage extends Vue {
 
   // view state
   protected showGeneralInfoChangeActions: boolean = false;
+
+  protected generalInfoChangeActionsError: string = '';
 
   protected get ShowGeneralInfoChangeActions() {
     return (
@@ -140,7 +143,7 @@ export default class ApplicationGeneralPage extends Vue {
     const error = await updateGeneralInfo(this.applicationId, this.application);
 
     if (error) {
-      console.log(error); // ToDo show error
+      this.generalInfoChangeActionsError = error;
       return;
     }
 

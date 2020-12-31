@@ -13,6 +13,7 @@ export async function updateGeneralInfo(
       application: minifiedApplication,
     },
   );
+
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
   const { error } = responseMessage.body;
 

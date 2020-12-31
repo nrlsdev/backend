@@ -3,8 +3,11 @@ import {
   MessageQueueType,
   MessageSeverityType,
 } from '@backend/messagehandler';
-import { Request, Response, NextFunction } from '@backend/server';
-import { ApplicationMessage } from '@backend/systemmessagefactory';
+import { Request, Response, NextFunction, StatusCodes } from '@backend/server';
+import {
+  ApplicationMessage,
+  ErrorMessage,
+} from '@backend/systemmessagefactory';
 import { ApplicationRole } from '@backend/systeminterfaces';
 import { messageManager } from '../message-manager';
 
@@ -26,12 +29,20 @@ export function checkApplicationAuthorization(role: ApplicationRole) {
     const { data } = responseMessage.body as any;
 
     if (!data || !data.role) {
-      response.status(statusCode).send(responseMessage).end();
+      const errorMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+      response.status(errorMessage.meta.statusCode).send(errorMessage).end();
+
       return;
     }
 
-    if (data.role < role) {
-      response.status(statusCode).send(responseMessage).end();
+    if (data.role < role || statusCode !== StatusCodes.OK) {
+      const errorMessage = ErrorMessage.forbiddenErrorResponse(
+        'You are not authorized to execute this action.',
+      );
+
+      response.status(errorMessage.meta.statusCode).send(errorMessage).end();
+
       return;
     }
 
