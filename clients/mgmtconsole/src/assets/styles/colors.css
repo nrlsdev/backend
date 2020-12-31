@@ -1,6 +1,7 @@
 :root {
   /* common */
   --transparent-color: rgba(0, 0, 0, 0);
+  --transparent50-color: rgba(0, 0, 0, 0.5);
   --black-color: rgb(0, 0, 0);
   --white-color: rgb(255, 255, 255);
 
@@ -90,7 +91,7 @@
   --custom-button-delte-active-color: var(--red1-active-color);
 
   /* custom input */
-  --custom-input-border-bottom-color: var(--gray3-color);
+  --custom-input-border-color: var(--gray3-color);
   --custom-input-placeholder-color: var(--gray1-color);
 
   /* radio button */
@@ -99,6 +100,15 @@
   --radio-button-not-checked-box-shadow-color: var(--gray3-color);
   --radio-button-checked-background-color: var(--primary-color);
   --radio-button-checked-box-shadow-color: var(--primary-color);
+
+  /* collapse */
+  --collapse-background-color: var(--gray6-color);
+  --collapse-separator-line-color: var(--gray5-color);
+
+  /* toggle switch */
+  --toggle-switch-not-checked-background-color: var(--gray4-color);
+  --toggle-switch-slider-color: var(--white-color);
+  --toggle-switch-checked-background-color: var(--primary-color);
 }
 
 .dark-mode {
@@ -178,7 +188,7 @@
   --custom-button-delte-active-color: var(--red1-active-color);
 
   /* custom input */
-  --custom-input-border-bottom-color: var(--gray4-color);
+  --custom-input-border-color: var(--gray4-color);
   --custom-input-placeholder-color: var(--gray2-color);
 
   /* radio button */
@@ -187,4 +197,13 @@
   --radio-button-not-checked-box-shadow-color: var(--gray3-color);
   --radio-button-checked-background-color: var(--primary-color);
   --radio-button-checked-box-shadow-color: var(--primary-color);
+
+  /* collapse */
+  --collapse-background-color: var(--gray6-color);
+  --collapse-separator-line-color: var(--gray5-color);
+
+  /* toggle switch */
+  --toggle-switch-not-checked-background-color: var(--gray4-color);
+  --toggle-switch-slider-color: var(--white-color);
+  --toggle-switch-checked-background-color: var(--primary-color);
 }

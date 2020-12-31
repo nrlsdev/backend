@@ -7,14 +7,14 @@
       <h1 class="account-title">{{ $t('StrSignIn') }}</h1>
       <form method="POST" @submit.prevent="onSignInButtonClicked">
         <CustomInput
-          class="account-input"
+          class="borderless"
           type="email"
           :placeholder="$t('StrEmail')"
           v-model="email"
           required
         />
         <CustomInput
-          class="account-input"
+          class="borderless"
           type="password"
           :placeholder="$t('StrPassword')"
           v-model="password"

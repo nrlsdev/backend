@@ -19,7 +19,7 @@ function axiosSystem(
   });
 
   systemAPI.defaults.validateStatus = (statusCode: number) => {
-    return statusCode !== 401 && statusCode !== 403;
+    return statusCode !== 401;
   };
 
   systemAPI.defaults.headers['Content-Language'] = context.app.i18n.locale;
@@ -37,13 +37,8 @@ function axiosSystem(
         return Promise.reject(error);
       }
 
-      config.data = config.data === undefined ? {} : JSON.parse(config.data);
-
-      if (
-        response!.status === 401 ||
-        (response!.status === 403 && !config.data.retry)
-      ) {
-        config.data.retry = true;
+      const { status } = response;
+      if (status === 401) {
         await refreshToken(context);
 
         const setCookies = context.res.getHeaders()['set-cookie'] as string[];

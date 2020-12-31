@@ -9,11 +9,13 @@
     >
       <div class="application-overview-modal-input">
         <CustomInput
+          class="borderless"
           type="text"
           :placeholder="$t('StrApplicationBundleIdentifier')"
           v-model="createApplicationBundleId"
         />
         <CustomInput
+          class="borderless"
           type="text"
           :placeholder="$t('StrApplicationName')"
           v-model="createApplicationName"
@@ -43,12 +45,10 @@
 </template>
 
 <script lang="ts">
+import { Application } from '@backend/systeminterfaces';
 import { Vue, Component } from 'nuxt-property-decorator';
 import Modal from '../components/elements/modal.vue';
-import {
-  ApplicationData,
-  ApplicationModule,
-} from '../store/modules/application';
+import { ApplicationModule } from '../store/modules/application';
 
 @Component
 export default class IndexPage extends Vue {
@@ -62,7 +62,7 @@ export default class IndexPage extends Vue {
 
   protected createApplicationError: string = '';
 
-  protected applications: ApplicationData[] = [];
+  protected applications: Application[] = [];
 
   protected async fetch() {
     await this.loadApplications();

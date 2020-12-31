@@ -12,7 +12,7 @@ export const checkToken = (
   const { token } = request.cookies;
 
   if (!token) {
-    const responseMessage: ResponseMessage = ErrorMessage.forbiddenErrorResponse(
+    const responseMessage: ResponseMessage = ErrorMessage.unauthorizedErrorResponse(
       'No authentication token provided.',
     );
 

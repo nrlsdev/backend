@@ -12,12 +12,14 @@ import {
   prop,
   ReturnModelType,
   Severity,
+  DocumentType,
 } from '@typegoose/typegoose';
 import { MongoError } from 'mongodb';
 import { Types } from 'mongoose';
 import autopopulate from 'mongoose-autopopulate';
 import { v4 as uuid } from 'uuid';
 import { SystemUserModel } from '../systemuser/system-user-schema';
+import { AuthenticationSchema } from './authentication/authentication-schema';
 import { AuthorizedUserSchema } from './authorized-users-schema';
 import { InvitedUserSchema } from './invited-user-schema';
 
@@ -58,6 +60,72 @@ export class ApplicationSchema implements Application {
   })
   invitedUsers?: InvitedUserSchema[];
 
+  @prop({
+    required: true,
+    unique: true,
+    default: {},
+    _id: false,
+    type: AuthenticationSchema,
+  })
+  authentication?: AuthenticationSchema;
+
+  public async updateAndSaveApplicationProperties(
+    this: DocumentType<ApplicationSchema>,
+    applicationUpdateData: Application,
+    current: any = this,
+    save: boolean = true,
+  ) {
+    const keys = Object.keys(applicationUpdateData);
+
+    keys.forEach(async (key: string) => {
+      const newValue = (applicationUpdateData as any)[key];
+      const updateValue = (current as any)[key];
+
+      if (newValue instanceof Object) {
+        await this.updateAndSaveApplicationProperties(
+          newValue,
+          updateValue,
+          false,
+        );
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        current[key] = newValue;
+      }
+    });
+
+    if (save) {
+      await this.save();
+    }
+  }
+
+  public static async updateApplicationData(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationData: Application,
+    applicationId: string,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No application found.',
+      };
+    }
+
+    try {
+      await application.updateAndSaveApplicationProperties(applicationData);
+    } catch (exception) {
+      ApplicationSchema.logger.error('updateApplicationData', exception);
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        invitationCode: null,
+        error: 'Something went wrong.',
+      };
+    }
+
+    return { statusCode: StatusCodes.OK, error: undefined };
+  }
+
   public static async createApplication(
     this: ReturnModelType<typeof ApplicationSchema>,
     bundleId: string,
@@ -96,7 +164,6 @@ export class ApplicationSchema implements Application {
   ) {
     try {
       const applications = await this.find({ 'authorizedUsers.user': userId });
-
       return { applications: applications as Application[], error: null };
     } catch (exception) {
       ApplicationSchema.logger.error(

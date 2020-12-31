@@ -1,11 +1,13 @@
 <template>
   <div v-if="application">
-    <h1 class="system-large-title-font">{{ $t('StrTeam') }}</h1>
+    <h1 class="system-large-title-font application-page-title">
+      {{ $t('StrTeam') }}
+    </h1>
     <section class="application-section">
-      <div class="application-section-header">
+      <div>
         <h2 class="system-title-two-font">{{ $t('StrInvitedUser') }}</h2>
       </div>
-      <div class="application-section-content">
+      <div>
         <CustomButton
           class="default application-section-button"
           @click.native="onInviteUserBtnClicked"
@@ -40,10 +42,10 @@
     </section>
     <hr class="application-section-separator" />
     <section class="application-section">
-      <div class="application-section-header">
+      <div>
         <h2 class="system-title-two-font">{{ $t('StrUser') }}</h2>
       </div>
-      <div class="application-section-content">
+      <div>
         <div class="application-team-list">
           <div
             v-for="authorizedUser in application.authorizedUsers"
@@ -69,6 +71,7 @@
       :positiveBtnClickHandler="onInviteUser"
     >
       <CustomInput
+        class="borderless"
         v-model="userToAddEmail"
         type="email"
         :placeholder="$t('StrEmail')"
@@ -88,6 +91,7 @@
       :positiveBtnClickHandler="onEditedUser"
     >
       <CustomInput
+        class="borderless"
         v-model="selectedEditUserEmail"
         type="email"
         :placeholder="$t('StrEmail')"
@@ -105,7 +109,6 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
-import { ApplicationData } from '../../../../store/modules/application';
 import {
   deleteInvitedUser,
   editAuthorizedUser,
@@ -116,6 +119,7 @@ import {
   AuthorizedUser,
   SystemUser,
   ApplicationRole,
+  Application,
 } from '@backend/systeminterfaces';
 
 @Component
@@ -124,7 +128,7 @@ export default class ApplicationTeamPage extends Vue {
 
   protected applicationId: string = '';
 
-  protected application: ApplicationData | null = null;
+  protected application: Application | null = null;
 
   private inviteUserModalId: string = 'application-team-invite-user';
 

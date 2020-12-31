@@ -16,6 +16,7 @@ import { SystemUser } from '@backend/systeminterfaces';
 import { Database } from './database/database';
 import { signUp, signIn, getSystemuserData } from './controller/system-user';
 import {
+  updateApplicationData,
   createApplication,
   getAllApplicationsUserHasAuthorizationFor,
   getApplicationByIdUserHasAuthorizationFor,
@@ -105,6 +106,12 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
   }
 
   switch (type) {
+    case ApplicationMessage.TYPE_APPLICATION_UPDATE_DATA: {
+      const { data }: any = requestMessage.body;
+      const { applicationId, applicationData } = data;
+
+      return updateApplicationData(applicationData, applicationId);
+    }
     case ApplicationMessage.TYPE_APPLICATION_CREATE: {
       const { data }: any = requestMessage.body;
       const { bundleId, name, ownerId } = data;

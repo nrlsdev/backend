@@ -34,5 +34,6 @@ export default class ApplicationLayout extends Vue {}
 .application-navbar {
   top: 0;
   position: sticky;
+  z-index: 1;
 }
 </style>

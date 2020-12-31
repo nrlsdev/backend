@@ -1,10 +1,26 @@
 import { StatusCodes } from '@backend/server';
+import { Application } from '@backend/systeminterfaces';
 import {
   ApplicationMessage,
   ErrorMessage,
 } from '@backend/systemmessagefactory';
 import { Database } from '../../database/database';
 import { MongoErrorCode } from '../../database/error-codes';
+
+export async function updateApplicationData(
+  applicationData: Application,
+  applicationId: string,
+) {
+  const {
+    statusCode,
+    error,
+  } = await Database.applicationEntity.updateApplicationData(
+    applicationData,
+    applicationId,
+  );
+
+  return ApplicationMessage.updateApplicationDataResponse(statusCode, error);
+}
 
 export async function createApplication(
   bundleId: string,

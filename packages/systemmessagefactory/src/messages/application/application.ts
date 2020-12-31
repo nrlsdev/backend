@@ -4,6 +4,9 @@ import { Application } from '@backend/systeminterfaces';
 export class ApplicationMessage {
   public static readonly TYPE_APPLICATION_CREATE = 'application_create';
 
+  public static readonly TYPE_APPLICATION_UPDATE_DATA =
+    'application_update_data';
+
   public static readonly TYPE_APPLICATION_GET_ALL_APPLICATIONS_USER_HAS_AUTHORIZATION_FOR =
     'get_all_applications_user_has_authorization_for';
 
@@ -12,6 +15,38 @@ export class ApplicationMessage {
 
   public static readonly TYPE_APPLICATION_GET_USER_ROLE_FOR_APPLICATION =
     'get_user_role_for_application';
+
+  // update application
+  public static updateApplicationDataRequest(
+    applicationData: Application,
+    applicationId: string,
+  ): RequestMessage {
+    return {
+      meta: {
+        type: ApplicationMessage.TYPE_APPLICATION_UPDATE_DATA,
+      },
+      body: {
+        data: {
+          applicationId,
+          applicationData,
+        },
+      },
+    };
+  }
+
+  public static updateApplicationDataResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
 
   // create application
   public static createApplicationRequest(

@@ -1,3 +1,4 @@
+import { Application } from '@backend/systeminterfaces';
 import { ApplicationModel } from './application-schema';
 
 export class ApplicationEntity {
@@ -9,6 +10,18 @@ export class ApplicationEntity {
 
   public static get Instance() {
     return ApplicationEntity.instance || new ApplicationEntity();
+  }
+
+  public async updateApplicationData(
+    applicationData: Application,
+    applicationId: string,
+  ) {
+    const result = await ApplicationModel.updateApplicationData(
+      applicationData,
+      applicationId,
+    );
+
+    return result;
   }
 
   public async createApplication(

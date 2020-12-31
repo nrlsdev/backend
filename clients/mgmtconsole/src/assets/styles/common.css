@@ -1,3 +1,7 @@
+body {
+  background-color: var(--default-page-background-color) !important;
+}
+
 *:not(text) {
   margin: 0;
   padding: 0;
@@ -6,8 +10,15 @@
   color: var(--default-font-color);
 }
 
-button {
+button,
+input,
+textarea {
   outline: none !important;
+}
+
+label,
+p {
+  margin: 0 !important;
 }
 
 picture,
@@ -15,10 +26,6 @@ source,
 img,
 svg {
   vertical-align: middle;
-}
-
-body {
-  background-color: var(--default-page-background-color) !important;
 }
 
 .common-wrapper {

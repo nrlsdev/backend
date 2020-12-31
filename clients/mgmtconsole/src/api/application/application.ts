@@ -1,6 +1,6 @@
 import { ResponseMessage } from '@backend/messagehandler';
 import { systemAPI } from '@/utils/axios-accessor';
-import { ApplicationData } from '@/store/modules/application';
+import { Application } from '@backend/systeminterfaces';
 
 export async function createApplication(bundleId: string, name: string) {
   const response = await systemAPI.post('/application/create', {
@@ -28,7 +28,7 @@ export async function getAllApplicationsUserIsAuthorizedFor() {
 
   const { applications } = responseMessage.body.data as any;
 
-  return applications as ApplicationData[];
+  return applications as Application[];
 }
 
 export async function getApplicationById(id: string) {
@@ -42,5 +42,5 @@ export async function getApplicationById(id: string) {
 
   const { application } = responseMessage.body.data as any;
 
-  return application as ApplicationData;
+  return application as Application;
 }
