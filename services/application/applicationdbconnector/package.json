@@ -1,0 +1,36 @@
+{
+  "name": "@backend/applicationdbconnector",
+  "version": "1.0.0",
+  "description": "applicationdbconnector",
+  "author": "Revanced GmbH",
+  "license": "LicenseRef-LICENSE",
+  "main": "./out/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rd ./out && rm -rd ./node_modules",
+    "dev": "cross-env NODE_ENV=development nodemon ./src/index.ts --watch src"
+  },
+  "dependencies": {
+    "@backend/constants": "^1.0.0",
+    "@backend/logger": "^1.0.0",
+    "@backend/messagehandler": "^1.0.0",
+    "@backend/server": "^1.0.0",
+    "@backend/applicationconfiguration": "^1.0.0",
+    "@typegoose/typegoose": "^7.4.5",
+    "bcryptjs": "^2.4.3",
+    "cross-env": "^7.0.3",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.11.8",
+    "mongoose-autopopulate": "^0.12.3",
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.1.0",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/mongodb": "^3.6.3",
+    "@types/mongoose": "^5.10.3",
+    "@types/mongoose-autopopulate": "^0.10.1",
+    "@types/uuid": "^8.3.0"
+  }
+}
