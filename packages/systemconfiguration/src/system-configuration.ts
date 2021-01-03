@@ -17,11 +17,11 @@ function getSystemConfiguration(development: boolean) {
 
   return {
     systemdbconnector: {
-      dbHost: process.env.DATABASE_HOST || '',
-      dbPort: (process.env.DATABASE_PORT || 0) as number,
-      dbName: process.env.DATABASE_NAME || '',
-      dbUsername: process.env.DATABASE_USERNAME || '',
-      dbPassword: process.env.DATABASE_PASSWORD || '',
+      dbHost: process.env.SYSTEM_DATABASE_HOST || '',
+      dbPort: (process.env.SYSTEM_DATABASE_PORT || 0) as number,
+      dbName: process.env.SYSTEM_DATABASE_NAME || '',
+      dbUsername: process.env.SYSTEM_DATABASE_USERNAME || '',
+      dbPassword: process.env.SYSTEM_DATABASE_PASSWORD || '',
     },
     systemmessagehandler: {
       mhHost: process.env.SYSTEM_MESSAGEHANDLER_HOST || '',

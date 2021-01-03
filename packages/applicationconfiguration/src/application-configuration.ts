@@ -16,6 +16,17 @@ function getApplicationConfiguration(development: boolean) {
   });
 
   return {
+    applicationdbconnector: {
+      dbHost: process.env.APPLICATION_DATABASE_HOST || '',
+      dbPort: (process.env.APPLICATION_DATABASE_PORT || 0) as number,
+      dbName: process.env.APPLICATION_DATABASE_NAME || '',
+      dbUsername: process.env.APPLICATION_DATABASE_USERNAME || '',
+      dbPassword: process.env.APPLICATION_DATABASE_PASSWORD || '',
+    },
+    applicationmessagehandler: {
+      mhHost: process.env.APPLICATION_MESSAGEHANDLER_HOST || '',
+      mhPort: (process.env.APPLICATION_MESSAGEHANDLER_PORT || 0) as number,
+    },
     applicationgatewayhttp: {
       private: {
         protocol: process.env.APPLICATIONGATEWAYHTTP_PRIVATE_PROTOCOL || '',
