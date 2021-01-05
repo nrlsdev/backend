@@ -14,6 +14,7 @@ import { MongoError } from 'mongodb';
 @modelOptions({
   options: {
     customName: 'SystemUser',
+    automaticName: false,
     allowMixed: Severity.ALLOW,
   },
 })

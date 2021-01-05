@@ -22,6 +22,7 @@ export class AuthorizedUserSchema implements AuthorizedUser {
   @prop({
     required: true,
     unique: false,
+    automaticName: false,
     type: SystemUserSchema,
     ref: SystemUserSchema,
     autopopulate: { select: '-password' },

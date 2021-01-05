@@ -22,6 +22,7 @@ export class InvitedUserSchema implements InvitedUser {
   @prop({
     required: true,
     unique: false,
+    automaticName: false,
     type: SystemUserSchema,
     ref: SystemUserSchema,
     autopopulate: true,

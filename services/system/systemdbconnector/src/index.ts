@@ -93,7 +93,9 @@ async function onSystemUserMessage(requestMessage: RequestMessage) {
       return getSystemuserData(data.systemUserId);
     }
     default: {
-      return ErrorMessage.unprocessableEntityErrorResponse();
+      return ErrorMessage.unprocessableEntityErrorResponse(
+        `Messgae of type '${type}' not implemented!`,
+      );
     }
   }
 }
