@@ -3,6 +3,6 @@ import { emailAndPasswordRouter } from './email-and-password/email-and-password-
 
 const authenticationRouter: Router = Router();
 
-authenticationRouter.use('emailandpassword', emailAndPasswordRouter);
+authenticationRouter.use('/emailandpassword', emailAndPasswordRouter);
 
 export { authenticationRouter };

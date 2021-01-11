@@ -16,6 +16,8 @@
     "@backend/messagehandler": "^1.0.0",
     "@backend/server": "^1.0.0",
     "@backend/applicationconfiguration": "^1.0.0",
+    "@backend/applicationinterfaces": "^1.0.0",
+    "@backend/applicationmessagefactory": "^1.0.0",
     "@typegoose/typegoose": "^7.4.5",
     "bcryptjs": "^2.4.3",
     "cross-env": "^7.0.3",
