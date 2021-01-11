@@ -1,0 +1,20 @@
+{
+  "name": "@backend/applicationmessagefactory",
+  "version": "1.0.0",
+  "description": "applicationmessagefactory",
+  "author": "Revanced GmbH",
+  "license": "LicenseRef-LICENSE",
+  "main": "./out/index.js",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rd ./out && rm -rd ./node_modules",
+    "test": "npx jest --collect-coverage",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@backend/messagehandler": "^1.0.0",
+    "@backend/server": "^1.0.0",
+    "@backend/applicationinterfaces": "^1.0.0"
+  }
+}
