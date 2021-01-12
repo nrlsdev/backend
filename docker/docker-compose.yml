@@ -5,3 +5,8 @@ services:
     image: rabbitmq:latest
     ports:
       - '5672:5672'
+
+  applicationmessagehandler:
+    image: rabbitmq:latest
+    ports:
+      - '5673:5672'

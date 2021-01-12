@@ -14,6 +14,7 @@ import { MongoError } from 'mongodb';
 @modelOptions({
   options: {
     customName: 'SystemUser',
+    automaticName: false,
     allowMixed: Severity.ALLOW,
   },
 })
@@ -71,7 +72,7 @@ export class SystemUserSchema implements SystemUser {
     if (!systemUser) {
       SystemUserSchema.logger.error(
         'signInSystemUser',
-        'No systemuser with email found.',
+        'No systemuser with this email found.',
       );
       return {
         error: new Error('Invalid E-Mail or password.'),
@@ -86,7 +87,10 @@ export class SystemUserSchema implements SystemUser {
     );
 
     if (!doPasswordsMatch) {
-      this.logger.error('signInSystemUser', 'Passwords do not match.');
+      SystemUserSchema.logger.error(
+        'signInSystemUser',
+        'Passwords do not match.',
+      );
       return {
         error: new Error('Invalid E-Mail or password.'),
         _id: null,

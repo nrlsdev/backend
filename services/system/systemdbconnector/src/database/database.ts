@@ -19,7 +19,6 @@ export class Database {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: false,
   };
 
   public static systemUserEntity: SystemUserEntity = SystemUserEntity.Instance;

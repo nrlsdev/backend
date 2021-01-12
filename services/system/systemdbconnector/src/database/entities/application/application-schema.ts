@@ -26,6 +26,7 @@ import { InvitedUserSchema } from './invited-user-schema';
 @modelOptions({
   options: {
     customName: 'Application',
+    automaticName: false,
     allowMixed: Severity.ALLOW,
   },
 })

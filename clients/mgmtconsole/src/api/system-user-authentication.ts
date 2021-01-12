@@ -48,7 +48,11 @@ export async function signOut(context: Context) {
     return;
   }
 
-  context.$cookies.removeAll();
+  try {
+    context.$cookies.removeAll();
+  } catch {
+    // nothing to do
+  }
 }
 
 export async function validateAndRefreshToken(context: Context) {
