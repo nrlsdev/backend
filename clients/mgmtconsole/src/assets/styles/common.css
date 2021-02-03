@@ -31,5 +31,9 @@ svg {
 .common-wrapper {
   width: 95%;
   max-width: 1024px;
-  margin: 15px auto;
+  margin: 25px auto;
+}
+
+.page-header {
+  margin-bottom: 25px;
 }
