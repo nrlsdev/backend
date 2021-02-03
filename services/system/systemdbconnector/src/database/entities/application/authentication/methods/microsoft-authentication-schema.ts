@@ -1,10 +1,5 @@
 import { MicrosoftAuthentication } from '@backend/systeminterfaces';
-import {
-  getModelForClass,
-  modelOptions,
-  prop,
-  Severity,
-} from '@typegoose/typegoose';
+import { modelOptions, prop, Severity } from '@typegoose/typegoose';
 
 @modelOptions({
   options: {
@@ -23,7 +18,3 @@ export class MicrosoftAuthenticationSchema implements MicrosoftAuthentication {
   @prop({ required: true, unique: false, type: String, default: '' })
   applicationSecret!: string;
 }
-
-export const MicrosoftAuthenticationModel = getModelForClass(
-  MicrosoftAuthenticationSchema,
-);

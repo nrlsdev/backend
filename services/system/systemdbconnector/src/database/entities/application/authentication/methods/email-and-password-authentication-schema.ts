@@ -1,10 +1,5 @@
 import { EmailAndPasswordAuthentication } from '@backend/systeminterfaces';
-import {
-  getModelForClass,
-  modelOptions,
-  prop,
-  Severity,
-} from '@typegoose/typegoose';
+import { modelOptions, prop, Severity } from '@typegoose/typegoose';
 
 @modelOptions({
   options: {
@@ -18,7 +13,3 @@ export class EmailAndPasswordAuthenticationSchema
   @prop({ required: true, unique: false, default: false })
   activated!: boolean;
 }
-
-export const EmailAndPasswordAuthenticationModel = getModelForClass(
-  EmailAndPasswordAuthenticationSchema,
-);

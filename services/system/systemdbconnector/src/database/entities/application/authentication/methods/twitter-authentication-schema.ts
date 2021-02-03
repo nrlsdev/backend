@@ -1,10 +1,5 @@
 import { TwitterAuthentication } from '@backend/systeminterfaces';
-import {
-  getModelForClass,
-  modelOptions,
-  prop,
-  Severity,
-} from '@typegoose/typegoose';
+import { modelOptions, prop, Severity } from '@typegoose/typegoose';
 
 @modelOptions({
   options: {
@@ -23,7 +18,3 @@ export class TwitterAuthenticationSchema implements TwitterAuthentication {
   @prop({ required: true, unique: false, type: String, default: '' })
   apiSecret!: string;
 }
-
-export const TwitterAuthenticationModel = getModelForClass(
-  TwitterAuthenticationSchema,
-);

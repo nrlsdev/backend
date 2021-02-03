@@ -1,10 +1,5 @@
 import { FacebookAuthentication } from '@backend/systeminterfaces';
-import {
-  getModelForClass,
-  modelOptions,
-  prop,
-  Severity,
-} from '@typegoose/typegoose';
+import { modelOptions, prop, Severity } from '@typegoose/typegoose';
 
 @modelOptions({
   options: {
@@ -23,7 +18,3 @@ export class FacebookAuthenticationSchema implements FacebookAuthentication {
   @prop({ required: true, unique: false, type: String, default: '' })
   applicationSecret!: string;
 }
-
-export const FacebookAuthenticationModel = getModelForClass(
-  FacebookAuthenticationSchema,
-);

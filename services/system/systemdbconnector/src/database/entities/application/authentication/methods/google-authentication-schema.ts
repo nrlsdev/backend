@@ -1,10 +1,5 @@
 import { GoogleAuthentication } from '@backend/systeminterfaces';
-import {
-  getModelForClass,
-  modelOptions,
-  prop,
-  Severity,
-} from '@typegoose/typegoose';
+import { modelOptions, prop, Severity } from '@typegoose/typegoose';
 
 @modelOptions({
   options: {
@@ -23,7 +18,3 @@ export class GoogleAuthenticationSchema implements GoogleAuthentication {
   @prop({ required: true, unique: false, type: String, default: '' })
   webClientSecret!: string;
 }
-
-export const GoogleAuthenticationModel = getModelForClass(
-  GoogleAuthenticationSchema,
-);

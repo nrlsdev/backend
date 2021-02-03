@@ -1,6 +1,5 @@
 import { ApplicationRole, InvitedUser } from '@backend/systeminterfaces';
 import {
-  getModelForClass,
   modelOptions,
   prop,
   Ref,
@@ -35,5 +34,3 @@ export class InvitedUserSchema implements InvitedUser {
   @prop({ required: true, unique: false })
   invitationCode!: string;
 }
-
-export const InvitedUserModel = getModelForClass(InvitedUserSchema);

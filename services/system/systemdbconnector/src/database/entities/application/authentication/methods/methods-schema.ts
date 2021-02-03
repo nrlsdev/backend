@@ -1,10 +1,5 @@
 import { AuthenticationMethods } from '@backend/systeminterfaces';
-import {
-  getModelForClass,
-  modelOptions,
-  prop,
-  Severity,
-} from '@typegoose/typegoose';
+import { modelOptions, prop, Severity } from '@typegoose/typegoose';
 import { AppleAuthenticationSchema } from './apple-authentication-schema';
 import { EmailAndPasswordAuthenticationSchema } from './email-and-password-authentication-schema';
 import { FacebookAuthenticationSchema } from './facebook-authentication-schema';
@@ -42,7 +37,3 @@ export class AuthenticationMethodsSchema implements AuthenticationMethods {
   @prop({ required: true, unique: true, default: {}, _id: false })
   twitter!: TwitterAuthenticationSchema;
 }
-
-export const AuthenticationMethodsModel = getModelForClass(
-  AuthenticationMethodsSchema,
-);
