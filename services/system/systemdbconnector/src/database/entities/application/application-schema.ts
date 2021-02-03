@@ -34,7 +34,7 @@ import { InvitedUserSchema } from './invited-user-schema';
 export class ApplicationSchema implements Application {
   private static readonly logger: Logger = new Logger('ApplicationSchema');
 
-  @prop({ required: true, unique: true })
+  @prop({ required: true, unique: false })
   bundleId!: string;
 
   @prop({ required: true, unique: false })
