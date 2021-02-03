@@ -1,5 +1,22 @@
 <template>
-  <div>
+  <div class="common-wrapper">
+    <div class="page-header applications-overview-header">
+      <h1 class="system-large-title-font">{{ $t('StrApplications') }}</h1>
+      <div>
+        <CustomButton
+          class="block default"
+          @click.native="onCreateApplicationClicked"
+          >{{ $t('StrCreateApplication') }}</CustomButton
+        >
+      </div>
+    </div>
+    <div class="applications-overview-container">
+      <Application
+        v-for="application in applications"
+        :key="application.bundleId"
+        :application="application"
+      />
+    </div>
     <Modal
       :id="applicationOverviewModalId"
       :title="$t('StrCreateApplication')"
@@ -7,7 +24,7 @@
       :positiveBtnClickHandler="onCreateApplicationBtnClicked"
       :error="createApplicationError"
     >
-      <div class="application-overview-modal-input">
+      <div class="applications-overview-modal-input">
         <CustomInput
           class="borderless"
           type="text"
@@ -22,25 +39,6 @@
         />
       </div>
     </Modal>
-    <div class="common-wrapper">
-      <div class="application-overview-header">
-        <h1 class="system-large-title-font">{{ $t('StrApplications') }}</h1>
-        <CustomButton
-          class="default application-overview-add-button"
-          @click.native="onCreateApplicationClicked"
-        >
-          <Icon class="application-overview-icon" icon="plus" />
-          Add Application
-        </CustomButton>
-      </div>
-      <div class="application-overview-container" :class="$mq">
-        <Application
-          v-for="application in applications"
-          :key="application.bundleId"
-          :application="application"
-        />
-      </div>
-    </div>
   </div>
 </template>
 
@@ -94,50 +92,21 @@ export default class IndexPage extends Vue {
 }
 </script>
 
-<style lang="postcss" scoped>
-.application-overview-header {
-  margin-bottom: 20px;
+<style scoped>
+.applications-overview-header {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 20px;
-}
-
-.application-overview-add-button {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 16px;
+  gap: 25px;
   align-items: center;
 }
 
-.application-overview-icon {
-  width: 1em;
-  height: 1em;
-  fill: var(--default-icon-color);
-}
-
-.application-overview-icon:hover {
-  fill: var(--default-icon-hover-color);
-}
-
-.application-overview-container {
+.applications-overview-container {
   display: grid;
-  gap: 40px;
-  text-align: center;
-
-  &.xs,
-  &.sm {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  &.md {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  &.lg,
-  &.xl {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  grid-template-columns: repeat(4, 1fr);
+  gap: 50px;
 }
 
-.application-overview-modal-input {
+.applications-overview-modal-input {
   display: grid;
   grid-template-rows: auto;
   gap: 8px;

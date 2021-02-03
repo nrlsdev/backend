@@ -1,7 +1,7 @@
 <template>
-  <div class="application-container" @click="onApplicationClicked">
+  <div class="application-item" @click="onApplicationClicked">
     <CustomImage class="application-image" :src="application.image" />
-    <label>{{ application.name }}</label>
+    <label class="ellipsis">{{ application.name }}</label>
   </div>
 </template>
 
@@ -24,11 +24,15 @@ export default class Icon extends Vue {
 </script>
 
 <style scoped>
-.application-container {
+.application-item {
+  display: grid;
+  grid-template-rows: 2;
+  gap: 8px;
   cursor: pointer;
+  text-align: center;
 }
 
-.application-container:hover {
+.application-item:hover {
   opacity: 0.75;
 }
 
@@ -36,7 +40,8 @@ export default class Icon extends Vue {
   width: 100%;
   padding-bottom: 100%;
   background-size: cover;
-  border-radius: 15px;
+  border-radius: 10%;
   background-color: var(--application-background-color);
+  border: 1px solid var(--application-background-color);
 }
 </style>
