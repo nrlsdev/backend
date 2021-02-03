@@ -16,24 +16,24 @@ import { TwitterAuthenticationSchema } from './twitter-authentication-schema';
   },
 })
 export class AuthenticationMethodsSchema implements AuthenticationMethods {
-  @prop({ required: true, unique: true, default: {}, _id: false })
+  @prop({ required: true, unique: false, default: {}, _id: false })
   emailAndPassword!: EmailAndPasswordAuthenticationSchema;
 
-  @prop({ required: true, unique: true, default: {}, _id: false })
+  @prop({ required: true, unique: false, default: {}, _id: false })
   apple!: AppleAuthenticationSchema;
 
-  @prop({ required: true, unique: true, default: {}, _id: false })
+  @prop({ required: true, unique: false, default: {}, _id: false })
   google!: GoogleAuthenticationSchema;
 
-  @prop({ required: true, unique: true, default: {}, _id: false })
+  @prop({ required: true, unique: false, default: {}, _id: false })
   microsoft!: MicrosoftAuthenticationSchema;
 
-  @prop({ required: true, unique: true, default: {}, _id: false })
+  @prop({ required: true, unique: false, default: {}, _id: false })
   facebook!: FacebookAuthenticationSchema;
 
-  @prop({ required: true, unique: true, default: {}, _id: false })
+  @prop({ required: true, unique: false, default: {}, _id: false })
   instagram!: InstagramAuthenticationSchema;
 
-  @prop({ required: true, unique: true, default: {}, _id: false })
+  @prop({ required: true, unique: false, default: {}, _id: false })
   twitter!: TwitterAuthenticationSchema;
 }
