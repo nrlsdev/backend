@@ -10,6 +10,7 @@
   --primary-opacity-50-color: rgba(252, 100, 0, 0.5);
   --primary-hover-color: rgb(226, 89, 0);
   --primary-active-color: rgb(201, 79, 0);
+
   /* logos */
   --company-logo-color: var(--primary-color);
 }
@@ -37,6 +38,7 @@
   --default-icon-color: var(--black-color);
   --default-icon-hover-color: var(--primary-color);
   --error-message-color: var(--red1-color);
+  --default-secondary-font-color: var(--gray1-color);
 
   /* account */
   --account-border-color: var(--gray5-color);
@@ -61,13 +63,12 @@
 
   /* applications overview */
   --applications-overview-header-border-line-color: var(--white-color);
+  --application-background-color: var(--gray6-color);
 
-  /* application sidebar */
-  --application-sidebar-background-color: var(--gray6-color);
-  --application-sidebar-active-link-background-color: var(
-    --primary-active-color
-  );
-  --application-sidebar-header-font-color: var(--primary-color);
+  /* sidebar */
+  --sidebar-background-color: var(--gray6-color);
+  --sidebar-active-link-background-color: var(--primary-active-color);
+  --sidebar-header-font-color: var(--primary-color);
 
   /* application team settings */
   --no-invited-users-text-color: var(--gray2-color);
@@ -134,6 +135,7 @@
   --default-icon-color: var(--white-color);
   --default-icon-hover-color: var(--primary-color);
   --error-message-color: var(--red1-color);
+  --default-secondary-font-color: var(--gray1-color);
 
   /* account */
   --account-border-color: var(--gray5-color);
@@ -158,13 +160,12 @@
 
   /* applications overview */
   --applications-overview-header-border-line-color: var(--white-color);
+  --application-background-color: var(--gray6-color);
 
   /* application sidebar */
-  --application-sidebar-background-color: var(--gray6-color);
-  --application-sidebar-active-link-background-color: var(
-    --primary-active-color
-  );
-  --application-sidebar-header-font-color: var(--primary-color);
+  --sidebar-background-color: var(--gray6-color);
+  --sidebar-active-link-background-color: var(--primary-active-color);
+  --sidebar-header-font-color: var(--primary-color);
 
   /* application team settings */
   --no-invited-users-text-color: var(--gray2-color);
