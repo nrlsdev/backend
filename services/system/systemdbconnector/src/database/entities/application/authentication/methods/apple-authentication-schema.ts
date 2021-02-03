@@ -1,10 +1,5 @@
 import { AppleAuthentication } from '@backend/systeminterfaces';
-import {
-  getModelForClass,
-  modelOptions,
-  prop,
-  Severity,
-} from '@typegoose/typegoose';
+import { modelOptions, prop, Severity } from '@typegoose/typegoose';
 
 @modelOptions({
   options: {
@@ -34,7 +29,3 @@ export class AppleAuthenticationSchema implements AppleAuthentication {
   @prop({ required: true, unique: false, type: String, default: '' })
   privateKey!: string;
 }
-
-export const AppleAuthenticationModel = getModelForClass(
-  AppleAuthenticationSchema,
-);

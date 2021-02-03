@@ -1,9 +1,4 @@
-import {
-  getModelForClass,
-  modelOptions,
-  prop,
-  Severity,
-} from '@typegoose/typegoose';
+import { modelOptions, prop, Severity } from '@typegoose/typegoose';
 import { ApplicationUserAuthenticationEmailAndPassword } from '@backend/applicationinterfaces';
 
 @modelOptions({
@@ -21,7 +16,3 @@ export class ApplicationUserAuthenticationEmailAndPasswordSchema
   @prop({ unique: false, required: true, _id: false })
   password!: string;
 }
-
-export const ApplicationUserAuthenticationEmailAndPasswordModel = getModelForClass(
-  ApplicationUserAuthenticationEmailAndPasswordSchema,
-);
