@@ -34,10 +34,10 @@ export default class Icon extends Vue {
 
 <style scoped>
 .icon {
+  width: 1em;
+  height: 1em;
   display: grid;
   fill: var(--default-icon-color);
   font-size: 16px;
-  width: 1em;
-  height: 1em;
 }
 </style>
