@@ -117,6 +117,7 @@ export class SystemUserSchema implements SystemUser {
     return {
       error: undefined,
       systemUser: {
+        _id: systemUser._id,
         email: systemUser.email,
         firstname: systemUser.firstname,
         lastname: systemUser.lastname,

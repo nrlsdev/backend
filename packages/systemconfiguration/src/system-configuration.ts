@@ -42,8 +42,6 @@ function getSystemConfiguration(development: boolean) {
       jsonWebTokenSecret: process.env.JSON_WEB_TOKEN_SECRET || '',
       jsonWebTokenLifetime: (process.env.JSON_WEB_TOKEN_LIFETIME ||
         0) as number,
-      refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET || '',
-      refreshTokenLifetime: (process.env.REFRESH_TOKEN_LIFETIME || 0) as number,
     },
     systemWebPage: {
       protocol: process.env.SYSTEMWEBPAGE_PROTOCOL || '',

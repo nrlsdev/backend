@@ -25,8 +25,8 @@ export class Server {
   private ssl: boolean;
 
   private sslOptions: ServerOptions = {
-    cert: getSSLCert('localhost'),
-    key: getSSLKey('localhost'),
+    cert: getSSLCert('192.168.178.36'),
+    key: getSSLKey('192.168.178.36'),
     rejectUnauthorized: false,
   };
 
