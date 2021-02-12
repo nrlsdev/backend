@@ -1,62 +1,44 @@
-.account-page-container {
-  width: 350px;
-  margin: 100px auto;
-  text-align: center;
+.account-container {
+  width: 95%;
+  max-width: 350px;
+  margin: 50px auto;
 }
 
-.account-container {
-  width: auto;
-  margin-bottom: 16px;
-  padding: 50px 12.5%;
+.account-sheet {
+  padding: 40px;
   border: 1px solid var(--account-border-color);
   border-radius: 10px;
   background-color: var(--account-background-color);
 }
 
-.account-company-logo-container {
-  display: inline-flex;
-  padding-bottom: 50px;
+.account-sheet-header {
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.account-company-logo {
-  width: 75px;
-  height: 75px;
-  margin: auto 0;
-}
-
-.account-title {
-  margin-bottom: 50px;
-  font-size: 1.75em;
-  color: var(--account-title-font-color);
-}
-
-.account-section {
+.account-branding-logo {
+  width: 100px;
+  height: 100px;
   margin-bottom: 16px;
 }
 
-.account-section:last-of-type {
-  margin-bottom: 0px;
+.account-section + .account-section {
+  margin-top: 32px;
 }
 
 .account-error-message {
-  width: 100%;
+  margin-bottom: 16px;
   display: block;
-  text-align: left;
-  font-size: 0.875em;
-  font-weight: bold;
   color: var(--error-message-color);
 }
 
-.account-actions {
+.account-button {
+  margin-top: 32px;
+}
+
+.account-links {
+  margin-top: 20px;
   display: grid;
   gap: 16px;
-}
-
-.account-link {
-  color: var(--account-link-color);
-  text-decoration: none;
-}
-
-.account-link:hover {
-  text-decoration: underline;
+  text-align: center;
 }

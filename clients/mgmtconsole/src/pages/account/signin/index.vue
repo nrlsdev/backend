@@ -1,10 +1,10 @@
 <template>
-  <div class="account-page-container">
-    <div class="account-container">
-      <div class="account-company-logo-container">
-        <VLogo class="account-company-logo" />
-      </div>
-      <h1 class="account-title">{{ $t('StrSignIn') }}</h1>
+  <div class="account-container">
+    <div class="account-sheet">
+      <header class="account-sheet-header">
+        <VLogo class="account-branding-logo" />
+        <h1 class="system-large-title-font">{{ $t('StrSignIn') }}</h1>
+      </header>
       <form method="POST" @submit.prevent="onSignInButtonClicked">
         <CustomInput
           class="borderless"
@@ -20,20 +20,22 @@
           v-model="password"
           required
         />
-        <label class="account-error-message">{{ errorMessage }}</label>
-        <div class="account-actions">
-          <CustomButton class="big branded" type="submit">
-            {{ $t('StrSignIn') }}
-          </CustomButton>
-          <n-link class="account-link" to="/account/resetpassword" prefetch>{{
-            $t('StrForogtPassword')
-          }}</n-link>
-        </div>
+        <span class="account-error-message" v-if="errorMessage">{{
+          errorMessage
+        }}</span>
+        <CustomButton class="big branded account-button" type="submit">
+          {{ $t('StrSignIn') }}
+        </CustomButton>
       </form>
     </div>
-    <n-link class="account-link" to="/account/signup" prefetch>{{
-      $t('StrCreateNewAccount')
-    }}</n-link>
+    <div class="account-links">
+      <n-link class="system-link-font" to="/account/resetpassword" prefetch>{{
+        $t('StrForgotPassword')
+      }}</n-link>
+      <n-link class="system-link-font" to="/account/signup" prefetch>{{
+        $t('StrCreateNewAccount')
+      }}</n-link>
+    </div>
   </div>
 </template>
 

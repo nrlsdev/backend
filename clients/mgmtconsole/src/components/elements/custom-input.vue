@@ -65,20 +65,17 @@ textarea::placeholder {
 }
 
 input:-webkit-autofill,
-textarea:-webkit-autofill,
 input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
-input:-webkit-autofill:active,
-textarea:-webkit-autofill:active,
-input:-webkit-autofill:focus textarea:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--default-font-color) !important;
-  box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
-  -webkit-box-shadow: 0 0 0 10000px var(--account-input-background-color) inset !important;
+textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--default-font-color);
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 .borderless {
   width: 100%;
-  margin-bottom: 16px;
   padding-bottom: 5px;
   border: none;
   border-radius: 0;
@@ -86,6 +83,10 @@ input:-webkit-autofill:focus textarea:-webkit-autofill:focus {
   background-color: var(--transparent-color);
   border-bottom: 1px solid;
   color: var(--default-font-color);
+}
+
+.borderless + .borderless {
+  margin-top: 16px;
 }
 
 .block {

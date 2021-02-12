@@ -1,10 +1,10 @@
 <template>
-  <div class="account-page-container">
-    <div class="account-container">
-      <div class="account-company-logo-container">
-        <VLogo class="account-company-logo" />
-      </div>
-      <h1 class="account-title">{{ $t('StrSignUp') }}</h1>
+  <div class="account-container">
+    <div class="account-sheet">
+      <header class="account-sheet-header">
+        <VLogo class="account-branding-logo" />
+        <h1 class="system-large-title-font">{{ $t('StrSignUp') }}</h1>
+      </header>
       <form method="POST" @submit.prevent="onSignUpButtonClicked">
         <section class="account-section">
           <CustomInput
@@ -47,15 +47,19 @@
             required
           />
         </section>
-        <label class="account-error-message">{{ errorMessage }}</label>
-        <CustomButton class="big branded" type="submit">
+        <span class="account-error-message" v-if="errorMessage">{{
+          errorMessage
+        }}</span>
+        <CustomButton class="big branded account-button" type="submit">
           {{ $t('StrSignUp') }}
         </CustomButton>
       </form>
     </div>
-    <n-link class="account-link" to="/account/signin" prefetch>{{
-      $t('StrAlreadyGotAnAccount')
-    }}</n-link>
+    <div class="account-links">
+      <n-link class="system-link-font" to="/account/signin" prefetch>{{
+        $t('StrAlreadyHaveAnAccount')
+      }}</n-link>
+    </div>
   </div>
 </template>
 

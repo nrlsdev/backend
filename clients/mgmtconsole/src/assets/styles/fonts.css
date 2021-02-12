@@ -77,6 +77,20 @@
   color: var(--default-secondary-font-color);
 }
 
+.system-link-font {
+  color: var(--default-link-font-color);
+  text-decoration: none;
+}
+
+.system-link-font:hover {
+  color: var(--default-link-font-color);
+  text-decoration: underline;
+}
+
+.system-link-font:focus {
+  outline: none;
+}
+
 .ellipsis {
   overflow: hidden;
   white-space: nowrap;
