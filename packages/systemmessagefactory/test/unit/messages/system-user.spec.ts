@@ -201,39 +201,6 @@ describe('SystemUserMessage', () => {
     });
   });
 
-  describe('.systemUserRefreshTokenResponse()', () => {
-    it('should return a systemuser refresh token response message without an error object', () => {
-      const statusCode: number = 200;
-      const responseMessage = SystemUserMessage.systemUserRefreshTokenResponse(
-        statusCode,
-      );
-
-      expect(responseMessage).toMatchObject({
-        meta: {
-          statusCode,
-        },
-        body: {},
-      });
-    });
-
-    it('should return a systemuser refresh token response message with an error object', () => {
-      const statusCode: number = 400;
-      const responseMessage = SystemUserMessage.systemUserRefreshTokenResponse(
-        statusCode,
-        testErrorMessage,
-      );
-
-      expect(responseMessage).toMatchObject({
-        meta: {
-          statusCode,
-        },
-        body: {
-          error: testErrorMessage,
-        },
-      });
-    });
-  });
-
   describe('.getSystemUserDataRequest()', () => {
     it('should return a get systemuser data request message', () => {
       const systemUserId: string = '2931023-sadkasd983d-2190ej01d12-d12d21d';
@@ -257,10 +224,12 @@ describe('SystemUserMessage', () => {
   describe('.getSystemUserDataResponse()', () => {
     it('should return a get systemuser data token response message without an error object', () => {
       const statusCode: number = 400;
+      const _id: string = '1234-5678-9012';
       const firstname: string = 'Test';
       const lastname: string = 'Revanced';
       const responseMessage = SystemUserMessage.getSystemUserDataResponse(
         statusCode,
+        _id,
         email,
         firstname,
         lastname,

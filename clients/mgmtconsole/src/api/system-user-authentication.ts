@@ -40,35 +40,7 @@ export async function signIn(email: string, password: string) {
 }
 
 export async function signOut(context: Context) {
-  const response = await authenticationAPI.get('/auth/signout');
-  const responseMessage: ResponseMessage = response.data as ResponseMessage;
-  const { error } = responseMessage.body;
-
-  if (error || response.status !== 200) {
-    return;
-  }
-
-  try {
-    context.$cookies.removeAll();
-  } catch {
-    // nothing to do
-  }
-}
-
-export async function validateAndRefreshToken(context: Context) {
-  const hasValidToken: boolean = await validateToken();
-
-  if (hasValidToken) {
-    return true;
-  }
-
-  const wasTokenRefreshed = await refreshToken(context);
-
-  return wasTokenRefreshed !== null;
-}
-
-export async function validateToken() {
-  const response = await authenticationAPI.get('/validate/token');
+  const response = await authenticationAPI.post('/auth/signout');
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
   const { error } = responseMessage.body;
 
@@ -76,23 +48,17 @@ export async function validateToken() {
     return false;
   }
 
+  try {
+    context.$cookies.removeAll();
+  } catch {
+    return false;
+  }
+
   return true;
 }
 
-export async function refreshToken(context: Context) {
-  const response = await authenticationAPI.get('/auth/refreshtoken');
-  const responseMessage: ResponseMessage = response.data as ResponseMessage;
-  const { error } = responseMessage.body;
+export async function isUserAuthenticated() {
+  const response = await authenticationAPI.get('/auth');
 
-  if (error || response.status !== 200) {
-    signOut(context);
-    return null;
-  }
-
-  if (process.server) {
-    context.res.setHeader('set-cookie', response.headers['set-cookie']);
-    return response.headers['set-cookie'] as [];
-  }
-
-  return [];
+  return response.status === 200;
 }

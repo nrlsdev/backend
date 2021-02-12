@@ -1,12 +1,12 @@
 import { Middleware, Context } from '@nuxt/types';
-import { validateAndRefreshToken } from '@/api/system-user-authentication';
+import { isUserAuthenticated } from '@/api/system-user-authentication';
 
 const redirectToSignInPageIfNotSignedIn: Middleware = async (
   context: Context,
 ) => {
-  const isTokenValid: boolean = await validateAndRefreshToken(context);
+  const isAuthenticated: boolean = await isUserAuthenticated();
 
-  if (isTokenValid) {
+  if (isAuthenticated) {
     return;
   }
 

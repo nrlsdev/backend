@@ -110,21 +110,6 @@ export class SystemUserMessage {
     };
   }
 
-  // Refresh token
-  public static systemUserRefreshTokenResponse(
-    statusCode: number,
-    error?: string,
-  ): ResponseMessage {
-    return {
-      meta: {
-        statusCode,
-      },
-      body: {
-        error,
-      },
-    };
-  }
-
   // Get systemuser data
   public static getSystemUserDataRequest(systemUserId: string): RequestMessage {
     return {
@@ -141,6 +126,7 @@ export class SystemUserMessage {
 
   public static getSystemUserDataResponse(
     statusCode: number,
+    _id: string,
     email: string,
     firstname: string,
     lastname: string,
@@ -152,10 +138,26 @@ export class SystemUserMessage {
       },
       body: {
         data: {
+          _id,
           email,
           firstname,
           lastname,
         },
+        error,
+      },
+    };
+  }
+
+  // isAuthenticated
+  public static isSystemUserAuthenticatedResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
         error,
       },
     };

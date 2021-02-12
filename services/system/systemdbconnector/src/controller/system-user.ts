@@ -47,6 +47,7 @@ export async function getSystemuserData(systemUserId: string) {
 
   return SystemUserMessage.getSystemUserDataResponse(
     StatusCodes.OK,
+    systemUser._id,
     systemUser.email,
     systemUser.firstname,
     systemUser.lastname,
