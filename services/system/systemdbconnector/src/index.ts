@@ -10,11 +10,20 @@ import {
   ErrorMessage,
   ApplicationMessage,
   ApplicationTeamMessage,
+  PaymentInformationMessage,
 } from '@backend/systemmessagefactory';
 import { SystemConfiguration } from '@backend/systemconfiguration';
 import { SystemUser } from '@backend/systeminterfaces';
 import { Database } from './database/database';
-import { signUp, signIn, getSystemuserData } from './controller/system-user';
+import {
+  signUp,
+  signIn,
+  getSystemuserData,
+} from './controller/system-user/system-user';
+import {
+  getCustomerId,
+  setCustomerId,
+} from './controller/system-user/payment-information';
 import {
   updateApplicationData,
   createApplication,
@@ -91,6 +100,16 @@ async function onSystemUserMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return getSystemuserData(data.systemUserId);
+    }
+    case PaymentInformationMessage.TYPE_PAYMENT_INFORMATION_GET_CUSTOMER_ID: {
+      const { data }: any = requestMessage.body;
+
+      return getCustomerId(data.userId);
+    }
+    case PaymentInformationMessage.TYPE_PAYMENT_INFORMATION_SET_CUSTOMER_ID: {
+      const { data }: any = requestMessage.body;
+
+      return setCustomerId(data.userId, data.customerId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

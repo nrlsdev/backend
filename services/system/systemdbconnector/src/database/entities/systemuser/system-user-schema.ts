@@ -129,6 +129,63 @@ export class SystemUserSchema implements SystemUser {
     };
   }
 
+  // Payment Information
+  public static async getCustomerId(
+    this: ReturnModelType<typeof SystemUserSchema>,
+    userId: string,
+  ) {
+    const systemUser = await this.findUserById(userId);
+
+    if (!systemUser) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'Wrong userId. Should not happen.',
+        customerId: undefined,
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+      customerId: systemUser.customerId,
+    };
+  }
+
+  public static async setCustomerId(
+    this: ReturnModelType<typeof SystemUserSchema>,
+    userId: string,
+    customerId: string,
+  ) {
+    const systemUser = await this.findUserById(userId);
+
+    if (!systemUser) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'Wrong userId. Should not happen.',
+      };
+    }
+
+    systemUser.customerId = customerId;
+
+    try {
+      systemUser.save();
+    } catch (exception) {
+      SystemUserSchema.logger.fatal('setCustomerId', exception);
+
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
+  // Helper
+
   public static async findUserById(
     this: ReturnModelType<typeof SystemUserSchema>,
     userId: string,
