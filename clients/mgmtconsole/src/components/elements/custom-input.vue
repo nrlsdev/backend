@@ -56,7 +56,14 @@ export default class CustomInput extends Vue {
 <style scoped>
 input,
 textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   border-color: var(--custom-input-border-color) !important;
+}
+
+textarea {
+  resize: none;
 }
 
 input,
@@ -98,15 +105,7 @@ textarea:-webkit-autofill:focus {
   color: var(--white);
 }
 
-.block + .block {
-  margin-top: 20px;
-}
-
 .readonly {
   color: var(--gray3-color);
-}
-
-textarea {
-  resize: none;
 }
 </style>
