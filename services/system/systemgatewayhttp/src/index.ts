@@ -34,7 +34,7 @@ const session: SessionOptions = {
   },
   secret: jsonWebTokenSecret,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
     maxAge: Number(jsonWebTokenLifetime),
     httpOnly: true,
