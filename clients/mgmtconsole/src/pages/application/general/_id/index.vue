@@ -1,12 +1,115 @@
 <template>
   <div v-if="application">
+    <div v-if="$mq === 'sm'">
+      <h1 class="system-large-title-font page-header">
+        {{ $t('StrGeneral') }}
+      </h1>
+      <section class="application-section-mobile">
+        <h2 class="system-title-two-font">{{ $t('StrInfo') }}</h2>
+        <div class="application-general-info-container" :class="$mq">
+          <div class="image-picker-container" @click="onImagePickerClicked">
+            <input
+              class="application-general-image-picker"
+              type="file"
+              accept="image/*"
+              ref="applicationGeneralImagePicker"
+              @change="onApplicationImageSelected"
+            />
+            <img
+              class="application-general-image"
+              :src="
+                application.image
+                  ? application.image
+                  : '/application-placeholder.png'
+              "
+              ref="applicationGeneralImage"
+            />
+            <div class="application-general-image-edit-container">
+              <Icon class="application-general-image-edit-icon" icon="pencil" />
+            </div>
+          </div>
+          <div>
+            <CustomInput
+              class="block readonly application-general-input"
+              type="text"
+              :value="application.bundleId"
+              readonly
+            />
+            <CustomInput
+              class="block application-general-input"
+              type="text"
+              v-model="application.name"
+            />
+          </div>
+          <ApplicationChangeActions
+            v-model="ShowGeneralInfoChangeActions"
+            :onSaveBtnClicked="onInfoSectionSaveBtnClicked"
+            :error="generalInfoChangeActionsError"
+          />
+        </div>
+      </section>
+    </div>
+
+    <div v-else>
+      <h1 class="system-large-title-font page-header">
+        {{ $t('StrGeneral') }}
+      </h1>
+      <section class="application-section">
+        <h2 class="system-title-two-font">{{ $t('StrInfo') }}</h2>
+        <div class="application-general-info-container" :class="$mq">
+          <div class="image-picker-container" @click="onImagePickerClicked">
+            <input
+              class="application-general-image-picker"
+              type="file"
+              accept="image/*"
+              ref="applicationGeneralImagePicker"
+              @change="onApplicationImageSelected"
+            />
+            <img
+              class="application-general-image"
+              :src="
+                application.image
+                  ? application.image
+                  : '/application-placeholder.png'
+              "
+              ref="applicationGeneralImage"
+            />
+            <div class="application-general-image-edit-container">
+              <Icon class="application-general-image-edit-icon" icon="pencil" />
+            </div>
+          </div>
+          <div>
+            <CustomInput
+              class="block readonly application-general-input"
+              type="text"
+              :value="application.bundleId"
+              readonly
+            />
+            <CustomInput
+              class="block application-general-input"
+              type="text"
+              v-model="application.name"
+            />
+          </div>
+          <ApplicationChangeActions
+            v-model="ShowGeneralInfoChangeActions"
+            :onSaveBtnClicked="onInfoSectionSaveBtnClicked"
+            :error="generalInfoChangeActionsError"
+          />
+        </div>
+      </section>
+    </div>
+  </div>
+  <!-- <div v-if="application">
     <h1 class="system-large-title-font application-page-title">
       {{ $t('StrGeneral') }}
     </h1>
-    <section class="application-section">
-      <div>
-        <h2 class="system-title-two-font">{{ $t('StrInfo') }}</h2>
-      </div>
+    <section
+      :class="
+        $mq === 'sm' ? 'application-section-mobile' : 'application-section'
+      "
+    >
+      <h2 class="system-title-two-font">{{ $t('StrInfo') }}</h2>
       <div class="application-general-info-container">
         <div @click="onImagePickerClicked">
           <input
@@ -45,7 +148,7 @@
         />
       </div>
     </section>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
@@ -154,15 +257,24 @@ export default class ApplicationGeneralPage extends Vue {
 
 <style src="~/assets/styles/pages/application.css" scoped></style>
 
-<style scoped>
+<style lang="postcss" scoped>
 .application-general-info-container {
   display: grid;
-  grid-template-columns: auto 1fr;
   gap: 20px;
+  &.sm {
+    grid-template-columns: 1fr;
+  }
+  &.md,
+  &.lg {
+    grid-template-columns: auto 1fr;
+  }
 }
 
-.application-general-info-container > div:first-of-type {
+.image-picker-container {
+  width: 128px;
   height: 128px;
+  overflow: hidden;
+  border-radius: 10%;
 }
 
 .application-general-image-picker {
@@ -178,9 +290,9 @@ export default class ApplicationGeneralPage extends Vue {
   top: -128px;
   padding: 32px;
   position: relative;
+  transition: 0.25s ease;
   background-color: var(--transparent-color);
   fill: var(--transparent-color);
-  transition: 0.25s ease;
 }
 
 .application-general-image-edit-container:hover {
@@ -201,7 +313,7 @@ export default class ApplicationGeneralPage extends Vue {
   fill: var(--transparent-color);
 }
 
-.application-change-actions {
-  grid-column: span 2;
+.application-general-input + .application-general-input {
+  margin-top: 20px;
 }
 </style>
