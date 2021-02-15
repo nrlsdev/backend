@@ -60,7 +60,7 @@ export function setupLocalAuthentication() {
         if (signInResponseMessage.body.error || !data) {
           logger.error('use', signInResponseMessage.body.error);
 
-          return done(null, false);
+          return done(signInResponseMessage, false);
         }
 
         if (signInResponseMessage.meta.statusCode !== StatusCodes.OK) {
@@ -69,7 +69,7 @@ export function setupLocalAuthentication() {
             `Signin request failed with statuscode '${signInResponseMessage.meta.statusCode}'.`,
           );
 
-          return done(null, false);
+          return done(signInResponseMessage, false);
         }
 
         return done(null, {
@@ -129,9 +129,9 @@ export function signIn(
 
   authenticate('local', (error, user, info) => {
     if (error) {
-      const errorResponseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse();
+      const errorResponseMessage: ResponseMessage = error;
 
-      logger.error('signIn', error);
+      logger.error('signIn', errorResponseMessage.body.error);
 
       return response
         .status(errorResponseMessage.meta.statusCode)
