@@ -25,6 +25,7 @@
     "nodemon": "^2.0.6",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "stripe": "^8.135.0",
     "ts-node": "^9.1.0",
     "uuid": "^8.3.2"
   },
@@ -34,6 +35,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/passport": "^1.0.6",
     "@types/passport-local": "^1.0.33",
+    "@types/stripe": "^8.0.417",
     "@types/uuid": "^8.3.0"
   }
 }

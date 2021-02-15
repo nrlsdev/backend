@@ -62,5 +62,9 @@ function getSystemConfiguration(development: boolean) {
         password: process.env.MAIL_NOREPLY_PASSWORD || '',
       },
     },
+    stripe: {
+      apiKey: process.env.STRIPE_API_KEY || '',
+      apiVersion: process.env.STRIPE_API_VERSION || '',
+    },
   };
 }
