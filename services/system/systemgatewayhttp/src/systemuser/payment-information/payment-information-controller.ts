@@ -162,6 +162,84 @@ export async function addPaymentInformation(
     .end();
 }
 
+export async function getPaymentInformations(
+  request: Request,
+  response: Response,
+) {
+  const { userId } = request.body;
+  const customerId = await getCustomerId(userId);
+
+  if (!customerId) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      'Could not find payment informations.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const sources: Stripe.Response<
+    Stripe.ApiList<Stripe.CustomerSource>
+  > = await stripe.customers.listSources(customerId);
+  const customer: Stripe.Customer = (await stripe.customers.retrieve(
+    customerId,
+  )) as Stripe.Customer;
+  const defaultSourceId: string = customer.default_source as string;
+
+  if (!sources || !sources.data) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      'Could not find payment informations.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const paymentInformations: PaymentInformation[] = [];
+
+  for (let i = 0; i < sources.data.length; i += 1) {
+    const source: Stripe.Card = sources.data[i] as Stripe.Card;
+    const paymentInformation: PaymentInformation = {
+      card: {
+        id: source.id,
+        last4: source.last4,
+        brand: source.brand,
+        owner: source.name || '',
+        expirationMonth: source.exp_month.toString() || '',
+        expirationYear: source.exp_year.toString() || '',
+        default: defaultSourceId === source.id,
+      },
+      billingAddress: {
+        addressLineOne: source.address_line1 || '',
+        addressLineTwo: source.address_line2 || '',
+        zipCode: source.address_zip || '',
+        city: source.address_city || '',
+        stateRegionProvince: source.address_state || '',
+        country: source.address_country || '',
+      },
+    };
+
+    paymentInformations.push(paymentInformation);
+  }
+
+  const responseMessage: ResponseMessage = PaymentInformationMessage.getPaymentInformations(
+    paymentInformations,
+    StatusCodes.OK,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
+
 export async function getCustomerId(userId: string) {
   const customerIdResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     PaymentInformationMessage.getCustomerIdRequest(userId),

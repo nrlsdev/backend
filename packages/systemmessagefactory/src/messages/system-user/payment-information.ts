@@ -1,4 +1,5 @@
 import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
+import { PaymentInformation } from '@backend/systeminterfaces';
 
 export class PaymentInformationMessage {
   public static readonly TYPE_PAYMENT_INFORMATION_GET_CUSTOMER_ID =
@@ -83,6 +84,25 @@ export class PaymentInformationMessage {
         statusCode,
       },
       body: {
+        error,
+      },
+    };
+  }
+
+  // get payment informations
+  public static getPaymentInformations(
+    paymentInformations: PaymentInformation[],
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          paymentInformations,
+        },
         error,
       },
     };

@@ -1,14 +1,18 @@
 export interface PaymentInformation {
   card?: {
-    number: string;
+    id?: string;
+    number?: string;
+    last4?: string;
+    brand?: string;
     owner: string;
     expirationMonth: string;
     expirationYear: string;
-    cvc: string;
+    cvc?: string;
+    default?: boolean;
   };
 
   billingAddress?: {
-    addressLineOne: string;
+    addressLineOne?: string;
     addressLineTwo: string;
     zipCode: string;
     city: string;
