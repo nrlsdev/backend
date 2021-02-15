@@ -2,7 +2,7 @@
   <b-modal :id="id" :title="title" hide-footer centered>
     <slot />
     <div>
-      <label class="modal-error">{{ error }}</label>
+      <span class="modal-error" v-if="error">{{ error }}</span>
     </div>
     <div class="modal-footer-container">
       <CustomButton
@@ -97,13 +97,15 @@ export default class Modal extends Vue {
 
 <style scoped>
 .modal-footer-container {
-  margin-top: 16px;
+  margin-top: 32px !important;
   display: grid;
   grid-template-columns: auto auto;
   gap: 8px;
 }
 
 .modal-error {
+  margin-top: 16px;
+  display: block;
   color: var(--error-message-color);
 }
 
