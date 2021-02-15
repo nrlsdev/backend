@@ -34,7 +34,7 @@ import { Vue, Component } from 'nuxt-property-decorator';
 @Component
 export default class UserSettingsSidebar extends Vue {
   protected createApplicationNuxtLink(urlPath: string) {
-    return `/application/${urlPath}/${this.$route.params.id}`;
+    return `/user/settings/${urlPath}`;
   }
 
   protected onSidebarLinkClicked() {

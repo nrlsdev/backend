@@ -87,7 +87,7 @@ export default class Navbar extends Vue {
 
   protected onNavbarPopoverSettingsItemClicked() {
     this.showAccountPopover = false;
-    this.$router.push('/settings');
+    this.$router.push('/user/settings/general');
   }
 
   protected async onNavbarPopoverSignOutItemClicked() {
