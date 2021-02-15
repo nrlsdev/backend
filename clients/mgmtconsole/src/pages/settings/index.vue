@@ -6,7 +6,11 @@
 import { Vue, Component } from 'nuxt-property-decorator';
 
 @Component
-export default class SettingsPage extends Vue {}
+export default class SettingsPage extends Vue {
+  protected layout() {
+    return 'user-settings';
+  }
+}
 </script>
 
-<style></style>
+<style scoped></style>
