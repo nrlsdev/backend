@@ -44,15 +44,6 @@
           </div>
           <div
             class="navbar-account-popover-item navbar-account-popover-item-link"
-            @click="onNavbarPopoverSubscriptionsItemClicked"
-          >
-            <label class="navbar-account-popover-item-link-label">{{
-              $t('StrSubscriptions')
-            }}</label>
-            <Icon icon="credit-card" />
-          </div>
-          <div
-            class="navbar-account-popover-item navbar-account-popover-item-link"
             @click="onNavbarPopoverSignOutItemClicked"
           >
             <label class="navbar-account-popover-item-link-label">{{
@@ -108,11 +99,6 @@ export default class NavbarWithSidebar extends Vue {
   protected onNavbarPopoverSettingsItemClicked() {
     this.showAccountPopover = false;
     this.$router.push('/settings');
-  }
-
-  protected onNavbarPopoverSubscriptionsItemClicked() {
-    this.showAccountPopover = false;
-    this.$router.push('/settings'); // ToDo
   }
 
   protected async onNavbarPopoverSignOutItemClicked() {

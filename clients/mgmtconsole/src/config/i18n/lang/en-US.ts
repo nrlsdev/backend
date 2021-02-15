@@ -73,7 +73,7 @@ export const enUS = {
   StrSignUp: 'Sign Up',
   StrStatistics: 'Statistics',
   StrStatus: 'Status',
-  StrSubscriptions: 'Subscriptions',
+  StrSubscription: 'Subscription',
   StrTeam: 'Team',
   StrTwitter: 'Twitter',
   StrUser: 'User',

@@ -75,7 +75,7 @@ export const deDE = {
   StrSignUp: 'Registrieren',
   StrStatistics: 'Statistiken',
   StrStatus: 'Status',
-  StrSubscriptions: 'Abonnements',
+  StrSubscription: 'Abonnement',
   StrTeam: 'Team',
   StrTwitter: 'Twitter',
   StrUser: 'Benutzer',

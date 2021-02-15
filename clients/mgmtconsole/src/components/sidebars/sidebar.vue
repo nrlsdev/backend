@@ -115,6 +115,23 @@
           </n-link>
         </div>
       </section>
+
+      <section class="sidebar-section" :class="$mq">
+        <label class="system-headline-font sidebar-header">{{
+          $t('StrSubscription')
+        }}</label>
+        <div class="sidebar-item-container">
+          <n-link
+            :to="createApplicationNuxtLink('subscription')"
+            @click.native="onSidebarLinkClicked"
+            class="sidebar-item"
+            :class="$mq"
+          >
+            <Icon icon="credit-card" />
+            <label>{{ $t('StrSubscription') }}</label>
+          </n-link>
+        </div>
+      </section>
     </div>
   </aside>
 </template>
