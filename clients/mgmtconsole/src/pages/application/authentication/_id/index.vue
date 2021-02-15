@@ -1,14 +1,17 @@
 <template>
   <div v-if="application">
-    <h1 class="system-large-title-font application-page-title">
+    <h1 class="system-large-title-font page-header">
       {{ $t('StrAuthentication') }}
     </h1>
-    <section class="application-section">
-      <div>
-        <h2 class="system-title-two-font">
-          {{ $t('StrAuthenticationMethods') }}
-        </h2>
-      </div>
+    <section
+      class="application-section"
+      :class="
+        $mq === 'sm' ? 'application-section-mobile' : 'application-section'
+      "
+    >
+      <h2 class="system-title-two-font">
+        {{ $t('StrAuthenticationMethods') }}
+      </h2>
       <div class="application-general-info-container">
         <Collapse
           icon="email"

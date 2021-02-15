@@ -1,10 +1,10 @@
 <template>
-  <div class="account-page-container">
-    <div class="account-container">
-      <div class="account-company-logo-container">
-        <VLogo class="account-company-logo" />
-      </div>
-      <h1 class="account-title">{{ $t('StrResetPassword') }}</h1>
+  <div class="account-container">
+    <div class="account-sheet">
+      <header class="account-sheet-header">
+        <VLogo class="account-branding-logo" />
+        <h1 class="system-large-title-font">{{ $t('StrResetPassword') }}</h1>
+      </header>
       <form>
         <section class="account-section">
           <CustomInput
@@ -28,15 +28,17 @@
             required
           />
         </section>
-        <label class="account-error-message"></label>
-        <CustomButton class="big branded" type="submit">
+        <span class="account-error-message" v-if="errorMessage"></span>
+        <CustomButton class="big branded account-button" type="submit">
           {{ $t('StrReset') }}
         </CustomButton>
       </form>
     </div>
-    <n-link class="account-link" to="/account/signin" prefetch>{{
-      $t('StrBackToSignInPage')
-    }}</n-link>
+    <div class="account-links">
+      <n-link class="system-link-font" to="/account/signin" prefetch>{{
+        $t('StrBackToSignInPage')
+      }}</n-link>
+    </div>
   </div>
 </template>
 

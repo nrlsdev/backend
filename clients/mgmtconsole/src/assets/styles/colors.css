@@ -4,6 +4,7 @@
   --transparent50-color: rgba(0, 0, 0, 0.5);
   --black-color: rgb(0, 0, 0);
   --white-color: rgb(255, 255, 255);
+  --default-link-font-color: var(--primary-color);
 
   /* branding */
   --primary-color: rgb(252, 100, 0);
@@ -43,12 +44,10 @@
   /* account */
   --account-border-color: var(--gray5-color);
   --account-background-color: var(--gray6-color);
-  --account-title-font-color: var(--black-color);
   --account-input-background-color: var(--account-background-color);
   --account-submit-button-color: var(--primary-color);
   --account-submit-button-hover-color: var(--primary-hover-color);
   --account-submit-button-active-color: var(--primary-active-color);
-  --account-link-color: var(--primary-color);
 
   /* navbar */
   --navbar-color: var(--gray6-color);
@@ -145,7 +144,6 @@
   --account-submit-button-color: var(--primary-color);
   --account-submit-button-hover-color: var(--primary-hover-color);
   --account-submit-button-active-color: var(--primary-active-color);
-  --account-link-color: var(--primary-color);
 
   /* navbar */
   --navbar-color: var(--gray6-color);

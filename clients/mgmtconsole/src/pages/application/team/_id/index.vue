@@ -1,12 +1,14 @@
 <template>
   <div v-if="application">
-    <h1 class="system-large-title-font application-page-title">
+    <h1 class="system-large-title-font page-header">
       {{ $t('StrTeam') }}
     </h1>
-    <section class="application-section">
-      <div>
-        <h2 class="system-title-two-font">{{ $t('StrInvitedUser') }}</h2>
-      </div>
+    <section
+      :class="
+        $mq === 'sm' ? 'application-section-mobile' : 'application-section'
+      "
+    >
+      <h2 class="system-title-two-font">{{ $t('StrInvitedUser') }}</h2>
       <div>
         <CustomButton
           class="default application-section-button"
@@ -16,21 +18,28 @@
         >
         <div
           class="application-team-list"
+          :class="$mq"
           v-if="application.invitedUsers.length > 0"
         >
           <div
+            class="application-team-list-item"
+            :class="$mq"
             v-for="invitedUser in application.invitedUsers"
             :key="invitedUser.user._id"
           >
             <label>{{ invitedUser.user.email }}</label>
-            <label>{{ getRoleName(invitedUser.role) }}</label>
-            <CustomButton
-              class="delete"
-              @click.native="
-                onDeleteInvitedUserBtnClicked(invitedUser.user._id)
-              "
-              >{{ $t('StrDelete') }}</CustomButton
-            >
+            <label class="application-team-role">{{
+              getRoleName(invitedUser.role)
+            }}</label>
+            <div class="application-team-action-button-container" :class="$mq">
+              <CustomButton
+                class="delete"
+                @click.native="
+                  onDeleteInvitedUserBtnClicked(invitedUser.user._id)
+                "
+                >{{ $t('StrDelete') }}</CustomButton
+              >
+            </div>
           </div>
         </div>
         <div v-else>
@@ -40,24 +49,31 @@
         </div>
       </div>
     </section>
-    <hr class="application-section-separator" />
-    <section class="application-section">
-      <div>
-        <h2 class="system-title-two-font">{{ $t('StrUser') }}</h2>
-      </div>
+    <section
+      :class="
+        $mq === 'sm' ? 'application-section-mobile' : 'application-section'
+      "
+    >
+      <h2 class="system-title-two-font">{{ $t('StrUser') }}</h2>
       <div>
         <div class="application-team-list">
           <div
+            class="application-team-list-item"
+            :class="$mq"
             v-for="authorizedUser in application.authorizedUsers"
             :key="authorizedUser.user._id"
           >
             <label>{{ authorizedUser.user.email }}</label>
-            <label>{{ getRoleName(authorizedUser.role) }}</label>
-            <CustomButton
-              class="default"
-              @click.native="onEditAuthorizedUserBtnClicked(authorizedUser)"
-              >{{ $t('StrEdit') }}</CustomButton
-            >
+            <label class="application-team-role">{{
+              getRoleName(authorizedUser.role)
+            }}</label>
+            <div class="application-team-action-button-container" :class="$mq">
+              <CustomButton
+                class="default"
+                @click.native="onEditAuthorizedUserBtnClicked(authorizedUser)"
+                >{{ $t('StrEdit') }}</CustomButton
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -260,17 +276,45 @@ export default class ApplicationTeamPage extends Vue {
 
 <style src="~/assets/styles/pages/application.css" scoped></style>
 
-<style scoped>
-.application-team-list > div {
-  padding: 5px 0;
+<style lang="postcss" scoped>
+.application-team-list-item {
+  padding: 10px 0;
   display: grid;
-  grid-template-columns: 2fr auto auto;
-  gap: 64px;
-  border-bottom: 1px solid var(--gray6-color);
+  align-items: center;
+  &.sm {
+    grid-template-columns: 1fr;
+    column-gap: 20px;
+  }
+  &.md,
+  &.lg {
+    grid-template-columns: 5fr 1fr 1fr;
+    gap: 20px;
+  }
 }
 
-.application-team-list > div:last-of-type {
-  border-bottom: none;
+.application-team-list-item:first-of-type {
+  margin-top: -10px;
+}
+
+.application-team-list-item + .application-team-list-item {
+  border-top: 1px solid var(--gray6-color);
+}
+
+.application-team-role {
+  color: var(--gray1-color);
+}
+
+.application-team-action-button-container {
+  &.sm {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 2;
+    grid-column-end: 3;
+  }
+  &.md,
+  &.lg {
+    justify-self: end;
+  }
 }
 
 .application-team-list-no-invited-users-text {

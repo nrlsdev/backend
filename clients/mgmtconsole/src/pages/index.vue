@@ -6,11 +6,19 @@
         <CustomButton
           class="block default"
           @click.native="onCreateApplicationClicked"
+          v-if="$mq === 'sm'"
+        >
+          <Icon icon="plus"></Icon>
+        </CustomButton>
+        <CustomButton
+          class="block default"
+          @click.native="onCreateApplicationClicked"
+          v-else
           >{{ $t('StrCreateApplication') }}</CustomButton
         >
       </div>
     </div>
-    <div class="applications-overview-container">
+    <div class="applications-overview-container" :class="$mq">
       <Application
         v-for="application in applications"
         :key="application.bundleId"
@@ -26,13 +34,13 @@
     >
       <div class="applications-overview-modal-input">
         <CustomInput
-          class="borderless"
+          class="block"
           type="text"
           :placeholder="$t('StrApplicationBundleIdentifier')"
           v-model="createApplicationBundleId"
         />
         <CustomInput
-          class="borderless"
+          class="block"
           type="text"
           :placeholder="$t('StrApplicationName')"
           v-model="createApplicationName"
@@ -92,7 +100,7 @@ export default class IndexPage extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .applications-overview-header {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -102,13 +110,19 @@ export default class IndexPage extends Vue {
 
 .applications-overview-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 50px;
+  &.sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &.md,
+  &.lg {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .applications-overview-modal-input {
   display: grid;
   grid-template-rows: auto;
-  gap: 8px;
+  gap: 16px;
 }
 </style>

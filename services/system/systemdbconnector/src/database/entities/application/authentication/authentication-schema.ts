@@ -10,6 +10,6 @@ import { AuthenticationMethodsSchema } from './methods/methods-schema';
   },
 })
 export class AuthenticationSchema implements Authentication {
-  @prop({ required: true, unique: true, default: {}, _id: false })
+  @prop({ required: true, unique: false, default: {}, _id: false })
   methods!: AuthenticationMethodsSchema;
 }

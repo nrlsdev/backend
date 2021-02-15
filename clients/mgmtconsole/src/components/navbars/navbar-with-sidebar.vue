@@ -1,12 +1,19 @@
 <template>
   <div class="navbar" :class="$mq">
     <nav class="navbar-container" :class="$mq">
-      <div class="navbar-branding-logo-container">
+      <div class="navbar-mobile-menu-icon-container" v-if="$mq === 'sm'">
+        <Icon
+          class="navbar-mobile-menu-icon"
+          icon="menu"
+          @click.native="onMenuIconClicked"
+        />
+      </div>
+      <div class="navbar-branding-logo-container" :class="$mq">
         <n-link to="/">
           <HLogo class="navbar-branding-logo" />
         </n-link>
       </div>
-      <div>
+      <div class="navbar-avatar-container">
         <b-avatar
           class="navbar-avatar"
           id="navbar-avatar-popover"
@@ -66,7 +73,7 @@ import { SystemUserModule } from '../../store/modules/system-user';
 import { signOut } from '../../api/system-user-authentication';
 
 @Component
-export default class Navbar extends Vue {
+export default class NavbarWithSidebar extends Vue {
   protected showAccountPopover: boolean = false;
   protected firstname: string = '';
   protected lastname: string = '';
@@ -88,6 +95,10 @@ export default class Navbar extends Vue {
     this.$root.$on('bv::popover::hide', () => {
       this.showAccountPopover = false;
     });
+  }
+
+  protected onMenuIconClicked() {
+    this.$nuxt.$emit('toggle-sidebar');
   }
 
   protected onNavbarAvatarClicked() {
@@ -128,25 +139,43 @@ export default class Navbar extends Vue {
 
 .navbar-container {
   display: grid;
-  grid-template-columns: 1fr auto;
   gap: 20px;
   &.sm {
     width: 95%;
     margin: 0 auto;
+    grid-template-columns: repeat(3, auto);
   }
   &.md,
   &.lg {
     width: 100%;
+    grid-template-columns: 1fr auto;
   }
 }
 
-.navbar-branding-logo-container {
+.navbar-mobile-menu-icon-container {
+  width: 2em;
   justify-self: start;
+  align-self: center;
+}
+
+.navbar-mobile-menu-icon {
+  width: 2em !important;
+  height: 2em !important;
+}
+
+.navbar-branding-logo-container {
+  &.sm {
+    justify-self: center;
+  }
 }
 
 .navbar-branding-logo {
   width: 80px;
   height: 40px;
+}
+
+.navbar-avatar-container {
+  justify-self: end;
 }
 
 /* avatar circle */
