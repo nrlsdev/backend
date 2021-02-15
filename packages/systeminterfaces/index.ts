@@ -1,4 +1,5 @@
 export { SystemUser } from './src/system-user/system-user';
+export { PaymentInformation } from './src/system-user/payment-information';
 export { Application } from './src/application/application';
 export { AuthorizedUser } from './src/application/authorized-user';
 export { InvitedUser } from './src/application/invited-user';
