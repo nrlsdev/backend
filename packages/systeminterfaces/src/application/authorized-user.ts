@@ -1,4 +1,4 @@
-import { SystemUser } from '../system-user';
+import { SystemUser } from '../system-user/system-user';
 
 export interface AuthorizedUser {
   user: SystemUser | any;

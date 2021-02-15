@@ -61,7 +61,7 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { SystemUserModule } from '../../store/modules/system-user';
-import { signOut } from '../../api/system-user-authentication';
+import { signOut } from '../../api/system-user/system-user-authentication';
 
 @Component
 export default class NavbarWithSidebar extends Vue {

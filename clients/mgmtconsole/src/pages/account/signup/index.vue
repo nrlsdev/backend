@@ -65,7 +65,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
-import { signUp } from '../../../api/system-user-authentication';
+import { signUp } from '../../../api/system-user/system-user-authentication';
 
 @Component
 export default class AccountSignUpPage extends Vue {
