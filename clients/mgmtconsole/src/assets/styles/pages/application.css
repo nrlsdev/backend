@@ -1,18 +1,20 @@
-.application-page-title {
-  margin-bottom: 20px;
-}
-
 .application-section {
   display: grid;
   grid-template-columns: 1fr 3fr;
   gap: 20px;
 }
 
-.application-section-separator {
-  margin: 50px 0;
-  height: 1px;
-  border: none;
-  background-color: var(--gray6-color);
+.application-section-mobile + .application-section-mobile,
+.application-section + .application-section {
+  margin-top: 50px;
+  padding-top: 50px;
+  border-top: 1px solid var(--gray4-color);
+}
+
+.application-section-mobile {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
 }
 
 .application-description {

@@ -27,7 +27,7 @@
 }
 
 .account-error-message {
-  margin-bottom: 16px;
+  margin-top: 16px;
   display: block;
   color: var(--error-message-color);
 }
