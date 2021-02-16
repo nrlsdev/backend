@@ -122,4 +122,19 @@ export class PaymentInformationMessage {
       },
     };
   }
+
+  // delete payment information
+  public static setDefaultPaymentInformationResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
 }

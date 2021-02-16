@@ -304,3 +304,55 @@ export async function deletePaymentInformation(
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
+
+export async function setDefaultPaymentInformation(
+  request: Request,
+  response: Response,
+) {
+  const { cardId } = request.params;
+  const { userId } = request.body;
+  const customerId = await getCustomerId(userId);
+
+  if (!customerId) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      'Could not find payment informations.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  try {
+    await stripe.customers.update(customerId, {
+      default_source: cardId,
+    });
+  } catch (exception) {
+    logger.error(
+      'setDefaultPaymentInformation',
+      'Default payment information could not be updated.',
+    );
+
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not set default payment information.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const responseMessage: ResponseMessage = PaymentInformationMessage.setDefaultPaymentInformationResponse(
+    StatusCodes.OK,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
