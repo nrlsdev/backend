@@ -240,21 +240,6 @@ export async function getPaymentInformations(
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
 
-export async function getCustomerId(userId: string) {
-  const customerIdResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    PaymentInformationMessage.getCustomerIdRequest(userId),
-    MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.SYSTEM_USER,
-  );
-  const { data }: any = customerIdResponseMessage.body;
-
-  if (!data) {
-    return undefined;
-  }
-
-  return data.customerId as string | undefined;
-}
-
 export async function deletePaymentInformation(
   request: Request,
   response: Response,
@@ -355,4 +340,19 @@ export async function setDefaultPaymentInformation(
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
+
+export async function getCustomerId(userId: string) {
+  const customerIdResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    PaymentInformationMessage.getCustomerIdRequest(userId),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.SYSTEM_USER,
+  );
+  const { data }: any = customerIdResponseMessage.body;
+
+  if (!data) {
+    return undefined;
+  }
+
+  return data.customerId as string | undefined;
 }
