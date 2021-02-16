@@ -66,5 +66,63 @@ function getSystemConfiguration(development: boolean) {
       apiKey: process.env.STRIPE_API_KEY || '',
       apiVersion: process.env.STRIPE_API_VERSION || '',
     },
+    subscriptions: [
+      {
+        id: (process.env.SUBSCRIPTION_OPTION_BASIC_ID || 0) as number,
+        name: process.env.SUBSCRIPTION_OPTION_BASIC_NAME || '',
+        priceMonthId: process.env.SUBSCRIPTION_OPTION_BASIC_PRICE_MONTH || '',
+        priceYearId: process.env.SUBSCRIPTION_OPTION_BASIC_PRICE_YEAR || '',
+        readRequests: (process.env.SUBSCRIPTION_OPTION_BASIC_READ_REQUESTS ||
+          0) as number,
+        writeRequests: (process.env.SUBSCRIPTION_OPTION_BASIC_WRITE_REQUESTS ||
+          0) as number,
+        dataStorageInGB: (process.env
+          .SUBSCRIPTION_OPTION_BASIC_DATA_STORAGE_IN_GB || 0) as number,
+        trial: (process.env.SUBSCRIPTION_OPTION_BASIC_TRIAL ||
+          false) as boolean,
+      },
+      {
+        id: (process.env.SUBSCRIPTION_OPTION_PLUS_ID || 0) as number,
+        name: process.env.SUBSCRIPTION_OPTION_PLUS_NAME || '',
+        priceMonthId: process.env.SUBSCRIPTION_OPTION_PLUS_PRICE_MONTH || '',
+        priceYearId: process.env.SUBSCRIPTION_OPTION_PLUS_PRICE_YEAR || '',
+        readRequests: (process.env.SUBSCRIPTION_OPTION_PLUS_READ_REQUESTS ||
+          0) as number,
+        writeRequests: (process.env.SUBSCRIPTION_OPTION_PLUS_WRITE_REQUESTS ||
+          0) as number,
+        dataStorageInGB: (process.env
+          .SUBSCRIPTION_OPTION_PLUS_DATA_STORAGE_IN_GB || 0) as number,
+        trial: (process.env.SUBSCRIPTION_OPTION_PLUS_TRIAL || false) as boolean,
+      },
+      {
+        id: (process.env.SUBSCRIPTION_OPTION_PRO_ID || 0) as number,
+        name: process.env.SUBSCRIPTION_OPTION_PRO_NAME || '',
+        priceMonthId: process.env.SUBSCRIPTION_OPTION_PRO_PRICE_MONTH || '',
+        priceYearId: process.env.SUBSCRIPTION_OPTION_PRO_PRICE_YEAR || '',
+        readRequests: (process.env.SUBSCRIPTION_OPTION_PRO_READ_REQUESTS ||
+          0) as number,
+        writeRequests: (process.env.SUBSCRIPTION_OPTION_PRO_WRITE_REQUESTS ||
+          0) as number,
+        dataStorageInGB: (process.env
+          .SUBSCRIPTION_OPTION_PRO_DATA_STORAGE_IN_GB || 0) as number,
+        trial: (process.env.SUBSCRIPTION_OPTION_PRO_TRIAL || false) as boolean,
+      },
+      {
+        id: (process.env.SUBSCRIPTION_OPTION_ENTERPRISE_ID || 0) as number,
+        name: process.env.SUBSCRIPTION_OPTION_ENTERPRISE_NAME || '',
+        priceMonthId:
+          process.env.SUBSCRIPTION_OPTION_ENTERPRISE_PRICE_MONTH || '',
+        priceYearId:
+          process.env.SUBSCRIPTION_OPTION_ENTERPRISE_PRICE_YEAR || '',
+        readRequests: (process.env
+          .SUBSCRIPTION_OPTION_ENTERPRISE_READ_REQUESTS || 0) as number,
+        writeRequests: (process.env
+          .SUBSCRIPTION_OPTION_ENTERPRISE_WRITE_REQUESTS || 0) as number,
+        dataStorageInGB: (process.env
+          .SUBSCRIPTION_OPTION_ENTERPRISE_DATA_STORAGE_IN_GB || 0) as number,
+        trial: (process.env.SUBSCRIPTION_OPTION_ENTERPRISE_TRIAL ||
+          false) as boolean,
+      },
+    ],
   };
 }

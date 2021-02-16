@@ -114,4 +114,11 @@ export class ApplicationEntity {
 
     return result;
   }
+
+  // subscription
+  public async getActiveSubscription(applicationId: string) {
+    const result = await ApplicationModel.getActiveSubscription(applicationId);
+
+    return result;
+  }
 }

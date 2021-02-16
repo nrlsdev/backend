@@ -11,6 +11,7 @@ import {
   ApplicationMessage,
   ApplicationTeamMessage,
   PaymentInformationMessage,
+  ApplicationSubscriptionMessage,
 } from '@backend/systemmessagefactory';
 import { SystemConfiguration } from '@backend/systemconfiguration';
 import { SystemUser } from '@backend/systeminterfaces';
@@ -37,6 +38,7 @@ import {
   deleteInvitation,
   updateAuthorizedUser,
 } from './controller/application/team';
+import { getActiveSubscription } from './controller/application/subscription';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
@@ -177,8 +179,15 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
 
       return updateAuthorizedUser(data.applicationId, data.role, data.userId);
     }
+    case ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_GET_ACTIVE_SUBSCRIPTION: {
+      const { data }: any = requestMessage.body;
+
+      return getActiveSubscription(data.applicationId);
+    }
     default: {
-      return ErrorMessage.unprocessableEntityErrorResponse();
+      return ErrorMessage.unprocessableEntityErrorResponse(
+        `Messgae of type '${type}' not implemented!`,
+      );
     }
   }
 }

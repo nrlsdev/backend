@@ -13,4 +13,7 @@ export { MicrosoftAuthentication } from './src/application/authentication/method
 export { FacebookAuthentication } from './src/application/authentication/methods/facebook';
 export { InstagramAuthentication } from './src/application/authentication/methods/instagram';
 export { TwitterAuthentication } from './src/application/authentication/methods/twitter';
+export { Subscriptions } from './src/application/subscriptions/subscriptions';
+export { Subscription } from './src/application/subscriptions/subscription';
+export { SubscriptionOption } from './src/application/subscriptions/subscription-option';
 export { objectEquals, minifyObject, copyObject } from './src/object';

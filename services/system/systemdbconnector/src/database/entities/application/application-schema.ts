@@ -3,6 +3,7 @@ import { StatusCodes } from '@backend/server';
 import {
   Application,
   ApplicationRole,
+  Subscription,
   SystemUser,
 } from '@backend/systeminterfaces';
 import {
@@ -22,6 +23,7 @@ import { SystemUserModel } from '../systemuser/system-user-schema';
 import { AuthenticationSchema } from './authentication/authentication-schema';
 import { AuthorizedUserSchema } from './authorized-users-schema';
 import { InvitedUserSchema } from './invited-user-schema';
+import { SubscriptionsSchema } from './subscriptions/subscriptions-schema';
 
 @modelOptions({
   options: {
@@ -35,13 +37,13 @@ export class ApplicationSchema implements Application {
   private static readonly logger: Logger = new Logger('ApplicationSchema');
 
   @prop({ required: true, unique: true })
-  bundleId!: string;
+  public bundleId!: string;
 
   @prop({ required: true, unique: false })
-  name!: string;
+  public name!: string;
 
   @prop({ required: false, unique: false })
-  image?: string;
+  public image?: string;
 
   @prop({
     required: false,
@@ -50,7 +52,7 @@ export class ApplicationSchema implements Application {
     _id: false,
     type: AuthorizedUserSchema,
   })
-  authorizedUsers?: AuthorizedUserSchema[];
+  public authorizedUsers?: AuthorizedUserSchema[];
 
   @prop({
     required: false,
@@ -59,7 +61,7 @@ export class ApplicationSchema implements Application {
     _id: false,
     type: InvitedUserSchema,
   })
-  invitedUsers?: InvitedUserSchema[];
+  public invitedUsers?: InvitedUserSchema[];
 
   @prop({
     required: true,
@@ -68,7 +70,15 @@ export class ApplicationSchema implements Application {
     _id: false,
     type: AuthenticationSchema,
   })
-  authentication?: AuthenticationSchema;
+  public authentication?: AuthenticationSchema;
+
+  @prop({
+    required: false,
+    unique: false,
+    _id: false,
+    type: SubscriptionsSchema,
+  })
+  public subscriptions?: SubscriptionsSchema;
 
   public async updateAndSaveApplicationProperties(
     this: DocumentType<ApplicationSchema>,
@@ -474,6 +484,57 @@ export class ApplicationSchema implements Application {
       statusCode: StatusCodes.OK,
       role,
       error: undefined,
+    };
+  }
+
+  // subscription
+  public static async getActiveSubscription(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        subscription: undefined,
+        error: 'No application found.',
+      };
+    }
+
+    if (!application.subscriptions) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        subscription: undefined,
+        error: 'No active subscription.',
+      };
+    }
+
+    if (application.subscriptions.active) {
+      return {
+        statusCode: StatusCodes.OK,
+        subscription: application.subscriptions.active as Subscription,
+        error: undefined,
+      };
+    }
+
+    for (let i = 0; i < application.subscriptions.canceled.length; i += 1) {
+      const canceledSubscription: Subscription =
+        application.subscriptions.canceled[i];
+
+      if (!canceledSubscription.expired) {
+        return {
+          statusCode: StatusCodes.OK,
+          subscription: canceledSubscription as Subscription,
+          error: undefined,
+        };
+      }
+    }
+
+    return {
+      statusCode: StatusCodes.NOT_FOUND,
+      subscription: undefined,
+      error: 'No active subscription.',
     };
   }
 
