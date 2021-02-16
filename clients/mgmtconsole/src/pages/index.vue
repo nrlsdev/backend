@@ -1,23 +1,11 @@
 <template>
   <div class="common-wrapper">
-    <div class="page-header applications-overview-header">
-      <h1 class="system-large-title-font">{{ $t('StrApplications') }}</h1>
-      <div>
-        <CustomButton
-          class="block default"
-          @click.native="onCreateApplicationClicked"
-          v-if="$mq === 'sm'"
-        >
-          <Icon icon="plus"></Icon>
-        </CustomButton>
-        <CustomButton
-          class="block default"
-          @click.native="onCreateApplicationClicked"
-          v-else
-          >{{ $t('StrCreateApplication') }}</CustomButton
-        >
-      </div>
-    </div>
+    <PageHeader
+      title="StrApplications"
+      buttonText="StrCreateApplication"
+      buttonIcon="plus"
+      :onActionButtonClicked="onCreateApplicationClicked"
+    />
     <div class="applications-overview-container" :class="$mq">
       <Application
         v-for="application in applications"
