@@ -107,4 +107,19 @@ export class PaymentInformationMessage {
       },
     };
   }
+
+  // delete payment information
+  public static deletePaymentInformationResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
 }

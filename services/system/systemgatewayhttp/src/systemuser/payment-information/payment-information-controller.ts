@@ -254,3 +254,53 @@ export async function getCustomerId(userId: string) {
 
   return data.customerId as string | undefined;
 }
+
+export async function deletePaymentInformation(
+  request: Request,
+  response: Response,
+) {
+  const { cardId } = request.params;
+  const { userId } = request.body;
+  const customerId = await getCustomerId(userId);
+
+  if (!customerId) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      'Could not find payment informations.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  try {
+    await stripe.customers.deleteSource(customerId, cardId);
+  } catch (exception) {
+    logger.error(
+      'deletePaymentInformation',
+      'Payment Information could not be deleted.',
+    );
+
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not delete payment information.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const responseMessage: ResponseMessage = PaymentInformationMessage.deletePaymentInformationResponse(
+    StatusCodes.OK,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
