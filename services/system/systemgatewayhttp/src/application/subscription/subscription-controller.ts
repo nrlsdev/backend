@@ -49,6 +49,9 @@ export async function getSubscriptionOptions(
     ? data.subscription || null
     : null;
   const subscriptionOptions: SubscriptionOption[] = [];
+  const activeStripeSubscription = await stripe.subscriptions.retrieve(
+    activeSubscription!.id,
+  );
 
   for (let i = 0; i < subscriptions.length; i += 1) {
     const subscription: SubscriptionOption = subscriptions[i];
@@ -79,6 +82,20 @@ export async function getSubscriptionOptions(
     subscriptionOption.active = activeSubscription
       ? Number(subscriptionOption.id) === Number(activeSubscription.option)
       : false;
+    if (subscriptionOption.active) {
+      subscriptionOption.startDate = activeStripeSubscription
+        ? activeStripeSubscription.start_date || -1
+        : -1;
+      subscriptionOption.currentPeriodEnd = activeStripeSubscription
+        ? activeStripeSubscription.current_period_end || -1
+        : -1;
+      subscriptionOption.cancelAt = activeStripeSubscription
+        ? activeStripeSubscription.cancel_at || -1
+        : -1;
+      subscriptionOption.canceledAt = activeStripeSubscription
+        ? activeStripeSubscription.canceled_at || -1
+        : -1;
+    }
 
     subscriptionOptions.push(subscriptionOption);
   }

@@ -10,4 +10,8 @@ export interface SubscriptionOption {
   dataStorageInGB: number;
   trial: boolean;
   active?: boolean;
+  startDate?: number;
+  currentPeriodEnd?: number;
+  cancelAt?: number;
+  canceledAt?: number;
 }
