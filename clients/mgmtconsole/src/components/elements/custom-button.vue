@@ -1,14 +1,34 @@
 <template>
-  <button>
+  <button
+    :class="readonly ? 'readonly' : ''"
+    :disbaled="readonly"
+    v-if="$mq === 'sm' && mobileIcon"
+  >
+    <Icon :icon="mobileIcon" />
+  </button>
+  <button :class="readonly ? 'readonly' : ''" :disbaled="readonly" v-else>
     <slot />
   </button>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator';
+import { Vue, Component, Prop } from 'nuxt-property-decorator';
 
 @Component
-export default class CustomButton extends Vue {}
+export default class CustomButton extends Vue {
+  @Prop({
+    type: String,
+    required: false,
+  })
+  protected mobileIcon!: string;
+
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: false,
+  })
+  protected readonly!: boolean;
+}
 </script>
 
 <style scoped>
@@ -17,6 +37,12 @@ button {
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
+}
+
+.readonly {
+  cursor: initial;
+  border: 1px solid var(--custom-button-default-color);
+  background-color: var(--transparent-color);
 }
 
 .default {
