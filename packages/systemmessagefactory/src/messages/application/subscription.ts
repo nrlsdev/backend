@@ -6,6 +6,9 @@ export class ApplicationSubscriptionMessage {
   public static readonly TYPE_APPLICATION_SUBSCRIPTION_GET_ACTIVE_SUBSCRIPTION =
     'application_subscription_get_active_subscription';
 
+  public static readonly TYPE_APPLICATION_SUBSCRIPTION_SUBSCRIBE_APPLICATION =
+    'application_subscription_subscribe_application';
+
   public static getActiveSubscriptionRequest(
     applicationId: string,
   ): RequestMessage {
@@ -40,7 +43,7 @@ export class ApplicationSubscriptionMessage {
     };
   }
 
-  public static getSubscriptionOptions(
+  public static getSubscriptionOptionsResponse(
     subscriptionOptions: SubscriptionOption[],
     statusCode: number,
     error?: string,
@@ -53,6 +56,38 @@ export class ApplicationSubscriptionMessage {
         data: {
           subscriptionOptions,
         },
+        error,
+      },
+    };
+  }
+
+  public static subscribeApplicationRequest(
+    applicationId: string,
+    subscription: Subscription,
+  ): RequestMessage {
+    return {
+      meta: {
+        type:
+          ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_SUBSCRIBE_APPLICATION,
+      },
+      body: {
+        data: {
+          applicationId,
+          subscription,
+        },
+      },
+    };
+  }
+
+  public static subscribeApplicationResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
         error,
       },
     };

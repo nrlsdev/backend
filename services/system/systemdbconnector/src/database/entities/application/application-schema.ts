@@ -538,6 +538,44 @@ export class ApplicationSchema implements Application {
     };
   }
 
+  public static async subscribeApplication(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+    subscription: Subscription,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No application found.',
+      };
+    }
+
+    if (!application.subscriptions) {
+      application.subscriptions = {
+        active: subscription,
+        canceled: [],
+      };
+    } else {
+      application.subscriptions.active = subscription;
+    }
+
+    try {
+      application.save();
+    } catch (exception) {
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: 'Could not save subscription.',
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
   // helper
   public static async findApplicationById(
     this: ReturnModelType<typeof ApplicationSchema>,

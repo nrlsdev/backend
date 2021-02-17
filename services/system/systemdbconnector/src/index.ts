@@ -38,7 +38,10 @@ import {
   deleteInvitation,
   updateAuthorizedUser,
 } from './controller/application/team';
-import { getActiveSubscription } from './controller/application/subscription';
+import {
+  getActiveSubscription,
+  subscribeApplication,
+} from './controller/application/subscription';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
@@ -183,6 +186,11 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return getActiveSubscription(data.applicationId);
+    }
+    case ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_SUBSCRIBE_APPLICATION: {
+      const { data }: any = requestMessage.body;
+
+      return subscribeApplication(data.applicationId, data.subscription);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

@@ -1,4 +1,4 @@
-import { Application } from '@backend/systeminterfaces';
+import { Application, Subscription } from '@backend/systeminterfaces';
 import { ApplicationModel } from './application-schema';
 
 export class ApplicationEntity {
@@ -118,6 +118,18 @@ export class ApplicationEntity {
   // subscription
   public async getActiveSubscription(applicationId: string) {
     const result = await ApplicationModel.getActiveSubscription(applicationId);
+
+    return result;
+  }
+
+  public async subscribeApplication(
+    applicationId: string,
+    subscription: Subscription,
+  ) {
+    const result = await ApplicationModel.subscribeApplication(
+      applicationId,
+      subscription,
+    );
 
     return result;
   }

@@ -15,8 +15,10 @@ import {
 } from '@backend/systeminterfaces';
 import { Logger } from '@backend/logger';
 import { SystemConfiguration } from '@backend/systemconfiguration';
+import Stripe from 'stripe';
 import { messageManager } from '../../message-manager';
 import { stripe } from '../../stripe';
+import { getCustomerId } from '../../systemuser/payment-information/payment-information-controller';
 
 const logger: Logger = new Logger('subscriptions-controller');
 const { subscriptions } = SystemConfiguration;
@@ -49,9 +51,9 @@ export async function getSubscriptionOptions(
     ? data.subscription || null
     : null;
   const subscriptionOptions: SubscriptionOption[] = [];
-  const activeStripeSubscription = await stripe.subscriptions.retrieve(
-    activeSubscription!.id,
-  );
+  const activeStripeSubscription = activeSubscription
+    ? await stripe.subscriptions.retrieve(activeSubscription!.id)
+    : null;
 
   for (let i = 0; i < subscriptions.length; i += 1) {
     const subscription: SubscriptionOption = subscriptions[i];
@@ -100,10 +102,173 @@ export async function getSubscriptionOptions(
     subscriptionOptions.push(subscriptionOption);
   }
 
-  const responseMessage: ResponseMessage = ApplicationSubscriptionMessage.getSubscriptionOptions(
+  const responseMessage: ResponseMessage = ApplicationSubscriptionMessage.getSubscriptionOptionsResponse(
     subscriptionOptions,
     StatusCodes.OK,
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
+
+export async function subscribeApplication(
+  request: Request,
+  response: Response,
+) {
+  const { applicationId, subscriptionOptionId } = request.params;
+  const activeSubscriptionResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+  const { data }: any = activeSubscriptionResponseMessage.body;
+
+  if (data.subscription) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.CONFLICT,
+      "Can't subscribe application with an active subscription.",
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const { userId, yearly, defaultPaymentMethodId } = request.body;
+  const customerId = await getCustomerId(userId);
+
+  if (!customerId) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      'You need to set payment information first.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const price = getSubscriptionPriceById(Number(subscriptionOptionId), yearly);
+
+  if (!price) {
+    logger.error(
+      'subscribeApplication',
+      `No price for subscription option '${subscriptionOptionId}' found.`,
+    );
+
+    const errorResponseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse();
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  let subscription: Stripe.Response<Stripe.Subscription>;
+
+  try {
+    subscription = await stripe.subscriptions.create({
+      customer: customerId,
+      default_payment_method: defaultPaymentMethodId,
+      items: [
+        {
+          price,
+        },
+      ],
+    });
+  } catch (exception) {
+    logger.fatal('subscribeApplication', exception);
+
+    const errorResponseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse();
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const createdSubscription: Subscription = {
+    id: subscription.id,
+    expired: false,
+    option: Number(subscriptionOptionId),
+  };
+
+  const subscribeApplicationResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.subscribeApplicationRequest(
+      applicationId,
+      createdSubscription,
+    ),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+
+  if (subscribeApplicationResponseMessage.meta.statusCode !== StatusCodes.OK) {
+    logger.fatal(
+      'subscribeApplication',
+      subscribeApplicationResponseMessage.body.error,
+    );
+
+    if (subscription) {
+      try {
+        // ToDo: give money back on error!
+        await stripe.subscriptions.del(subscription.id);
+      } catch (exception) {
+        logger.fatal('subscribeApplication', exception);
+      }
+    }
+
+    response
+      .status(subscribeApplicationResponseMessage.meta.statusCode)
+      .send(subscribeApplicationResponseMessage)
+      .end();
+
+    return;
+  }
+
+  response
+    .status(subscribeApplicationResponseMessage.meta.statusCode)
+    .send(subscribeApplicationResponseMessage)
+    .end();
+}
+
+function getSubscriptionOptionById(subscriptionOptionId: number) {
+  if (!subscriptions) {
+    return null;
+  }
+
+  for (let i = 0; i < subscriptions.length; i += 1) {
+    const subscription: SubscriptionOption = subscriptions[i];
+
+    if (Number(subscription.id) === Number(subscriptionOptionId)) {
+      return subscription;
+    }
+  }
+
+  return null;
+}
+
+function getSubscriptionPriceById(
+  subscriptionOptionId: number,
+  yearly: boolean,
+) {
+  const subscriptionOption: SubscriptionOption | null = getSubscriptionOptionById(
+    subscriptionOptionId,
+  );
+
+  if (!subscriptionOption) {
+    return null;
+  }
+
+  return yearly
+    ? (subscriptionOption.priceYearId as string)
+    : (subscriptionOption.priceMonthId as string);
 }
