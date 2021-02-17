@@ -231,12 +231,12 @@ export default class ApplicationTeamPage extends Vue {
 
     if (error) {
       this.editUserModalError = error;
-      return;
+      return false;
     }
 
-    this.loadApplication();
+    await this.loadApplication();
 
-    Modal.setVisible(this.$root, this.editUserModalId, false);
+    return true;
   }
 
   protected async onInviteUser() {
@@ -248,11 +248,12 @@ export default class ApplicationTeamPage extends Vue {
 
     if (error) {
       this.invitedUserModalError = error;
-      return;
+      return false;
     }
 
     await this.loadApplication();
-    Modal.setVisible(this.$root, this.inviteUserModalId, false);
+
+    return true;
   }
 
   protected getRoleName(role: number) {

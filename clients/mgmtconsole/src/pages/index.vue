@@ -80,10 +80,12 @@ export default class IndexPage extends Vue {
 
     if (error) {
       this.createApplicationError = error;
-      return;
+      return false;
     }
+
     await this.loadApplications();
-    Modal.setVisible(this.$root, this.applicationOverviewModalId, false);
+
+    return true;
   }
 }
 </script>
