@@ -5,7 +5,7 @@
       <CustomButton
         class="block default"
         @click.native="onActionButtonClicked"
-        :mobileIcon="buttonIcon"
+        :mobileIcon="mobileIcon"
         >{{ $t(buttonText) }}</CustomButton
       >
     </div>
@@ -36,7 +36,7 @@ export default class PageHeader extends Vue {
     type: String,
     required: false,
   })
-  protected buttonIcon!: string;
+  protected mobileIcon!: string;
 
   @Prop({
     type: Function,

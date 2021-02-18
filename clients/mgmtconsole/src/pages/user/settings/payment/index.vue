@@ -3,7 +3,7 @@
     <PageHeader
       title="StrPaymentInformation"
       buttonText="StrAddPaymentInformation"
-      buttonIcon="plus"
+      mobileIcon="plus"
       :onActionButtonClicked="onAddPaymentInformationButtonClicked"
     />
     <section class="payment-information-container" :class="$mq">

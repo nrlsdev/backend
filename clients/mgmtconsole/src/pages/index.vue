@@ -3,7 +3,7 @@
     <PageHeader
       title="StrApplications"
       buttonText="StrCreateApplication"
-      buttonIcon="plus"
+      mobileIcon="plus"
       :onActionButtonClicked="onCreateApplicationClicked"
     />
     <div class="applications-overview-container" :class="$mq">
