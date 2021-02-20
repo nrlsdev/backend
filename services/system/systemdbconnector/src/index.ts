@@ -41,6 +41,7 @@ import {
 import {
   getActiveSubscription,
   subscribeApplication,
+  getAllApplicationSubscriptionIds,
 } from './controller/application/subscription';
 
 const logger: Logger = new Logger('systemdbconnector::index');
@@ -191,6 +192,11 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return subscribeApplication(data.applicationId, data.subscription);
+    }
+    case ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_GET_ALL_APPLICATION_SUBSCRIPTION_IDS: {
+      const { data }: any = requestMessage.body;
+
+      return getAllApplicationSubscriptionIds(data.applicationId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

@@ -16,4 +16,5 @@ export { TwitterAuthentication } from './src/application/authentication/methods/
 export { Subscriptions } from './src/application/subscriptions/subscriptions';
 export { Subscription } from './src/application/subscriptions/subscription';
 export { SubscriptionOption } from './src/application/subscriptions/subscription-option';
+export { SubscriptionInvoice } from './src/application/subscriptions/subscription-invoice';
 export { objectEquals, minifyObject, copyObject } from './src/object';

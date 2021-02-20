@@ -130,6 +130,17 @@
           <label>{{ $t('StrSubscription') }}</label>
         </n-link>
       </div>
+      <div class="sidebar-item-container">
+        <n-link
+          :to="createApplicationNuxtLink('invoices')"
+          @click.native="onSidebarLinkClicked"
+          class="sidebar-item"
+          :class="$mq"
+        >
+          <Icon icon="invoice" />
+          <label>{{ $t('StrInvoices') }}</label>
+        </n-link>
+      </div>
     </section>
   </Sidebar>
 </template>

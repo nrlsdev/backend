@@ -84,6 +84,7 @@ export const deDE = {
   StrInvite: 'Einladen',
   StrInviteUser: 'Benutzer einladen',
   StrInvitedUser: 'Eingeladene Benutzer',
+  StrInvoices: 'Rechnungen',
   StrKeyId: 'Schlüssel-ID',
   StrLastname: 'Nachname',
   StrMicrosoft: 'Microsoft',

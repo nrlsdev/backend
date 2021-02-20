@@ -12,6 +12,7 @@ import {
   copyObject,
   SubscriptionOption,
   Subscription,
+  SubscriptionInvoice,
 } from '@backend/systeminterfaces';
 import { Logger } from '@backend/logger';
 import { SystemConfiguration } from '@backend/systemconfiguration';
@@ -238,6 +239,56 @@ export async function subscribeApplication(
     .status(subscribeApplicationResponseMessage.meta.statusCode)
     .send(subscribeApplicationResponseMessage)
     .end();
+}
+
+export async function getApplicationSubscriptionInvoices(
+  request: Request,
+  response: Response,
+) {
+  const { applicationId } = request.params;
+  const getAllApplicationSubscriptionIdsResponse: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.getAllApplicationSubscriptionIdsRequest(
+      applicationId,
+    ),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+  const { data }: any = getAllApplicationSubscriptionIdsResponse.body;
+  const { subscriptionIds }: { subscriptionIds: string[] } = data;
+  const subscriptionInvoices: SubscriptionInvoice[] = [];
+
+  for (let i = 0; i < subscriptionIds.length; i += 1) {
+    const subscriptionId: string = subscriptionIds[i];
+    // eslint-disable-next-line no-await-in-loop
+    const invoices = await stripe.invoices.list({
+      subscription: subscriptionId,
+    });
+
+    for (let j = 0; j < invoices.data.length; j += 1) {
+      const invoice = invoices.data[j];
+
+      if (
+        invoice.invoice_pdf &&
+        invoice.hosted_invoice_url &&
+        invoice.status_transitions.paid_at &&
+        invoice.amount_paid
+      ) {
+        subscriptionInvoices.push({
+          pdf: invoice.invoice_pdf,
+          url: invoice.hosted_invoice_url,
+          paidAt: invoice.status_transitions.paid_at * 1000,
+          amount: invoice.amount_paid,
+        });
+      }
+    }
+  }
+
+  const responseMessage: ResponseMessage = ApplicationSubscriptionMessage.getApplicationSubscriptionInvoicesResponse(
+    subscriptionInvoices,
+    StatusCodes.OK,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
 
 function getSubscriptionOptionById(subscriptionOptionId: number) {

@@ -82,6 +82,7 @@ export const enUS = {
   StrInvite: 'Invite',
   StrInviteUser: 'Invite User',
   StrInvitedUser: 'Invited User',
+  StrInvoices: 'Invoices',
   StrKeyId: 'Key ID',
   StrLastname: 'Lastname',
   StrMicrosoft: 'Microsoft',

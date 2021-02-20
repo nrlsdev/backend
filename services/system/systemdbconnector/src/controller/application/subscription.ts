@@ -28,3 +28,15 @@ export async function subscribeApplication(
     result.error,
   );
 }
+
+export async function getAllApplicationSubscriptionIds(applicationId: string) {
+  const result = await Database.applicationEntity.getAllApplicationSubscriptionIds(
+    applicationId,
+  );
+
+  return ApplicationSubscriptionMessage.getAllApplicationSubscriptionIdsResponse(
+    result.subscriptionIds,
+    result.statusCode,
+    result.error,
+  );
+}

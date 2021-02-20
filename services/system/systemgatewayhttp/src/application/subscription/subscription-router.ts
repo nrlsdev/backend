@@ -4,6 +4,7 @@ import { checkApplicationAuthorization } from '../application-authorization-chec
 import {
   getSubscriptionOptions,
   subscribeApplication,
+  getApplicationSubscriptionInvoices,
 } from './subscription-controller';
 
 const applicationSubscriptionRouter: Router = Router({ mergeParams: true });
@@ -18,6 +19,12 @@ applicationSubscriptionRouter.post(
   '/:subscriptionOptionId',
   checkApplicationAuthorization(ApplicationRole.OWNER),
   subscribeApplication,
+);
+
+applicationSubscriptionRouter.get(
+  '/invoices',
+  checkApplicationAuthorization(ApplicationRole.OWNER),
+  getApplicationSubscriptionInvoices,
 );
 
 export { applicationSubscriptionRouter };

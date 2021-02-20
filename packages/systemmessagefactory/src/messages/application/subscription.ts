@@ -1,6 +1,9 @@
 import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
-import { Subscription } from '@backend/systeminterfaces';
-import { SubscriptionOption } from '@backend/systeminterfaces/src/application/subscriptions/subscription-option';
+import {
+  Subscription,
+  SubscriptionOption,
+  SubscriptionInvoice,
+} from '@backend/systeminterfaces';
 
 export class ApplicationSubscriptionMessage {
   public static readonly TYPE_APPLICATION_SUBSCRIPTION_GET_ACTIVE_SUBSCRIPTION =
@@ -8,6 +11,9 @@ export class ApplicationSubscriptionMessage {
 
   public static readonly TYPE_APPLICATION_SUBSCRIPTION_SUBSCRIBE_APPLICATION =
     'application_subscription_subscribe_application';
+
+  public static readonly TYPE_APPLICATION_SUBSCRIPTION_GET_ALL_APPLICATION_SUBSCRIPTION_IDS =
+    'application_subscription_get_all_application_subscription_ids';
 
   public static getActiveSubscriptionRequest(
     applicationId: string,
@@ -88,6 +94,58 @@ export class ApplicationSubscriptionMessage {
         statusCode,
       },
       body: {
+        error,
+      },
+    };
+  }
+
+  public static getAllApplicationSubscriptionIdsRequest(
+    applicationId: string,
+  ): RequestMessage {
+    return {
+      meta: {
+        type:
+          ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_GET_ALL_APPLICATION_SUBSCRIPTION_IDS,
+      },
+      body: {
+        data: {
+          applicationId,
+        },
+      },
+    };
+  }
+
+  public static getAllApplicationSubscriptionIdsResponse(
+    subscriptionIds: string[],
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          subscriptionIds,
+        },
+        error,
+      },
+    };
+  }
+
+  public static getApplicationSubscriptionInvoicesResponse(
+    subscriptionInvoices: SubscriptionInvoice[],
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          subscriptionInvoices,
+        },
         error,
       },
     };

@@ -133,4 +133,12 @@ export class ApplicationEntity {
 
     return result;
   }
+
+  public async getAllApplicationSubscriptionIds(applicationId: string) {
+    const result = await ApplicationModel.getAllApplicationSubscriptionIds(
+      applicationId,
+    );
+
+    return result;
+  }
 }

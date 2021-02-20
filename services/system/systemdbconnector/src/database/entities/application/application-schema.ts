@@ -577,6 +577,46 @@ export class ApplicationSchema implements Application {
   }
 
   // helper
+  public static async getAllApplicationSubscriptionIds(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No application found.',
+        subscriptionIds: [],
+      };
+    }
+
+    const subscriptionIds: string[] = [];
+
+    if (!application.subscriptions) {
+      return {
+        statusCode: StatusCodes.OK,
+        error: undefined,
+        subscriptionIds,
+      };
+    }
+
+    if (application.subscriptions.active) {
+      subscriptionIds.push(application.subscriptions.active.id);
+    }
+
+    for (let i = 0; i < application.subscriptions.canceled.length; i += 1) {
+      subscriptionIds.push(application.subscriptions.canceled[i].id);
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+      subscriptionIds,
+    };
+  }
+
+  // helper
   public static async findApplicationById(
     this: ReturnModelType<typeof ApplicationSchema>,
     applicationId: string,
