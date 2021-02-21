@@ -17,4 +17,5 @@ export { Subscriptions } from './src/application/subscriptions/subscriptions';
 export { Subscription } from './src/application/subscriptions/subscription';
 export { SubscriptionOption } from './src/application/subscriptions/subscription-option';
 export { SubscriptionInvoice } from './src/application/subscriptions/subscription-invoice';
+export { SubscriptionLineItem } from './src/application/subscriptions/subscription-line-item';
 export { objectEquals, minifyObject, copyObject } from './src/object';

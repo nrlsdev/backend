@@ -3,6 +3,7 @@ import {
   Subscription,
   SubscriptionOption,
   SubscriptionInvoice,
+  SubscriptionLineItem,
 } from '@backend/systeminterfaces';
 
 export class ApplicationSubscriptionMessage {
@@ -147,6 +148,90 @@ export class ApplicationSubscriptionMessage {
           subscriptionInvoices,
         },
         error,
+      },
+    };
+  }
+
+  public static getApplicationSubscriptionNextInvoicePriceResponse(
+    total: number,
+    subscriptionLineItems: SubscriptionLineItem[],
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          total,
+          subscriptionLineItems,
+        },
+        error,
+      },
+    };
+  }
+
+  public static cancelSubscriptionRequest(
+    applicationId: string,
+    expiresAt: number,
+  ): RequestMessage {
+    return {
+      meta: {
+        type:
+          ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_CANCEL_SUBSCRIPTION,
+      },
+      body: {
+        data: {
+          applicationId,
+          expiresAt,
+        },
+      },
+    };
+  }
+
+  public static cancelSubscriptionResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
+
+  public static changeSubscriptionResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
+
+  public static changeSubscriptionRequest(
+    applicationId: string,
+    subscriptionOptionId: number,
+  ): RequestMessage {
+    return {
+      meta: {
+        type:
+          ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_CHANGE_SUBSCRIPTION,
+      },
+      body: {
+        data: {
+          applicationId,
+          subscriptionOptionId,
+        },
       },
     };
   }

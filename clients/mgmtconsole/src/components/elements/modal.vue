@@ -4,7 +4,13 @@
     <div>
       <span class="modal-error" v-if="error">{{ error }}</span>
     </div>
-    <div class="modal-footer-container">
+    <div
+      :class="
+        hidePositiveButton
+          ? 'modal-footer-container-1'
+          : 'modal-footer-container-2'
+      "
+    >
       <CustomButton
         class="modal-btn"
         @click.native="defaultNegativeBtnClickHandler()"
@@ -13,13 +19,13 @@
       <CustomButton
         :class="isDeleteModal ? 'delete' : 'branded'"
         @click.native="defaultPositiveBtnClickHandler()"
-        v-if="isDeleteModal && !positiveBtnText"
+        v-if="isDeleteModal && !hidePositiveButton"
         >{{ $t(isDeleteModal ? 'StrDelete' : positiveBtnText) }}</CustomButton
       >
       <CustomButton
         :class="isDeleteModal ? 'delete' : 'branded'"
         @click.native="defaultPositiveBtnClickHandler()"
-        v-else
+        v-else-if="!isDeleteModal && !hidePositiveButton"
         >{{ $t(positiveBtnText) }}</CustomButton
       >
     </div>
@@ -136,7 +142,14 @@ export default class Modal extends Vue {
 </script>
 
 <style scoped>
-.modal-footer-container {
+.modal-footer-container-1 {
+  margin-top: 32px !important;
+  display: grid;
+  grid-template-columns: auto;
+  gap: 8px;
+}
+
+.modal-footer-container-2 {
   margin-top: 32px !important;
   display: grid;
   grid-template-columns: auto auto;

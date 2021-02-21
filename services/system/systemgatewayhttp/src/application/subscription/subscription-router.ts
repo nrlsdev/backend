@@ -5,6 +5,7 @@ import {
   getSubscriptionOptions,
   subscribeApplication,
   getApplicationSubscriptionInvoices,
+  getUpcomingSubscriptionInvoice,
 } from './subscription-controller';
 
 const applicationSubscriptionRouter: Router = Router({ mergeParams: true });
@@ -19,6 +20,12 @@ applicationSubscriptionRouter.post(
   '/:subscriptionOptionId',
   checkApplicationAuthorization(ApplicationRole.OWNER),
   subscribeApplication,
+);
+
+applicationSubscriptionRouter.get(
+  '/:yearly/:subscriptionOptionId',
+  checkApplicationAuthorization(ApplicationRole.OWNER),
+  getUpcomingSubscriptionInvoice,
 );
 
 applicationSubscriptionRouter.get(

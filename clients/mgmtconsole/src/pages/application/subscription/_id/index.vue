@@ -1,126 +1,48 @@
 <template>
   <div v-if="loadingDone">
-    <PageHeader title="StrSubscription" />
+    <PageHeader title="StrSubscription">
+      <ToggleSwitch
+        :text="$t('StrShowPricesYearly')"
+        v-model="showPricesYearly"
+      />
+    </PageHeader>
     <section
       class="application-subscription-section"
       v-if="activeSubscriptionOption"
     >
-      <h2 class="system-title-two-font application-subscription-section-title">
+      <h2 class="system-title-one-font application-subscription-section-title">
         {{ $t('StrActiveSubscription') }}
       </h2>
-      <div class="application-subscription-container">
-        <div class="application-subscription-item">
-          <strong class="system-title-three-font">{{
-            $t(activeSubscriptionOption.name)
-          }}</strong>
-          <div class="application-subscription-item-row" :class="$mq">
-            <label class="application-subscription-item-label" :class="$mq">{{
-              $t('StrReadRequests')
-            }}</label>
-            <label>{{ activeSubscriptionOption.readRequests }}</label>
-            <label class="application-subscription-item-label" :class="$mq">{{
-              $t('StrWriteRequests')
-            }}</label>
-            <label>{{ activeSubscriptionOption.writeRequests }}</label>
-            <label class="application-subscription-item-label" :class="$mq">{{
-              $t('StrDataStorage')
-            }}</label>
-            <label>{{ activeSubscriptionOption.dataStorageInGB }} GB</label>
-          </div>
-          <div
-            class="application-subscription-item-row application-subscription-item-active-option"
-            :class="$mq"
-          >
-            <label class="application-subscription-item-label" :class="$mq">{{
-              $t('StrStartedOn')
-            }}</label>
-            <label>{{ activeSubscriptionOption.startDate }}</label>
-            <label
-              class="application-subscription-item-label"
-              :class="$mq"
-              v-if="activeSubscriptionOption.cancelAt === -1"
-              >{{ $t('StrNextBillingDate') }}</label
-            >
-            <label v-if="activeSubscriptionOption.cancelAt === -1">{{
-              activeSubscriptionOption.currentPeriodEnd
-            }}</label>
-            <label
-              class="application-subscription-item-label"
-              :class="$mq"
-              v-if="activeSubscriptionOption.cancelAt !== -1"
-              >{{ $t('StrCancelAt') }}</label
-            >
-            <label v-if="activeSubscriptionOption.cancelAt !== -1">{{
-              activeSubscriptionOption.cancelAt
-            }}</label>
-          </div>
-          <CustomButton
-            class="block default"
-            @click.native="onCancelSubscriptionButtonClicked"
-            >{{ $t('StrCancelSubscription') }}</CustomButton
-          >
-        </div>
+      <div class="application-subscription-container" :class="$mq">
+        <SubscriptionOptionItem
+          :subscriptionOption="activeSubscriptionOption"
+          :onCancelSubscriptionButtonClicked="onCancelSubscriptionButtonClicked"
+          :showPricesYearly="showPricesYearly"
+        />
       </div>
     </section>
 
     <section class="application-subscription-section">
-      <h2 class="system-title-two-font">
+      <h2 class="system-title-one-font">
         {{ $t('StrAvailableSubscriptionOptions') }}
       </h2>
-      <div class="application-subscription-container">
-        <div
-          class="application-subscription-item"
+      <div class="application-subscription-container" :class="$mq">
+        <SubscriptionOptionItem
           v-for="subscriptionOption in subscriptionOptions"
           :key="subscriptionOption.id"
-        >
-          <strong class="system-title-three-font">{{
-            $t(subscriptionOption.name)
-          }}</strong>
-          <div class="application-subscription-item-row" :class="$mq">
-            <label class="application-subscription-item-label" :class="$mq">{{
-              $t('StrReadRequests')
-            }}</label>
-            <label>{{ subscriptionOption.readRequests }}</label>
-            <label class="application-subscription-item-label" :class="$mq">{{
-              $t('StrWriteRequests')
-            }}</label>
-            <label>{{ subscriptionOption.writeRequests }}</label>
-            <label class="application-subscription-item-label" :class="$mq">{{
-              $t('StrDataStorage')
-            }}</label>
-            <label>{{ subscriptionOption.dataStorageInGB }} GB</label>
-          </div>
-          <CustomButton
-            class="block branded"
-            v-if="activeSubscriptionOption"
-            @click.native="onChangeSubscriptionButtonClicked"
-            >{{ $t('StrChangeSubscription') }}</CustomButton
-          >
-          <CustomButton
-            class="block branded"
-            v-else
-            @click.native="onSubscribeButtonClicked"
-            >{{ $t('StrSubscribe') }}</CustomButton
-          >
-        </div>
+          :subscriptionOption="subscriptionOption"
+          :onChooseOptionButtonClicked="
+            activeSubscriptionOption ? undefined : onChooseOptionButtonClicked
+          "
+          :onChangeSubscriptionButtonClicked="
+            activeSubscriptionOption
+              ? onChangeSubscriptionButtonClicked
+              : undefined
+          "
+          :showPricesYearly="showPricesYearly"
+        />
       </div>
     </section>
-    <Modal
-      :id="subscribeModalId"
-      :title="$t('StrSubscribeApplication')"
-      :error="subscribeError"
-      positiveBtnText="StrSubscribe"
-      :positiveBtnClickHandler="onSubscribeModalButtonClicked"
-    >
-    </Modal>
-    <Modal
-      :id="changeSubscriptionModalId"
-      :title="$t('StrChangeSubscription')"
-      :error="changeSubscriptionError"
-      positiveBtnText="StrChangeSubscription"
-      :positiveBtnClickHandler="onChangeSubscriptionModalButtonClicked"
-    >
-    </Modal>
     <Modal
       :id="cancelSubscriptionModalId"
       :title="$t('StrCancelSubscription')"
@@ -129,35 +51,37 @@
       :positiveBtnClickHandler="onCancelSubscriptionModalButtonClicked"
       isDeleteModal
     >
+      <label>{{ $t('StrCancelSubscriptionInfoText') }}</label>
     </Modal>
   </div>
 </template>
 
 <script lang="ts">
+import { Application } from '@backend/systeminterfaces';
 import { SubscriptionOption } from '@backend/systeminterfaces';
 import { Vue, Component } from 'nuxt-property-decorator';
-import { getApplicationSubscriptionOptions } from '../../../../api/application/subscription';
+import { getApplicationById } from '../../../../api/application/application';
+import {
+  cancelSubscription,
+  getApplicationSubscriptionOptions,
+} from '../../../../api/application/subscription/subscription';
 import Modal from '../../../../components/elements/modal.vue';
 
 @Component
 export default class ApplicationSubscriptionPage extends Vue {
-  protected subscribeModalId: string = 'subscribe-modal';
-
-  protected subscribeError: string = '';
-
-  protected changeSubscriptionModalId: string = 'change-subscription-modal';
-
-  protected changeSubscriptionError: string = '';
-
   protected cancelSubscriptionModalId: string = 'cancel-subscription-modal';
 
   protected cancelSubscriptionError: string = '';
 
   protected applicationId: string = '';
 
+  protected application: Application | null = null;
+
   protected activeSubscriptionOption: SubscriptionOption | null = null;
 
   protected subscriptionOptions: SubscriptionOption[] = [];
+
+  protected showPricesYearly: boolean = false;
 
   protected loadingDone: boolean = false;
 
@@ -166,9 +90,14 @@ export default class ApplicationSubscriptionPage extends Vue {
   }
 
   protected async fetch() {
+    await this.loadData();
+  }
+
+  protected async loadData() {
     this.applicationId = this.$route.params.id;
 
     await this.loadSubscriptionOptions();
+    await this.loadApplication();
 
     this.loadingDone = true;
   }
@@ -197,30 +126,49 @@ export default class ApplicationSubscriptionPage extends Vue {
       activeSubscriptions.length > 0 ? activeSubscriptions[0] : null;
   }
 
-  protected onSubscribeButtonClicked() {
-    Modal.setVisible(this, this.subscribeModalId, true);
+  protected async loadApplication() {
+    this.application = await getApplicationById(this.applicationId);
   }
 
-  protected onSubscribeModalButtonClicked() {
-    console.log('Not implemented yet!');
-    return true;
+  protected onChooseOptionButtonClicked(subscriptionOptionId: string) {
+    this.$router.push(
+      `/application/subscription/${this.applicationId}/details?option=${subscriptionOptionId}&change=false`,
+    );
   }
 
-  protected onChangeSubscriptionButtonClicked() {
-    Modal.setVisible(this, this.changeSubscriptionModalId, true);
-  }
-
-  protected onChangeSubscriptionModalButtonClicked() {
-    console.log('Not implemented yet!');
-    return true;
+  protected onChangeSubscriptionButtonClicked(subscriptionOptionId: string) {
+    this.$router.push(
+      `/application/subscription/${this.applicationId}/details?option=${subscriptionOptionId}&change=true`,
+    );
   }
 
   protected onCancelSubscriptionButtonClicked() {
     Modal.setVisible(this, this.cancelSubscriptionModalId, true);
   }
 
-  protected onCancelSubscriptionModalButtonClicked() {
-    console.log('Not implemented yet!');
+  protected async onCancelSubscriptionModalButtonClicked() {
+    if (
+      !this.application ||
+      !this.application.subscriptions ||
+      !this.application.subscriptions.active ||
+      !this.application.subscriptions.active.id
+    ) {
+      // ToDo: Error handling
+      return;
+    }
+
+    const result = await cancelSubscription(
+      this.applicationId,
+      this.application.subscriptions.active.id,
+    );
+
+    if (result.error) {
+      this.cancelSubscriptionError = result.error;
+      return false;
+    }
+
+    await this.loadData();
+
     return true;
   }
 }
@@ -239,45 +187,13 @@ export default class ApplicationSubscriptionPage extends Vue {
 
 .application-subscription-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.application-subscription-item {
-  padding: 20px;
-  border-radius: 10px;
-  background-color: var(--gray6-color);
-}
-
-.application-subscription-item-row {
-  margin-top: 20px;
-  display: grid;
   &.sm {
     grid-template-columns: 1fr;
   }
   &.md,
   &.lg {
-    grid-template-columns: auto 1fr;
-    grid-row-gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
   }
-  grid-column-gap: 20px;
-  align-items: top;
-}
-
-.application-subscription-item-label {
-  display: block;
-  color: var(--gray1-color);
-}
-
-* + .application-subscription-item-label {
-  &.sm {
-    margin-top: 16px !important;
-  }
-}
-
-.application-subscription-item-active-option {
-  padding: 20px;
-  border: 1px solid var(--gray4-color);
-  border-radius: 10px;
+  gap: 20px;
 }
 </style>

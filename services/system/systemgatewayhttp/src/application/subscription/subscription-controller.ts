@@ -13,6 +13,7 @@ import {
   SubscriptionOption,
   Subscription,
   SubscriptionInvoice,
+  SubscriptionLineItem,
 } from '@backend/systeminterfaces';
 import { Logger } from '@backend/logger';
 import { SystemConfiguration } from '@backend/systemconfiguration';
@@ -85,18 +86,24 @@ export async function getSubscriptionOptions(
     subscriptionOption.active = activeSubscription
       ? Number(subscriptionOption.id) === Number(activeSubscription.option)
       : false;
-    if (subscriptionOption.active) {
+    if (subscriptionOption.active && activeStripeSubscription) {
       subscriptionOption.startDate = activeStripeSubscription
-        ? activeStripeSubscription.start_date || -1
+        ? Number(activeStripeSubscription.start_date) * 1000 || -1
         : -1;
       subscriptionOption.currentPeriodEnd = activeStripeSubscription
-        ? activeStripeSubscription.current_period_end || -1
+        ? Number(activeStripeSubscription.current_period_end) * 1000 || -1
         : -1;
+      // eslint-disable-next-line no-nested-ternary
       subscriptionOption.cancelAt = activeStripeSubscription
-        ? activeStripeSubscription.cancel_at || -1
+        ? activeStripeSubscription.cancel_at
+          ? Number(activeStripeSubscription.cancel_at) * 1000
+          : -1 || -1
         : -1;
+      // eslint-disable-next-line no-nested-ternary
       subscriptionOption.canceledAt = activeStripeSubscription
-        ? activeStripeSubscription.canceled_at || -1
+        ? activeStripeSubscription.canceled_at
+          ? Number(activeStripeSubscription.canceled_at) * 1000
+          : -1 || -1
         : -1;
     }
 
@@ -137,7 +144,7 @@ export async function subscribeApplication(
     return;
   }
 
-  const { userId, yearly, defaultPaymentMethodId } = request.body;
+  const { userId, yearly, paymentMethodId } = request.body;
   const customerId = await getCustomerId(userId);
 
   if (!customerId) {
@@ -177,7 +184,7 @@ export async function subscribeApplication(
   try {
     subscription = await stripe.subscriptions.create({
       customer: customerId,
-      default_payment_method: defaultPaymentMethodId,
+      default_payment_method: paymentMethodId,
       items: [
         {
           price,
@@ -241,6 +248,273 @@ export async function subscribeApplication(
     .end();
 }
 
+export async function changeSubscription(request: Request, response: Response) {
+  const { yearly, paymentMethodId, userId } = request.body;
+  const { applicationId, subscriptionOptionId } = request.params;
+
+  if (
+    yearly === undefined ||
+    paymentMethodId === undefined ||
+    subscriptionOptionId === undefined
+  ) {
+    const errorResponse = ErrorMessage.unprocessableEntityErrorResponse();
+
+    response.status(errorResponse.meta.statusCode).send(errorResponse).end();
+
+    return;
+  }
+
+  const customerId = await getCustomerId(userId);
+
+  if (!customerId) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      'You need to set payment information first.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const activeSubscriptionResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+  const { data }: any = activeSubscriptionResponseMessage.body;
+
+  if (!data || !data.subscription) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      "Can't change subscription if application do not have any subscription.",
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const activeSubscription: Subscription = data.subscription;
+  const oldSubscriptionId: number = activeSubscription.option;
+
+  if (Number(activeSubscription.option) === Number(subscriptionOptionId)) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.BAD_REQUEST,
+      "Can't change subscription to same subscription option.",
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const changeSubscriptionResponse: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.changeSubscriptionRequest(
+      applicationId,
+      Number(subscriptionOptionId),
+    ),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+
+  if (changeSubscriptionResponse.body.error) {
+    logger.error('changeSubscription', 'Could not change subscription.');
+
+    response
+      .status(changeSubscriptionResponse.meta.statusCode)
+      .send(changeSubscriptionResponse)
+      .end();
+
+    return;
+  }
+
+  const price = getSubscriptionPriceById(Number(subscriptionOptionId), yearly);
+
+  if (!price) {
+    logger.error(
+      'changeSubscription',
+      `No price for subscription option '${subscriptionOptionId}' found.`,
+    );
+
+    await revertChangeSubscription(applicationId, oldSubscriptionId);
+
+    const errorResponseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse();
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const activeStripeSubscription = await stripe.subscriptions.retrieve(
+    activeSubscription.id,
+  );
+
+  try {
+    if (Number(activeSubscription.option) >= Number(subscriptionOptionId)) {
+      await stripe.subscriptions.update(activeSubscription.id, {
+        items: [
+          {
+            id: activeStripeSubscription.items.data[0].id,
+            price,
+          },
+        ],
+        proration_behavior: 'none',
+        billing_cycle_anchor: 'now',
+      });
+    } else {
+      const prorationDate = getProrationDate();
+
+      await stripe.subscriptions.update(activeSubscription.id, {
+        items: [
+          {
+            id: activeStripeSubscription.items.data[0].id,
+            price,
+          },
+        ],
+        proration_date: Math.floor(prorationDate.getTime() / 1000),
+        proration_behavior: 'create_prorations',
+        billing_cycle_anchor: 'now',
+      });
+    }
+  } catch (exception) {
+    const errorResponse: ResponseMessage = ErrorMessage.internalServerErrorResponse(
+      'Could not change subscription.',
+    );
+
+    await revertChangeSubscription(applicationId, oldSubscriptionId);
+
+    logger.fatal('changeSubscription', exception);
+
+    if (changeSubscriptionResponse.body.error) {
+      logger.error('changeSubscription', 'Could not change subscription.');
+
+      response
+        .status(changeSubscriptionResponse.meta.statusCode)
+        .send(changeSubscriptionResponse)
+        .end();
+
+      return;
+    }
+
+    response.status(errorResponse.meta.statusCode).send(errorResponse).end();
+
+    return;
+  }
+
+  response
+    .status(changeSubscriptionResponse.meta.statusCode)
+    .send(changeSubscriptionResponse)
+    .end();
+}
+
+async function revertChangeSubscription(
+  applicationId: string,
+  subscriptionOptionId: number,
+) {
+  const revertSubscriptionResponse: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.changeSubscriptionRequest(
+      applicationId,
+      Number(subscriptionOptionId),
+    ),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+
+  if (revertSubscriptionResponse.body.error) {
+    logger.fatal(
+      'revertChangeSubscription',
+      'Could not revert subscriptionOptionId after change subscription failed.',
+    );
+  } else {
+    logger.warn(
+      'revertChangeSubscription',
+      `Reverted subscriptionOptionId to '${subscriptionOptionId}'.`,
+    );
+  }
+}
+
+export async function cancelSubscription(request: Request, response: Response) {
+  const { applicationId } = request.params;
+  const getActiveSubscriptionResponse: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+  const { data }: any = getActiveSubscriptionResponse.body;
+
+  if (!data.subscription) {
+    logger.error('cancelSubscription', 'Could not cancel subscription.');
+
+    response
+      .status(getActiveSubscriptionResponse.meta.statusCode)
+      .send(getActiveSubscriptionResponse)
+      .end();
+
+    return;
+  }
+
+  const activeSubscription: Subscription = data.subscription;
+  let subscription: Stripe.Subscription;
+
+  try {
+    await stripe.subscriptions.update(activeSubscription.id, {
+      cancel_at_period_end: true,
+    });
+    subscription = await stripe.subscriptions.retrieve(activeSubscription.id);
+  } catch (exception) {
+    const errorResponse: ResponseMessage = ErrorMessage.internalServerErrorResponse(
+      'Could not cancel subscription.',
+    );
+
+    logger.fatal('cancelSubscription', exception);
+
+    response.status(errorResponse.meta.statusCode).send(errorResponse).end();
+
+    return;
+  }
+
+  const cancelDate: Date = new Date(subscription.cancel_at! * 1000);
+  cancelDate.setHours(23);
+  cancelDate.setMinutes(59);
+  cancelDate.setSeconds(59);
+  cancelDate.setMilliseconds(999);
+
+  const cancelSubscriptionResponse: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.cancelSubscriptionRequest(
+      applicationId,
+      cancelDate.getTime(),
+    ),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+
+  if (cancelSubscriptionResponse.body.error) {
+    logger.fatal('cancelSubscription', 'Could not cancel subscription!');
+
+    await stripe.subscriptions.update(activeSubscription.id, {
+      cancel_at_period_end: false,
+    });
+  }
+
+  response
+    .status(cancelSubscriptionResponse.meta.statusCode)
+    .send(cancelSubscriptionResponse)
+    .end();
+}
+
 export async function getApplicationSubscriptionInvoices(
   request: Request,
   response: Response,
@@ -291,6 +565,148 @@ export async function getApplicationSubscriptionInvoices(
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
 
+export async function getUpcomingSubscriptionInvoice(
+  request: Request,
+  response: Response,
+) {
+  const { applicationId, subscriptionOptionId, yearly } = request.params;
+  const { userId } = request.body;
+
+  if (subscriptionOptionId === undefined || yearly === undefined) {
+    const errorResponse = ErrorMessage.unprocessableEntityErrorResponse();
+
+    response.status(errorResponse.meta.statusCode).send(errorResponse).end();
+
+    return;
+  }
+
+  const customerId = await getCustomerId(userId);
+  if (!customerId) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      'You need to set payment information first.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const activeSubscriptionResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+  const { data }: any = activeSubscriptionResponseMessage.body;
+
+  if (!data || !data.subscription) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      "Can't get invoice price from subscription if application do not have any subscription.",
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const price = getSubscriptionPriceById(
+    Number(subscriptionOptionId),
+    yearly === 'true',
+  );
+
+  if (!price) {
+    logger.error(
+      'subscribeApplication',
+      `No price for subscription option '${subscriptionOptionId}' found.`,
+    );
+
+    const errorResponseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse();
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  let invoice;
+  try {
+    const activeSubscription: Subscription = data.subscription;
+    const activeStripeSubscription = await stripe.subscriptions.retrieve(
+      activeSubscription.id,
+    );
+
+    if (Number(activeSubscription.option) >= Number(subscriptionOptionId)) {
+      invoice = await stripe.invoices.retrieveUpcoming({
+        customer: customerId,
+        subscription: activeSubscription.id,
+        subscription_items: [
+          {
+            id: activeStripeSubscription.items.data[0].id,
+            price,
+          },
+        ],
+        subscription_proration_behavior: 'none',
+        subscription_billing_cycle_anchor: 'now',
+      });
+    } else {
+      const prorationDate: Date = getProrationDate();
+
+      invoice = await stripe.invoices.retrieveUpcoming({
+        customer: customerId,
+        subscription: activeSubscription.id,
+        subscription_items: [
+          {
+            id: activeStripeSubscription.items.data[0].id,
+            price,
+          },
+        ],
+        subscription_proration_date: Math.floor(prorationDate.getTime() / 1000),
+        subscription_proration_behavior: 'create_prorations',
+        subscription_billing_cycle_anchor: 'now',
+      });
+    }
+  } catch (exception) {
+    logger.fatal('getUpcomingSubscriptionInvoice', exception);
+
+    const errorResponseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse();
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  const subscriptionLineItems: SubscriptionLineItem[] = [];
+  for (let i = 0; i < invoice.lines.data.length; i += 1) {
+    const line = invoice.lines.data[i];
+
+    subscriptionLineItems.push({
+      id: invoice.lines.data.length - i,
+      amount: line.amount,
+      description: line.description,
+    });
+  }
+
+  const responseMessage: ResponseMessage = ApplicationSubscriptionMessage.getApplicationSubscriptionNextInvoicePriceResponse(
+    invoice.total,
+    subscriptionLineItems.reverse(),
+    StatusCodes.OK,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
+
 function getSubscriptionOptionById(subscriptionOptionId: number) {
   if (!subscriptions) {
     return null;
@@ -322,4 +738,18 @@ function getSubscriptionPriceById(
   return yearly
     ? (subscriptionOption.priceYearId as string)
     : (subscriptionOption.priceMonthId as string);
+}
+
+function getProrationDate() {
+  const subscriptionChangeDate = new Date();
+
+  subscriptionChangeDate.setDate(subscriptionChangeDate.getDate() + 1);
+  subscriptionChangeDate.setHours(subscriptionChangeDate.getHours());
+  subscriptionChangeDate.setMinutes(subscriptionChangeDate.getMinutes());
+  subscriptionChangeDate.setSeconds(subscriptionChangeDate.getSeconds());
+  subscriptionChangeDate.setMilliseconds(
+    subscriptionChangeDate.getMilliseconds(),
+  );
+
+  return subscriptionChangeDate;
 }

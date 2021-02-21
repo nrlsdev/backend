@@ -129,8 +129,6 @@
           <Icon icon="credit-card" />
           <label>{{ $t('StrSubscription') }}</label>
         </n-link>
-      </div>
-      <div class="sidebar-item-container">
         <n-link
           :to="createApplicationNuxtLink('invoices')"
           @click.native="onSidebarLinkClicked"
