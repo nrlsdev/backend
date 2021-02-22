@@ -16,6 +16,9 @@ export class ApplicationSubscriptionMessage {
   public static readonly TYPE_APPLICATION_SUBSCRIPTION_GET_ALL_APPLICATION_SUBSCRIPTION_IDS =
     'application_subscription_get_all_application_subscription_ids';
 
+  public static readonly TYPE_APPLICATION_SUBSCRIPTION_CANCEL_SUBSCRIPTION =
+    'application_subscription_cancel_subscription';
+
   public static getActiveSubscriptionRequest(
     applicationId: string,
   ): RequestMessage {

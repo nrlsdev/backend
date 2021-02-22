@@ -141,4 +141,13 @@ export class ApplicationEntity {
 
     return result;
   }
+
+  public async cancelSubscription(applicationId: string, expiresAt: number) {
+    const result = await ApplicationModel.cancelSubscription(
+      applicationId,
+      expiresAt,
+    );
+
+    return result;
+  }
 }

@@ -206,7 +206,6 @@ export async function subscribeApplication(
 
   const createdSubscription: Subscription = {
     id: subscription.id,
-    expired: false,
     option: Number(subscriptionOptionId),
   };
 

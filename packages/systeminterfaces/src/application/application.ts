@@ -1,3 +1,4 @@
+import { Subscriptions } from './subscriptions/subscriptions';
 import { Authentication } from './authentication/authentication';
 import { AuthorizedUser } from './authorized-user';
 
@@ -8,4 +9,5 @@ export interface Application {
   image?: string;
   authorizedUsers?: AuthorizedUser[] | any;
   authentication?: Authentication;
+  subscriptions?: Subscriptions;
 }

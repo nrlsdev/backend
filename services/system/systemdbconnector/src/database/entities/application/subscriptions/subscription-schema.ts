@@ -24,9 +24,9 @@ export class SubscriptionSchema implements Subscription {
   public option!: number;
 
   @prop({
-    required: true,
+    required: false,
     unique: false,
-    type: Boolean,
+    type: Number,
   })
-  public expired!: boolean;
+  public expiresAt?: number;
 }

@@ -40,3 +40,18 @@ export async function getAllApplicationSubscriptionIds(applicationId: string) {
     result.error,
   );
 }
+
+export async function cancelSubscription(
+  applicationId: string,
+  expiresAt: number,
+) {
+  const result = await Database.applicationEntity.cancelSubscription(
+    applicationId,
+    expiresAt,
+  );
+
+  return ApplicationSubscriptionMessage.cancelSubscriptionResponse(
+    result.statusCode,
+    result.error,
+  );
+}

@@ -1,6 +1,6 @@
 import { Subscription } from './subscription';
 
 export interface Subscriptions {
-  active: Subscription;
+  active?: Subscription;
   canceled: Subscription[];
 }

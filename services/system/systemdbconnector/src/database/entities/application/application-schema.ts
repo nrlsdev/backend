@@ -3,6 +3,7 @@ import { StatusCodes } from '@backend/server';
 import {
   Application,
   ApplicationRole,
+  copyObject,
   Subscription,
   SystemUser,
 } from '@backend/systeminterfaces';
@@ -522,7 +523,10 @@ export class ApplicationSchema implements Application {
       const canceledSubscription: Subscription =
         application.subscriptions.canceled[i];
 
-      if (!canceledSubscription.expired) {
+      if (
+        canceledSubscription.expiresAt &&
+        canceledSubscription.expiresAt > Date.now()
+      ) {
         return {
           statusCode: StatusCodes.OK,
           subscription: canceledSubscription as Subscription,
@@ -613,6 +617,54 @@ export class ApplicationSchema implements Application {
       statusCode: StatusCodes.OK,
       error: undefined,
       subscriptionIds,
+    };
+  }
+
+  public static async cancelSubscription(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+    expiresAt: number,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No application found.',
+      };
+    }
+
+    if (!application.subscriptions || !application.subscriptions.active) {
+      ApplicationSchema.logger.error(
+        'cancelSubscription',
+        `Could not cancel subscription. No subscriptions for application '${applicationId}'.`,
+      );
+
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'Could not cancel subscription.',
+      };
+    }
+
+    const canceledSubscription: Subscription = copyObject(
+      application.subscriptions.active,
+    );
+    canceledSubscription.expiresAt = expiresAt;
+    application.subscriptions.canceled.push(canceledSubscription);
+    application.subscriptions.active = undefined;
+
+    try {
+      application.save();
+    } catch (exception) {
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: 'Could not save subscription.',
+      };
+    }
+
+    return {
+      error: undefined,
+      statusCode: StatusCodes.OK,
     };
   }
 
