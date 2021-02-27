@@ -150,4 +150,16 @@ export class ApplicationEntity {
 
     return result;
   }
+
+  public async changeSubscription(
+    applicationId: string,
+    subscriptionOptionId: number,
+  ) {
+    const result = await ApplicationModel.changeSubscription(
+      applicationId,
+      subscriptionOptionId,
+    );
+
+    return result;
+  }
 }

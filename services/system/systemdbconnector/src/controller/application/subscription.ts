@@ -55,3 +55,18 @@ export async function cancelSubscription(
     result.error,
   );
 }
+
+export async function changeSubscription(
+  applicationId: string,
+  subscriptionOptionId: number,
+) {
+  const result = await Database.applicationEntity.changeSubscription(
+    applicationId,
+    subscriptionOptionId,
+  );
+
+  return ApplicationSubscriptionMessage.changeSubscriptionResponse(
+    result.statusCode,
+    result.error,
+  );
+}

@@ -4,6 +4,7 @@ import { checkApplicationAuthorization } from '../application-authorization-chec
 import {
   getSubscriptionOptions,
   subscribeApplication,
+  changeSubscription,
   cancelSubscription,
   getApplicationSubscriptionInvoices,
   getUpcomingSubscriptionInvoice,
@@ -21,6 +22,12 @@ applicationSubscriptionRouter.post(
   '/:subscriptionOptionId',
   checkApplicationAuthorization(ApplicationRole.OWNER),
   subscribeApplication,
+);
+
+applicationSubscriptionRouter.put(
+  '/change/:subscriptionOptionId',
+  checkApplicationAuthorization(ApplicationRole.OWNER),
+  changeSubscription,
 );
 
 applicationSubscriptionRouter.put(

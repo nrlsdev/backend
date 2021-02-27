@@ -374,7 +374,7 @@ export async function changeSubscription(request: Request, response: Response) {
         billing_cycle_anchor: 'now',
       });
     } else {
-      const prorationDate = getProrationDate();
+      const prorationDate = getProrationDate(activeStripeSubscription);
 
       await stripe.subscriptions.update(activeSubscription.id, {
         items: [
@@ -535,6 +535,7 @@ export async function getApplicationSubscriptionInvoices(
     // eslint-disable-next-line no-await-in-loop
     const invoices = await stripe.invoices.list({
       subscription: subscriptionId,
+      limit: 100, // ToDo
     });
 
     for (let j = 0; j < invoices.data.length; j += 1) {
@@ -657,7 +658,7 @@ export async function getUpcomingSubscriptionInvoice(
         subscription_billing_cycle_anchor: 'now',
       });
     } else {
-      const prorationDate: Date = getProrationDate();
+      const prorationDate: Date = getProrationDate(activeStripeSubscription);
 
       invoice = await stripe.invoices.retrieveUpcoming({
         customer: customerId,
@@ -739,15 +740,18 @@ function getSubscriptionPriceById(
     : (subscriptionOption.priceMonthId as string);
 }
 
-function getProrationDate() {
+function getProrationDate(subscription: Stripe.Subscription) {
+  const subscriptionCreatedDate = new Date(
+    subscription.billing_cycle_anchor * 1000,
+  );
   const subscriptionChangeDate = new Date();
 
   subscriptionChangeDate.setDate(subscriptionChangeDate.getDate() + 1);
-  subscriptionChangeDate.setHours(subscriptionChangeDate.getHours());
-  subscriptionChangeDate.setMinutes(subscriptionChangeDate.getMinutes());
-  subscriptionChangeDate.setSeconds(subscriptionChangeDate.getSeconds());
+  subscriptionChangeDate.setHours(subscriptionCreatedDate.getHours());
+  subscriptionChangeDate.setMinutes(subscriptionCreatedDate.getMinutes());
+  subscriptionChangeDate.setSeconds(subscriptionCreatedDate.getSeconds());
   subscriptionChangeDate.setMilliseconds(
-    subscriptionChangeDate.getMilliseconds(),
+    subscriptionCreatedDate.getMilliseconds(),
   );
 
   return subscriptionChangeDate;

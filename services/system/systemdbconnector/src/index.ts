@@ -43,6 +43,7 @@ import {
   subscribeApplication,
   getAllApplicationSubscriptionIds,
   cancelSubscription,
+  changeSubscription,
 } from './controller/application/subscription';
 
 const logger: Logger = new Logger('systemdbconnector::index');
@@ -203,6 +204,11 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return cancelSubscription(data.applicationId, data.expiresAt);
+    }
+    case ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_CHANGE_SUBSCRIPTION: {
+      const { data }: any = requestMessage.body;
+
+      return changeSubscription(data.applicationId, data.subscriptionOptionId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

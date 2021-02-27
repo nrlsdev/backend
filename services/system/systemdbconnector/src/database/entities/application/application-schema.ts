@@ -668,6 +668,49 @@ export class ApplicationSchema implements Application {
     };
   }
 
+  public static async changeSubscription(
+    this: ReturnModelType<typeof ApplicationSchema>,
+    applicationId: string,
+    subscriptionOptionId: number,
+  ) {
+    const application = await this.findApplicationById(applicationId);
+
+    if (!application) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No application found.',
+      };
+    }
+
+    if (!application.subscriptions || !application.subscriptions.active) {
+      ApplicationSchema.logger.error(
+        'cancelSubscription',
+        `Could not cancel subscription. No subscriptions for application '${applicationId}'.`,
+      );
+
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'Could not cancel subscription.',
+      };
+    }
+
+    application.subscriptions.active.option = subscriptionOptionId;
+
+    try {
+      application.save();
+    } catch (exception) {
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: 'Could not save subscription.',
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
   // helper
   public static async findApplicationById(
     this: ReturnModelType<typeof ApplicationSchema>,
