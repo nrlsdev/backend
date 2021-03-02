@@ -144,7 +144,7 @@ export async function subscribeApplication(
     return;
   }
 
-  const { userId, yearly, paymentMethodId } = request.body;
+  const { userId, yearly, paymentMethodId, promotionCode } = request.body;
   const customerId = await getCustomerId(userId);
 
   if (!customerId) {
@@ -190,6 +190,7 @@ export async function subscribeApplication(
           price,
         },
       ],
+      coupon: promotionCode as string | undefined,
     });
   } catch (exception) {
     logger.fatal('subscribeApplication', exception);
@@ -248,7 +249,7 @@ export async function subscribeApplication(
 }
 
 export async function changeSubscription(request: Request, response: Response) {
-  const { yearly, paymentMethodId, userId } = request.body;
+  const { yearly, paymentMethodId, userId, promotionCode } = request.body;
   const { applicationId, subscriptionOptionId } = request.params;
 
   if (
@@ -372,6 +373,7 @@ export async function changeSubscription(request: Request, response: Response) {
         ],
         proration_behavior: 'none',
         billing_cycle_anchor: 'now',
+        coupon: promotionCode as string | undefined,
       });
     } else {
       const prorationDate = getProrationDate(activeStripeSubscription);
@@ -386,6 +388,7 @@ export async function changeSubscription(request: Request, response: Response) {
         proration_date: Math.floor(prorationDate.getTime() / 1000),
         proration_behavior: 'create_prorations',
         billing_cycle_anchor: 'now',
+        coupon: promotionCode as string | undefined,
       });
     }
   } catch (exception) {
@@ -601,21 +604,6 @@ export async function getUpcomingSubscriptionInvoice(
     MessageSeverityType.APPLICATION,
   );
   const { data }: any = activeSubscriptionResponseMessage.body;
-
-  if (!data || !data.subscription) {
-    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
-      StatusCodes.NOT_FOUND,
-      "Can't get invoice price from subscription if application do not have any subscription.",
-    );
-
-    response
-      .status(errorResponseMessage.meta.statusCode)
-      .send(errorResponseMessage)
-      .end();
-
-    return;
-  }
-
   const price = getSubscriptionPriceById(
     Number(subscriptionOptionId),
     yearly === 'true',
@@ -637,74 +625,122 @@ export async function getUpcomingSubscriptionInvoice(
     return;
   }
 
+  const { promotionCode } = request.query;
+  const activeSubscription: Subscription | undefined = data.subscription;
   let invoice;
+  let promotionCodeSuccess: boolean = false;
+
   try {
-    const activeSubscription: Subscription = data.subscription;
-    const activeStripeSubscription = await stripe.subscriptions.retrieve(
-      activeSubscription.id,
+    invoice = await createUpcomingInvoice(
+      customerId,
+      subscriptionOptionId,
+      price,
+      activeSubscription,
+      promotionCode as string | undefined,
     );
+    promotionCodeSuccess = true;
+  } catch (exceptionOne) {
+    logger.fatal('getUpcomingSubscriptionInvoice', exceptionOne);
+    try {
+      invoice = await createUpcomingInvoice(
+        customerId,
+        subscriptionOptionId,
+        price,
+        activeSubscription,
+      );
+      promotionCodeSuccess = false;
+    } catch (exceptionTwo) {
+      logger.fatal('getUpcomingSubscriptionInvoice', exceptionTwo);
 
-    if (Number(activeSubscription.option) >= Number(subscriptionOptionId)) {
-      invoice = await stripe.invoices.retrieveUpcoming({
-        customer: customerId,
-        subscription: activeSubscription.id,
-        subscription_items: [
-          {
-            id: activeStripeSubscription.items.data[0].id,
-            price,
-          },
-        ],
-        subscription_proration_behavior: 'none',
-        subscription_billing_cycle_anchor: 'now',
-      });
-    } else {
-      const prorationDate: Date = getProrationDate(activeStripeSubscription);
+      const errorResponseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse();
 
-      invoice = await stripe.invoices.retrieveUpcoming({
-        customer: customerId,
-        subscription: activeSubscription.id,
-        subscription_items: [
-          {
-            id: activeStripeSubscription.items.data[0].id,
-            price,
-          },
-        ],
-        subscription_proration_date: Math.floor(prorationDate.getTime() / 1000),
-        subscription_proration_behavior: 'create_prorations',
-        subscription_billing_cycle_anchor: 'now',
-      });
+      response
+        .status(errorResponseMessage.meta.statusCode)
+        .send(errorResponseMessage)
+        .end();
+
+      return;
     }
-  } catch (exception) {
-    logger.fatal('getUpcomingSubscriptionInvoice', exception);
-
-    const errorResponseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse();
-
-    response
-      .status(errorResponseMessage.meta.statusCode)
-      .send(errorResponseMessage)
-      .end();
-
-    return;
   }
 
+  const lines = invoice.lines.data.reverse();
   const subscriptionLineItems: SubscriptionLineItem[] = [];
-  for (let i = 0; i < invoice.lines.data.length; i += 1) {
-    const line = invoice.lines.data[i];
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i];
 
     subscriptionLineItems.push({
-      id: invoice.lines.data.length - i,
+      id: invoice.lines.data.length - i - 1,
       amount: line.amount,
       description: line.description,
     });
   }
 
+  // ToDo: More promotion codes
+  if (invoice.discount && invoice.total_discount_amounts) {
+    subscriptionLineItems.push({
+      id: subscriptionLineItems.length,
+      amount: -invoice.total_discount_amounts[0].amount,
+      description: invoice.discount.coupon.name,
+    });
+    promotionCodeSuccess = true;
+  }
+
   const responseMessage: ResponseMessage = ApplicationSubscriptionMessage.getApplicationSubscriptionNextInvoicePriceResponse(
     invoice.total,
-    subscriptionLineItems.reverse(),
+    subscriptionLineItems,
+    promotionCodeSuccess,
     StatusCodes.OK,
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
+
+async function createUpcomingInvoice(
+  customerId: string,
+  subscriptionOptionId: number | string,
+  price: string,
+  activeSubscription?: Subscription,
+  promotionCode?: string,
+) {
+  let upcomingInvoice: Stripe.Response<Stripe.Invoice>;
+  if (!activeSubscription) {
+    upcomingInvoice = await stripe.invoices.retrieveUpcoming({
+      customer: customerId,
+      subscription_items: [
+        {
+          price,
+        },
+      ],
+      coupon: promotionCode || undefined,
+    });
+  } else {
+    const activeStripeSubscription: Stripe.Response<Stripe.Subscription> = await stripe.subscriptions.retrieve(
+      activeSubscription.id,
+    );
+    const downgrade: boolean =
+      Number(activeSubscription.option) >= Number(subscriptionOptionId);
+    const prorationDate: Date = getProrationDate(activeStripeSubscription);
+
+    upcomingInvoice = await stripe.invoices.retrieveUpcoming({
+      customer: customerId,
+      subscription: activeSubscription.id,
+      subscription_items: [
+        {
+          id: activeStripeSubscription.items.data[0].id,
+          price,
+        },
+      ],
+      subscription_proration_date: downgrade
+        ? undefined
+        : Math.floor(prorationDate.getTime() / 1000),
+      subscription_proration_behavior: downgrade ? 'none' : 'create_prorations',
+      subscription_billing_cycle_anchor: 'now',
+      coupon: promotionCode || undefined,
+    });
+  }
+
+  return upcomingInvoice;
 }
 
 function getSubscriptionOptionById(subscriptionOptionId: number) {

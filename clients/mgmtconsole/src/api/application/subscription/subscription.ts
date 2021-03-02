@@ -56,12 +56,14 @@ export async function subscribeApplication(
   subscriptionOptionId: number,
   yearly: boolean,
   paymentMethodId: string,
+  promotionCode?: string,
 ) {
   const response = await systemAPI.post(
-    `/application/${applicationId}/subscription/${subscriptionOptionId}`,
+    `/application/${applicationId}/subscription/subscribe/${subscriptionOptionId}`,
     {
       yearly,
       paymentMethodId,
+      promotionCode,
     },
   );
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
@@ -83,12 +85,14 @@ export async function changeSubscription(
   subscriptionOptionId: number,
   paymentMethodId: string,
   yearly: boolean,
+  promotionCode?: string,
 ) {
   const response = await systemAPI.put(
     `/application/${applicationId}/subscription/change/${subscriptionOptionId}`,
     {
       paymentMethodId,
       yearly,
+      promotionCode,
     },
   );
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
@@ -109,9 +113,13 @@ export async function getUpcomingSubscriptionInvoice(
   applicationId: string,
   subscriptionOptionId: number,
   yearly: boolean,
+  promotionCode?: string,
 ) {
+  const promotionCodeUrlQuery = promotionCode
+    ? `?promotionCode=${promotionCode}`
+    : '';
   const response = await systemAPI.get(
-    `/application/${applicationId}/subscription/${yearly}/${subscriptionOptionId}`,
+    `/application/${applicationId}/subscription/${yearly}/${subscriptionOptionId}${promotionCodeUrlQuery}`,
   );
   const responseMessage: ResponseMessage = response.data as ResponseMessage;
   const { error } = responseMessage.body;
@@ -122,6 +130,7 @@ export async function getUpcomingSubscriptionInvoice(
       error,
       total: undefined,
       subscriptionLineItems: [],
+      promotionCodeSuccess: false,
     };
   }
 
@@ -129,5 +138,6 @@ export async function getUpcomingSubscriptionInvoice(
     error: undefined,
     total: data.total as number,
     subscriptionLineItems: data.subscriptionLineItems as SubscriptionLineItem[],
+    promotionCodeSuccess: data.promotionCodeSuccess as boolean,
   };
 }

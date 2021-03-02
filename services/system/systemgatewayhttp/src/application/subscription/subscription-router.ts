@@ -19,7 +19,7 @@ applicationSubscriptionRouter.get(
 );
 
 applicationSubscriptionRouter.post(
-  '/:subscriptionOptionId',
+  '/subscribe/:subscriptionOptionId',
   checkApplicationAuthorization(ApplicationRole.OWNER),
   subscribeApplication,
 );

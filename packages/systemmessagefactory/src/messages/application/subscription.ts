@@ -161,6 +161,7 @@ export class ApplicationSubscriptionMessage {
   public static getApplicationSubscriptionNextInvoicePriceResponse(
     total: number,
     subscriptionLineItems: SubscriptionLineItem[],
+    promotionCodeSuccess: boolean,
     statusCode: number,
     error?: string,
   ): ResponseMessage {
@@ -172,6 +173,7 @@ export class ApplicationSubscriptionMessage {
         data: {
           total,
           subscriptionLineItems,
+          promotionCodeSuccess,
         },
         error,
       },

@@ -96,6 +96,27 @@
             toLocalizedPriceString(totalInvoicePrice)
           }}</label>
         </div>
+        <form
+          class="detail-promotion-code-form"
+          :class="$mq"
+          method="POST"
+          @submit.prevent="onPromotionCodeButtonClicked"
+        >
+          <CustomInput
+            class="block"
+            type="text"
+            :placeholder="$t('StrPromotionCode')"
+            v-model="promotionCode"
+          />
+          <CustomButton class="default" type="submit">
+            {{ $t('StrRedeem') }}
+          </CustomButton>
+          <label
+            class="system-callout-font system-error-font"
+            v-if="promotionCodeEntered && !promotionCodeSuccess"
+            >{{ $t('StrInvalidPromotionCode') }}</label
+          >
+        </form>
       </div>
     </section>
     <div class="detail-action-container">
@@ -108,7 +129,7 @@
         class="block branded"
         @click.native="onChangeButtonClicked"
         v-if="changeSubscription"
-        >{{ $t('StrChange') }}</CustomButton
+        >{{ $t('StrChangeSubscription') }}</CustomButton
       >
       <CustomButton
         class="block branded"
@@ -185,6 +206,12 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
 
   protected subscriptionLineItems: SubscriptionLineItem[] = [];
 
+  protected promotionCode: string = '';
+
+  protected promotionCodeEntered: boolean = false;
+
+  protected promotionCodeSuccess: boolean = false;
+
   protected async fetch() {
     this.applicationId = this.$route.params.id;
     this.subscriptionOptionId = Number(this.$route.query.option) || 0;
@@ -237,7 +264,12 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
       this.applicationId,
       this.selectedSubscriptionOption.id,
       this.yearlySubscription,
+      this.promotionCode,
     );
+
+    if (this.promotionCode) {
+      this.promotionCodeEntered = true;
+    }
 
     if (result.error || !result.total || !result.subscriptionLineItems) {
       // ToDo: Error handling
@@ -246,6 +278,7 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
 
     this.totalInvoicePrice = result.total;
     this.subscriptionLineItems = result.subscriptionLineItems;
+    this.promotionCodeSuccess = result.promotionCodeSuccess;
   }
 
   protected onSubscriptionOptionChangeButtonClicked() {
@@ -271,6 +304,7 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
       this.subscriptionOptionId,
       this.yearlySubscription,
       this.selectedPaymentInformation.card.id,
+      this.promotionCode,
     );
 
     if (result.error) {
@@ -296,6 +330,7 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
       this.subscriptionOptionId,
       this.selectedPaymentInformation.card.id,
       this.yearlySubscription,
+      this.promotionCode,
     );
 
     if (result.error) {
@@ -330,6 +365,10 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
 
   protected toLocalizedPriceString(price: number) {
     return getLocalizedPriceString(price / 100, this.$i18n.locale);
+  }
+
+  protected async onPromotionCodeButtonClicked() {
+    await this.loadUpcomingInvoice();
   }
 }
 </script>
@@ -369,13 +408,6 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
   background-color: var(--gray6-color);
 }
 
-.detail-action-container {
-  margin-top: 100px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
 .detail-payment-information-modal-container {
   display: grid;
   &.sm,
@@ -410,5 +442,23 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
 
 .detail-invoice-preview-item > *:nth-child(even) {
   text-align: right;
+}
+
+.detail-promotion-code-form {
+  &.md,
+  &.lg {
+    width: calc(50% - 10px);
+  }
+  margin-top: 25px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 20px;
+}
+
+.detail-action-container {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 </style>
