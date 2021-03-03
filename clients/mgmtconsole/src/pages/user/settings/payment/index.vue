@@ -84,7 +84,7 @@
         placeholder="StrStateRegionProvince"
         v-model="addressStateProvinceRegion"
       />
-      <CustomSelect class="block" countries />
+      <CustomSelect class="block" countries v-model="addressCountry" />
     </Modal>
     <Modal
       :id="deletePaymentnformationModalId"
