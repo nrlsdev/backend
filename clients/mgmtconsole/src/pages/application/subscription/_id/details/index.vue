@@ -61,9 +61,22 @@
         <h2 class="system-title-one-font">{{ $t('StrPaymentInformation') }}</h2>
         <CustomButton
           class="block default"
+          mobileIcon="plus"
+          @click.native="onAddPaymentMethodButtonClicked"
+          v-if="selectedPaymentInformation === null"
+          >{{ $t('StrAddPaymentInformation') }}</CustomButton
+        >
+        <CustomButton
+          class="block default"
           mobileIcon="pencil"
           @click.native="onChangePaymentMethodButtonClicked"
+          v-else
           >{{ $t('StrChange') }}</CustomButton
+        >
+        <label
+          class="system-secondary-font"
+          v-if="selectedPaymentInformation === null"
+          >{{ $t('StrAddPaymentInformationError') }}</label
         >
       </div>
       <div class="detail-selected-option-container" :class="$mq">
@@ -73,7 +86,7 @@
         />
       </div>
     </section>
-    <section class="detail-section">
+    <section class="detail-section" v-if="selectedPaymentInformation !== null">
       <div class="detail-section-header">
         <h2 class="system-title-one-font">{{ $t('StrSummary') }}</h2>
       </div>
@@ -119,7 +132,13 @@
         </form>
       </div>
     </section>
-    <div class="detail-action-container">
+    <div
+      :class="
+        selectedPaymentInformation == null
+          ? 'detail-action-container-1'
+          : 'detail-action-container-2'
+      "
+    >
       <CustomButton
         class="block default"
         @click.native="onCancelButtonClicked"
@@ -128,13 +147,13 @@
       <CustomButton
         class="block branded"
         @click.native="onChangeButtonClicked"
-        v-if="changeSubscription"
+        v-if="changeSubscription && selectedPaymentInformation !== null"
         >{{ $t('StrChangeSubscription') }}</CustomButton
       >
       <CustomButton
         class="block branded"
         @click.native="onSubscribeButtonClicked"
-        v-else
+        v-else-if="selectedPaymentInformation !== null"
         >{{ $t('StrSubscribe') }}</CustomButton
       >
     </div>
@@ -345,6 +364,10 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
     Modal.setVisible(this, this.changePaymentMethodModalId, true);
   }
 
+  protected onAddPaymentMethodButtonClicked() {
+    this.$router.push('/user/settings/payment');
+  }
+
   protected onChangePaymentMethodModalButtonClicked() {
     return true;
   }
@@ -455,7 +478,14 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
   column-gap: 20px;
 }
 
-.detail-action-container {
+.detail-action-container-1 {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.detail-action-container-2 {
   margin-top: 50px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);

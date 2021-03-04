@@ -3,6 +3,8 @@ export const deDE = {
   StrActiveSubscription: 'Aktives Abonnement',
   StrAdd: 'Hinzufügen',
   StrAddPaymentInformation: 'Zahlungsinformationen hinzufügen',
+  StrAddPaymentInformationError:
+    'Sie müssen zuerst Zahlungsinformationen hinzufügen.',
   StrAddressLineOne: 'Adresszeile 1',
   StrAddressLineTwo: 'Adresszeile 2 (Optional)',
   StrAdministrator: 'Administrator',

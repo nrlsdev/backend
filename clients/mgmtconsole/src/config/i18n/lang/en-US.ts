@@ -3,6 +3,7 @@ export const enUS = {
   StrActiveSubscription: 'Active Subscription',
   StrAdd: 'Add',
   StrAddPaymentInformation: 'Add Payment Information',
+  StrAddPaymentInformationError: 'You have to add payment information first.',
   StrAddressLineOne: 'Address Line 1',
   StrAddressLineTwo: 'Address Line 2 (Optional)',
   StrAdministrator: 'Administrator',
