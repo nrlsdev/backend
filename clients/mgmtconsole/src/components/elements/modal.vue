@@ -23,9 +23,9 @@
         >{{ $t(isDeleteModal ? 'StrDelete' : positiveBtnText) }}</CustomButton
       >
       <CustomButton
-        :class="isDeleteModal ? 'delete' : 'branded'"
+        :class="danger ? 'delete' : 'branded'"
         @click.native="defaultPositiveBtnClickHandler()"
-        v-else-if="!isDeleteModal && !hidePositiveButton"
+        v-else
         >{{ $t(positiveBtnText) }}</CustomButton
       >
     </div>
@@ -89,6 +89,13 @@ export default class Modal extends Vue {
     default: false,
   })
   protected isDeleteModal!: boolean;
+
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: false,
+  })
+  protected danger!: boolean;
 
   @Prop({
     type: Boolean,

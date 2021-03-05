@@ -49,7 +49,7 @@
       :error="cancelSubscriptionError"
       positiveBtnText="StrCancelSubscription"
       :positiveBtnClickHandler="onCancelSubscriptionModalButtonClicked"
-      isDeleteModal
+      danger
     >
       <label>{{ $t('StrCancelSubscriptionInfoText') }}</label>
     </Modal>
