@@ -52,6 +52,17 @@ function getSystemConfiguration(development: boolean) {
       protocol: process.env.SYSTEMMGMTCONSOLE_PROTOCOL || '',
       host: process.env.SYSTEMMGMTCONSOLE_HOST || '',
       port: (process.env.SYSTEMMGMTCONSOLE_PORT || 0) as number,
+      authenticationAPIProtocol:
+        process.env.SYSTEMMGMTCONSOLE_AUTHENTICATION_API_PROTOCOL || '',
+      authenticationAPIHost:
+        process.env.SYSTEMMGMTCONSOLE_AUTHENTICATION_API_HOST || '',
+      authenticationAPIPort: (process.env
+        .SYSTEMMGMTCONSOLE_AUTHENTICATION_API_PORT || 0) as number,
+      systemAPIProtocol:
+        process.env.SYSTEMMGMTCONSOLE_SYSTEM_API_PROTOCOL || '',
+      systemAPIHost: process.env.SYSTEMMGMTCONSOLE_SYSTEM_API_HOST || '',
+      systemAPIPort: (process.env.SYSTEMMGMTCONSOLE_SYSTEM_API_PORT ||
+        0) as number,
     },
     mail: {
       noreply: {

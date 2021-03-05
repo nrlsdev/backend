@@ -24,11 +24,7 @@ export class Server {
 
   private ssl: boolean;
 
-  private sslOptions: ServerOptions = {
-    cert: getSSLCert('192.168.178.36'),
-    key: getSSLKey('192.168.178.36'),
-    rejectUnauthorized: false,
-  };
+  private sslOptions: ServerOptions = {};
 
   public get Application() {
     return this.application;
@@ -53,10 +49,19 @@ export class Server {
     this.ssl = ssl;
 
     if (this.ssl) {
+      this.setSSLOptions(host);
       this.server = createHTTPSServer(this.sslOptions, this.application);
     } else {
       this.server = createHTTPServer(this.application);
     }
+  }
+
+  private setSSLOptions(host: string) {
+    this.sslOptions = {
+      cert: getSSLCert(host),
+      key: getSSLKey(host),
+      rejectUnauthorized: false,
+    };
   }
 
   public start() {
