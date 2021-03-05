@@ -468,8 +468,10 @@ export class ApplicationSchema implements Application {
     application.authorizedUsers?.forEach((user: AuthorizedUserSchema) => {
       const systemUser: SystemUser = user.user as SystemUser;
 
-      if (systemUser._id.toString() === userId) {
-        role = user.role;
+      if (systemUser) {
+        if (systemUser._id.toString() === userId) {
+          role = user.role;
+        }
       }
     });
 

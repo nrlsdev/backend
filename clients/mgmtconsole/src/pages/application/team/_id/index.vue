@@ -194,6 +194,18 @@ export default class ApplicationTeamPage extends Vue {
 
   protected async loadApplication() {
     this.application = await getApplicationById(this.applicationId);
+    if (this.application) {
+      this.application!.authorizedUsers = this.application?.authorizedUsers.filter(
+        (user: any) => {
+          return user.user !== null;
+        },
+      );
+      this.application!.invitedUsers = this.application?.invitedUsers.filter(
+        (user: any) => {
+          return user.user !== null;
+        },
+      );
+    }
   }
 
   protected onInviteUserBtnClicked() {
