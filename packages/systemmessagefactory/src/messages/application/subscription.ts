@@ -243,4 +243,18 @@ export class ApplicationSubscriptionMessage {
       },
     };
   }
+
+  public static changeApplicationSubscriptionPaymentMethodResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
 }

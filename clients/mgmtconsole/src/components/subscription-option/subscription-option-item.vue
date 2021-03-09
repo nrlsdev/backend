@@ -59,6 +59,13 @@
         toMediumLocalizedDateString(subscriptionOption.cancelAt)
       }}</label>
     </div>
+
+    <CustomButton
+      class="block default subscription-option-item-button"
+      @click.native="onChangePaymentMethodButtonClicked"
+      v-if="onChangePaymentMethodButtonClicked"
+      >{{ $t('StrChangePaymentMethod') }}</CustomButton
+    >
     <CustomButton
       class="block default subscription-option-item-button"
       @click.native="onCancelSubscriptionButtonClicked"
@@ -114,6 +121,12 @@ export default class SubscriptionOptionItem extends Vue {
     required: false,
   })
   protected onChooseOptionButtonClicked!: Function;
+
+  @Prop({
+    type: Function,
+    required: false,
+  })
+  protected onChangePaymentMethodButtonClicked!: Function;
 
   @Prop({
     type: Function,

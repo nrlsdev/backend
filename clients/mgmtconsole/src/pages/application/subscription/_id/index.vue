@@ -17,6 +17,9 @@
         <SubscriptionOptionItem
           :subscriptionOption="activeSubscriptionOption"
           :onCancelSubscriptionButtonClicked="onCancelSubscriptionButtonClicked"
+          :onChangePaymentMethodButtonClicked="
+            onChangePaymentMethodButtonClicked
+          "
           :showPricesYearly="showPricesYearly"
         />
       </div>
@@ -53,16 +56,24 @@
     >
       <label>{{ $t('StrCancelSubscriptionInfoText') }}</label>
     </Modal>
+    <ChangePaymentInformationModal
+      :id="changePaymentMethodModalId"
+      :error="changePaymentMethodError"
+      :firstSelectedPaymentInformationId="firstSelectedPaymentInformationId"
+      :onPositiveButtonClicked="onPaymentMethodChangeModalButtonClicked"
+      v-model="selectedPaymentInformation"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { Application } from '@backend/systeminterfaces';
+import { Application, PaymentInformation } from '@backend/systeminterfaces';
 import { SubscriptionOption } from '@backend/systeminterfaces';
 import { Vue, Component } from 'nuxt-property-decorator';
 import { getApplicationById } from '../../../../api/application/application';
 import {
   cancelSubscription,
+  changeApplicationPaymentMethod,
   getApplicationSubscriptionOptions,
 } from '../../../../api/application/subscription/subscription';
 import Modal from '../../../../components/elements/modal.vue';
@@ -83,6 +94,14 @@ export default class ApplicationSubscriptionPage extends Vue {
 
   protected showPricesYearly: boolean = false;
 
+  protected changePaymentMethodModalId: string = 'change-payment-method-modal';
+
+  protected changePaymentMethodError: string = '';
+
+  protected selectedPaymentInformation: PaymentInformation | null = null;
+
+  protected firstSelectedPaymentInformationId: string = '';
+
   protected loadingDone: boolean = false;
 
   protected layout() {
@@ -98,6 +117,9 @@ export default class ApplicationSubscriptionPage extends Vue {
 
     await this.loadSubscriptionOptions();
     await this.loadApplication();
+
+    this.firstSelectedPaymentInformationId =
+      this.activeSubscriptionOption?.defaultCardId || '';
 
     this.loadingDone = true;
   }
@@ -168,6 +190,35 @@ export default class ApplicationSubscriptionPage extends Vue {
     }
 
     await this.loadData();
+
+    return true;
+  }
+
+  protected onChangePaymentMethodButtonClicked() {
+    Modal.setVisible(this, this.changePaymentMethodModalId, true);
+  }
+
+  protected async onPaymentMethodChangeModalButtonClicked() {
+    if (
+      !this.selectedPaymentInformation ||
+      !this.selectedPaymentInformation.card ||
+      !this.selectedPaymentInformation.card.id
+    ) {
+      this.changePaymentMethodError = this.$t(
+        'StrNoPaymentMethodSelected',
+      ).toString();
+      return false;
+    }
+
+    const result = await changeApplicationPaymentMethod(
+      this.applicationId,
+      this.selectedPaymentInformation.card.id,
+    );
+
+    if (result.error) {
+      this.changePaymentMethodError = result.error;
+      return false;
+    }
 
     return true;
   }

@@ -41,6 +41,21 @@ export async function getSubscriptionOptions(
 
     return;
   }
+  const { userId } = request.body;
+  const customerId = await getCustomerId(userId);
+  if (!customerId) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      'You need to set payment information first.',
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
 
   const { applicationId } = request.params;
   const subscriptionIdResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
@@ -87,6 +102,9 @@ export async function getSubscriptionOptions(
       ? Number(subscriptionOption.id) === Number(activeSubscription.option)
       : false;
     if (subscriptionOption.active && activeStripeSubscription) {
+      // eslint-disable-next-line no-await-in-loop
+      const customer = await stripe.customers.retrieve(customerId);
+
       subscriptionOption.startDate = activeStripeSubscription
         ? Number(activeStripeSubscription.start_date) * 1000 || -1
         : -1;
@@ -105,6 +123,9 @@ export async function getSubscriptionOptions(
           ? Number(activeStripeSubscription.canceled_at) * 1000
           : -1 || -1
         : -1;
+      subscriptionOption.defaultCardId = activeStripeSubscription.default_source
+        ? activeStripeSubscription.default_source?.toString()
+        : (customer as any).default_source.toString();
     }
 
     subscriptionOptions.push(subscriptionOption);
@@ -690,6 +711,54 @@ export async function getUpcomingSubscriptionInvoice(
     invoice.total,
     subscriptionLineItems,
     promotionCodeSuccess,
+    StatusCodes.OK,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
+
+export async function changeApplicationPaymentMethod(
+  request: Request,
+  response: Response,
+) {
+  const { cardId } = request.body;
+  const { applicationId } = request.params;
+  const subscriptionIdResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
+    MessageQueueType.SYSTEM_DBCONNECTOR,
+    MessageSeverityType.APPLICATION,
+  );
+  const { data }: any = subscriptionIdResponseMessage.body;
+  const activeSubscription: Subscription | null = data
+    ? data.subscription || null
+    : null;
+
+  if (!activeSubscription) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.errorResponse(
+      StatusCodes.NOT_FOUND,
+      "Can't change application payment method if application do not have any subscription.",
+    );
+
+    response
+      .status(errorResponseMessage.meta.statusCode)
+      .send(errorResponseMessage)
+      .end();
+
+    return;
+  }
+
+  try {
+    await stripe.subscriptions.update(activeSubscription.id, {
+      default_source: cardId,
+    });
+  } catch (exception) {
+    logger.fatal(
+      'changeApplicationPaymentMethod',
+      'Could not change subscriptions payment method.',
+    );
+  }
+
+  const responseMessage: ResponseMessage = ApplicationSubscriptionMessage.changeApplicationSubscriptionPaymentMethodResponse(
     StatusCodes.OK,
   );
 

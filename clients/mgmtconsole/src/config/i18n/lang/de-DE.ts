@@ -103,6 +103,7 @@ export const deDE = {
   StrNewPassword: 'Neues Passwort',
   StrNextBillingDate: 'Nächstes Abrechnungsdatum',
   StrNoInvitedUsers: 'Keine eingeladenen Benutzer',
+  StrNoPaymentMethodSelected: 'Keine Zahlungsinformationen ausgewählt.',
   StrOk: 'Ok',
   StrOverview: 'Übersicht',
   StrOwner: 'Eigentümer',

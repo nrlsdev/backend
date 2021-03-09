@@ -157,28 +157,11 @@
         >{{ $t('StrSubscribe') }}</CustomButton
       >
     </div>
-    <Modal
+    <ChangePaymentInformationModal
       :id="changePaymentMethodModalId"
-      :title="$t('StrChangePaymentMethod')"
       :error="changePaymentMethodError"
-      positiveBtnText="StrOk"
-      :positiveBtnClickHandler="onChangePaymentMethodModalButtonClicked"
-      size="xl"
-    >
-      <div class="detail-payment-information-modal-container" :class="$mq">
-        <PaymentInformationCard
-          v-for="paymentInformation in paymentInformations"
-          :key="paymentInformation.card.id"
-          :class="
-            paymentInformation.card.id === selectedPaymentInformation.card.id
-              ? 'selected-element'
-              : 'not-selected-element'
-          "
-          :paymentInformation="paymentInformation"
-          @click.native="onPaymentInformationClicked(paymentInformation)"
-        />
-      </div>
-    </Modal>
+      v-model="selectedPaymentInformation"
+    />
   </div>
 </template>
 
@@ -195,8 +178,6 @@ import {
   changeSubscription,
   getUpcomingSubscriptionInvoice,
 } from '../../../../../api/application/subscription/subscription';
-import { getPaymentInformations } from '../../../../../api/system-user/payment-information';
-import Modal from '../../../../../components/elements/modal.vue';
 import { getLocalizedPriceString } from '../../../../../utils/helper-methods';
 
 @Component
@@ -206,8 +187,6 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
   protected subscriptionOptionId: number = 0;
 
   protected changeSubscription: boolean = false;
-
-  protected paymentInformations: PaymentInformation[] = [];
 
   protected selectedPaymentInformation: PaymentInformation | null = null;
 
@@ -237,7 +216,6 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
     this.changeSubscription = this.$route.query.change === 'true' || false;
 
     await this.loadSubsciptionOptions();
-    await this.loadPaymentInformations();
     await this.loadUpcomingInvoice();
 
     this.loadingDone = true;
@@ -254,22 +232,6 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
     this.selectedSubscriptionOption = result.subscriptionOptions.filter(
       (subscriptionOption: SubscriptionOption) => {
         return subscriptionOption.id === this.subscriptionOptionId;
-      },
-    )[0];
-  }
-
-  protected async loadPaymentInformations() {
-    const result = await getPaymentInformations();
-
-    if (result.error || !result.paymentInformations) {
-      // ToDo: Error handling
-      return;
-    }
-
-    this.paymentInformations = result.paymentInformations;
-    this.selectedPaymentInformation = this.paymentInformations.filter(
-      (paymentInfomrtaion: PaymentInformation) => {
-        return paymentInfomrtaion.card!.default;
       },
     )[0];
   }
@@ -360,22 +322,8 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
     this.$router.push(`/application/subscription/${this.applicationId}`);
   }
 
-  protected onChangePaymentMethodButtonClicked() {
-    Modal.setVisible(this, this.changePaymentMethodModalId, true);
-  }
-
   protected onAddPaymentMethodButtonClicked() {
     this.$router.push('/user/settings/payment');
-  }
-
-  protected onChangePaymentMethodModalButtonClicked() {
-    return true;
-  }
-
-  protected onPaymentInformationClicked(
-    paymentInformation: PaymentInformation,
-  ) {
-    this.selectedPaymentInformation = paymentInformation;
   }
 
   protected async onSelectSubscriptionPeriodClicked(
@@ -429,26 +377,6 @@ export default class ApplicationSubscriptionDetailsPage extends Vue {
   gap: 20px;
   border-radius: 10px;
   background-color: var(--gray6-color);
-}
-
-.detail-payment-information-modal-container {
-  display: grid;
-  &.sm,
-  &.md {
-    grid-template-columns: 1fr;
-  }
-  &.lg {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  gap: 20px;
-}
-
-.not-selected-element {
-  border: 1px solid var(--gray6-color);
-}
-
-.selected-element {
-  border: 1px solid var(--primary-color);
 }
 
 .detail-invoice-preview-container {

@@ -14,4 +14,5 @@ export interface SubscriptionOption {
   currentPeriodEnd?: number;
   cancelAt?: number;
   canceledAt?: number;
+  defaultCardId?: string;
 }

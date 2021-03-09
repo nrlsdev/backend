@@ -100,6 +100,7 @@ export const enUS = {
   StrNewPassword: 'New Password',
   StrNextBillingDate: 'Next Billing Date',
   StrNoInvitedUsers: 'No invited users',
+  StrNoPaymentMethodSelected: 'No Payment Method selected.',
   StrOk: 'Ok',
   StrOverview: 'Overview',
   StrOwner: 'Owner',

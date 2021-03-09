@@ -141,3 +141,27 @@ export async function getUpcomingSubscriptionInvoice(
     promotionCodeSuccess: data.promotionCodeSuccess as boolean,
   };
 }
+
+export async function changeApplicationPaymentMethod(
+  applicationId: string,
+  cardId: string,
+) {
+  const response = await systemAPI.put(
+    `/application/${applicationId}/subscription/payment`,
+    {
+      cardId,
+    },
+  );
+  const responseMessage: ResponseMessage = response.data as ResponseMessage;
+  const { error } = responseMessage.body;
+
+  if (error) {
+    return {
+      error,
+    };
+  }
+
+  return {
+    error: undefined,
+  };
+}

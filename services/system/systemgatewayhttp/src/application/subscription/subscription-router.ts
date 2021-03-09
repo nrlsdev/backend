@@ -8,6 +8,7 @@ import {
   cancelSubscription,
   getApplicationSubscriptionInvoices,
   getUpcomingSubscriptionInvoice,
+  changeApplicationPaymentMethod,
 } from './subscription-controller';
 
 const applicationSubscriptionRouter: Router = Router({ mergeParams: true });
@@ -46,6 +47,12 @@ applicationSubscriptionRouter.get(
   '/invoices',
   checkApplicationAuthorization(ApplicationRole.OWNER),
   getApplicationSubscriptionInvoices,
+);
+
+applicationSubscriptionRouter.put(
+  '/payment',
+  checkApplicationAuthorization(ApplicationRole.OWNER),
+  changeApplicationPaymentMethod,
 );
 
 export { applicationSubscriptionRouter };
