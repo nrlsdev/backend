@@ -19,6 +19,9 @@ import { Countries } from '@backend/constants';
 
 @Component
 export default class CustomSelect extends Vue {
+  @Prop()
+  protected value: any;
+
   @Prop({
     type: Boolean,
     required: false,
@@ -26,8 +29,9 @@ export default class CustomSelect extends Vue {
   })
   protected countries!: boolean;
 
-  // ToDo: Localization
   protected countriesData = Countries;
+
+  protected countriesLoaded: boolean = false;
 
   protected updateInput(value: string) {
     this.$emit('input', value);

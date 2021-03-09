@@ -99,6 +99,7 @@
 </template>
 
 <script lang="ts">
+import { Countries } from '@backend/constants';
 import { PaymentInformation } from '@backend/systeminterfaces';
 import { Vue, Component } from 'nuxt-property-decorator';
 import {
@@ -147,7 +148,7 @@ export default class UserSettingsPaymentPage extends Vue {
 
   protected addressStateProvinceRegion: string = '';
 
-  protected addressCountry: string = '';
+  protected addressCountry: string = Countries[0].code2;
 
   protected cardIdToDelete: string = '';
 
