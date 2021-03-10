@@ -1,6 +1,5 @@
 import { Server } from '@backend/server';
 import { ApplicationConfiguration } from '@backend/applicationconfiguration';
-import { authenticationRouter } from './application/private/authentication/authentication-router';
 
 const { applicationgatewayhttp } = ApplicationConfiguration;
 const privateServer: Server = new Server(
@@ -17,8 +16,6 @@ const publicServer: Server = new Server(
 privateServer.useJsonMiddleware();
 
 publicServer.useJsonMiddleware();
-
-privateServer.Application.use('/auth', authenticationRouter);
 
 privateServer.start();
 

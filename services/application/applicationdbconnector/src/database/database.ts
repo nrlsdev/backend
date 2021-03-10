@@ -7,7 +7,6 @@ import {
   Schema,
 } from 'mongoose';
 import { ConnectionState } from './connection-state';
-import { ApplicationUserEntity } from './entities/application-user/application-user-entity';
 
 export class Database {
   private static logger: Logger = new Logger('Database');
@@ -19,9 +18,6 @@ export class Database {
     useUnifiedTopology: true,
     useCreateIndex: true,
   };
-
-  public static applicationUserEntity: ApplicationUserEntity =
-    ApplicationUserEntity.Instance;
 
   private static getConnectionUrl(
     urlFormat: string,
