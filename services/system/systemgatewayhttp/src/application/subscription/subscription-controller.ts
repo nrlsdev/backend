@@ -61,7 +61,7 @@ export async function getSubscriptionOptions(
   const subscriptionIdResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
   const { data }: any = subscriptionIdResponseMessage.body;
   const activeSubscription: Subscription | null = data
@@ -147,7 +147,7 @@ export async function subscribeApplication(
   const activeSubscriptionResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
   const { data }: any = activeSubscriptionResponseMessage.body;
 
@@ -237,7 +237,7 @@ export async function subscribeApplication(
       createdSubscription,
     ),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   if (subscribeApplicationResponseMessage.meta.statusCode !== StatusCodes.OK) {
@@ -304,7 +304,7 @@ export async function changeSubscription(request: Request, response: Response) {
   const activeSubscriptionResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
   const { data }: any = activeSubscriptionResponseMessage.body;
 
@@ -345,7 +345,7 @@ export async function changeSubscription(request: Request, response: Response) {
       Number(subscriptionOptionId),
     ),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   if (changeSubscriptionResponse.body.error) {
@@ -453,7 +453,7 @@ async function revertChangeSubscription(
       Number(subscriptionOptionId),
     ),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   if (revertSubscriptionResponse.body.error) {
@@ -474,7 +474,7 @@ export async function cancelSubscription(request: Request, response: Response) {
   const getActiveSubscriptionResponse: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
   const { data }: any = getActiveSubscriptionResponse.body;
 
@@ -521,7 +521,7 @@ export async function cancelSubscription(request: Request, response: Response) {
       cancelDate.getTime(),
     ),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   if (cancelSubscriptionResponse.body.error) {
@@ -548,7 +548,7 @@ export async function getApplicationSubscriptionInvoices(
       applicationId,
     ),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
   const { data }: any = getAllApplicationSubscriptionIdsResponse.body;
   const { subscriptionIds }: { subscriptionIds: string[] } = data;
@@ -622,7 +622,7 @@ export async function getUpcomingSubscriptionInvoice(
   const activeSubscriptionResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
   const { data }: any = activeSubscriptionResponseMessage.body;
   const price = getSubscriptionPriceById(
@@ -726,7 +726,7 @@ export async function changeApplicationPaymentMethod(
   const subscriptionIdResponseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationSubscriptionMessage.getActiveSubscriptionRequest(applicationId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
   const { data }: any = subscriptionIdResponseMessage.body;
   const activeSubscription: Subscription | null = data

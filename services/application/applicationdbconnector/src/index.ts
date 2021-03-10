@@ -23,14 +23,8 @@ async function startup() {
 
   messageManager.createRPCServer(
     MessageQueueType.APPLICATION_DBCONNECTOR,
-    MessageSeverityType.APPLICATION_PRIVATE,
-    onPrivateApplicationMessage,
-  );
-
-  messageManager.createRPCServer(
-    MessageQueueType.APPLICATION_DBCONNECTOR,
-    MessageSeverityType.APPLICATION_PUBLIC,
-    onPublicApplicationMessage,
+    MessageSeverityType.APPLICATION_USER,
+    onApplicationUserMessage,
   );
 }
 
@@ -45,29 +39,13 @@ async function connectToDatabase() {
 
   try {
     await Database.connect(dbHost, dbPort, dbName, dbUsername, dbPassword);
-    logger.info('connectToDatabase', 'Connected to the system database');
+    logger.info('connectToDatabase', 'Connected to the application database');
   } catch (exception) {
     logger.error('connectToDatabase', exception.message);
   }
 }
 
-async function onPrivateApplicationMessage(requestMessage: RequestMessage) {
-  const { type } = requestMessage.meta;
-
-  if (!type) {
-    return ErrorMessage.unprocessableEntityErrorResponse();
-  }
-
-  switch (type) {
-    default: {
-      return ErrorMessage.unprocessableEntityErrorResponse(
-        `Messgae of type '${type}' not implemented!`,
-      );
-    }
-  }
-}
-
-async function onPublicApplicationMessage(requestMessage: RequestMessage) {
+async function onApplicationUserMessage(requestMessage: RequestMessage) {
   const { type } = requestMessage.meta;
 
   if (!type) {

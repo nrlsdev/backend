@@ -2,21 +2,21 @@ import { Server } from '@backend/server';
 import { ApplicationConfiguration } from '@backend/applicationconfiguration';
 
 const { applicationgatewayhttp } = ApplicationConfiguration;
-const privateServer: Server = new Server(
-  applicationgatewayhttp.private.host,
-  applicationgatewayhttp.private.port,
+const authenticationServer: Server = new Server(
+  applicationgatewayhttp.authentication.host,
+  applicationgatewayhttp.authentication.port,
   true,
 );
-const publicServer: Server = new Server(
-  applicationgatewayhttp.public.host,
-  applicationgatewayhttp.public.port,
+const applicationServer: Server = new Server(
+  applicationgatewayhttp.application.host,
+  applicationgatewayhttp.application.port,
   true,
 );
 
-privateServer.useJsonMiddleware();
+authenticationServer.useJsonMiddleware();
 
-publicServer.useJsonMiddleware();
+applicationServer.useJsonMiddleware();
 
-privateServer.start();
+authenticationServer.start();
 
-publicServer.start();
+applicationServer.start();

@@ -28,15 +28,18 @@ function getApplicationConfiguration(development: boolean) {
       mhPort: (process.env.APPLICATION_MESSAGEHANDLER_PORT || 0) as number,
     },
     applicationgatewayhttp: {
-      private: {
-        protocol: process.env.APPLICATIONGATEWAYHTTP_PRIVATE_PROTOCOL || '',
-        host: process.env.APPLICATIONGATEWAYHTTP_PRIVATE_HOST || '',
-        port: (process.env.APPLICATIONGATEWAYHTTP_PRIVATE_PORT || 0) as number,
+      authentication: {
+        protocol:
+          process.env.APPLICATIONGATEWAYHTTP_AUTHENTICATION_PROTOCOL || '',
+        host: process.env.APPLICATIONGATEWAYHTTP_AUTHENTICATION_HOST || '',
+        port: (process.env.APPLICATIONGATEWAYHTTP_AUTHENTICATION_PORT ||
+          0) as number,
       },
-      public: {
-        protocol: process.env.APPLICATIONGATEWAYHTTP_PUBLIC_PROTOCOL || '',
-        host: process.env.APPLICATIONGATEWAYHTTP_PUBLIC_HOST || '',
-        port: (process.env.APPLICATIONGATEWAYHTTP_PUBLIC_PORT || 0) as number,
+      application: {
+        protocol: process.env.APPLICATIONGATEWAYHTTP_APPLICATION_PROTOCOL || '',
+        host: process.env.APPLICATIONGATEWAYHTTP_APPLICATION_HOST || '',
+        port: (process.env.APPLICATIONGATEWAYHTTP_APPLICATION_PORT ||
+          0) as number,
       },
     },
   };
