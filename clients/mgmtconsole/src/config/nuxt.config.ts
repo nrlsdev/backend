@@ -5,13 +5,13 @@ import { MQConfiguration } from './nuxt-mq/nuxt-mq-config';
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
 const {
-  authenticationProtocol,
-  authenticationHost,
-  authenticationPort,
-  systemProtocol,
-  systemHost,
-  systemPort,
-} = SystemConfiguration.systemgatewayhttp;
+  authenticationAPIProtocol,
+  authenticationAPIHost,
+  authenticationAPIPort,
+  systemAPIProtocol,
+  systemAPIHost,
+  systemAPIPort,
+} = SystemConfiguration.systemMgmtConsole;
 
 export const config: NuxtConfig = {
   dev: isDev,
@@ -78,11 +78,11 @@ export const config: NuxtConfig = {
     },
   },
   publicRuntimeConfig: {
-    authenticationBaseUrl: `${authenticationProtocol}://${
-      authenticationHost === '' ? 'localhost' : authenticationHost
-    }:${authenticationPort}`,
-    systemBaseUrl: `${systemProtocol}://${
-      systemHost === '' ? 'localhost' : systemHost
-    }:${systemPort}`,
+    authenticationBaseUrl: `${authenticationAPIProtocol}://${
+      authenticationAPIHost === '' ? 'localhost' : authenticationAPIHost
+    }:${authenticationAPIPort}`,
+    systemBaseUrl: `${systemAPIProtocol}://${
+      systemAPIHost === '' ? 'localhost' : systemAPIHost
+    }:${systemAPIPort}`,
   },
 };

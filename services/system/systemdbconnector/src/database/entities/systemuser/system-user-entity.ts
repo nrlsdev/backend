@@ -39,4 +39,17 @@ export class SystemUserEntity {
 
     return result.id!;
   }
+
+  // Payment Information
+  public async getCustomerId(userId: string) {
+    const result = await SystemUserModel.getCustomerId(userId);
+
+    return result;
+  }
+
+  public async setCustomerId(userId: string, customerId: string) {
+    const result = await SystemUserModel.setCustomerId(userId, customerId);
+
+    return result;
+  }
 }

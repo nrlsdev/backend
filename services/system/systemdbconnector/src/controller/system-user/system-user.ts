@@ -1,8 +1,8 @@
 import { ErrorMessage, SystemUserMessage } from '@backend/systemmessagefactory';
 import { StatusCodes } from '@backend/server';
 import { SystemUser } from '@backend/systeminterfaces';
-import { Database } from '../database/database';
-import { MongoErrorCode } from '../database/error-codes';
+import { Database } from '../../database/database';
+import { MongoErrorCode } from '../../database/error-codes';
 
 export async function signUp(systemUser: SystemUser) {
   const error = await Database.systemUserEntity.signUp(systemUser);

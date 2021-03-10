@@ -10,11 +10,21 @@ import {
   ErrorMessage,
   ApplicationMessage,
   ApplicationTeamMessage,
+  PaymentInformationMessage,
+  ApplicationSubscriptionMessage,
 } from '@backend/systemmessagefactory';
 import { SystemConfiguration } from '@backend/systemconfiguration';
 import { SystemUser } from '@backend/systeminterfaces';
 import { Database } from './database/database';
-import { signUp, signIn, getSystemuserData } from './controller/system-user';
+import {
+  signUp,
+  signIn,
+  getSystemuserData,
+} from './controller/system-user/system-user';
+import {
+  getCustomerId,
+  setCustomerId,
+} from './controller/system-user/payment-information';
 import {
   updateApplicationData,
   createApplication,
@@ -28,6 +38,13 @@ import {
   deleteInvitation,
   updateAuthorizedUser,
 } from './controller/application/team';
+import {
+  getActiveSubscription,
+  subscribeApplication,
+  getAllApplicationSubscriptionIds,
+  cancelSubscription,
+  changeSubscription,
+} from './controller/application/subscription';
 
 const logger: Logger = new Logger('systemdbconnector::index');
 const { mhHost, mhPort } = SystemConfiguration.systemmessagehandler;
@@ -91,6 +108,16 @@ async function onSystemUserMessage(requestMessage: RequestMessage) {
       const { data }: any = requestMessage.body;
 
       return getSystemuserData(data.systemUserId);
+    }
+    case PaymentInformationMessage.TYPE_PAYMENT_INFORMATION_GET_CUSTOMER_ID: {
+      const { data }: any = requestMessage.body;
+
+      return getCustomerId(data.userId);
+    }
+    case PaymentInformationMessage.TYPE_PAYMENT_INFORMATION_SET_CUSTOMER_ID: {
+      const { data }: any = requestMessage.body;
+
+      return setCustomerId(data.userId, data.customerId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
@@ -158,8 +185,35 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
 
       return updateAuthorizedUser(data.applicationId, data.role, data.userId);
     }
+    case ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_GET_ACTIVE_SUBSCRIPTION: {
+      const { data }: any = requestMessage.body;
+
+      return getActiveSubscription(data.applicationId);
+    }
+    case ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_SUBSCRIBE_APPLICATION: {
+      const { data }: any = requestMessage.body;
+
+      return subscribeApplication(data.applicationId, data.subscription);
+    }
+    case ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_GET_ALL_APPLICATION_SUBSCRIPTION_IDS: {
+      const { data }: any = requestMessage.body;
+
+      return getAllApplicationSubscriptionIds(data.applicationId);
+    }
+    case ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_CANCEL_SUBSCRIPTION: {
+      const { data }: any = requestMessage.body;
+
+      return cancelSubscription(data.applicationId, data.expiresAt);
+    }
+    case ApplicationSubscriptionMessage.TYPE_APPLICATION_SUBSCRIPTION_CHANGE_SUBSCRIPTION: {
+      const { data }: any = requestMessage.body;
+
+      return changeSubscription(data.applicationId, data.subscriptionOptionId);
+    }
     default: {
-      return ErrorMessage.unprocessableEntityErrorResponse();
+      return ErrorMessage.unprocessableEntityErrorResponse(
+        `Messgae of type '${type}' not implemented!`,
+      );
     }
   }
 }

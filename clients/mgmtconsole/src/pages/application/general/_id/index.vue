@@ -100,55 +100,6 @@
       </section>
     </div>
   </div>
-  <!-- <div v-if="application">
-    <h1 class="system-large-title-font application-page-title">
-      {{ $t('StrGeneral') }}
-    </h1>
-    <section
-      :class="
-        $mq === 'sm' ? 'application-section-mobile' : 'application-section'
-      "
-    >
-      <h2 class="system-title-two-font">{{ $t('StrInfo') }}</h2>
-      <div class="application-general-info-container">
-        <div @click="onImagePickerClicked">
-          <input
-            class="application-general-image-picker"
-            type="file"
-            accept="image/*"
-            ref="applicationGeneralImagePicker"
-            @change="onApplicationImageSelected"
-          />
-          <img
-            class="application-general-image"
-            :src="
-              application.image
-                ? application.image
-                : '/application-placeholder.png'
-            "
-            ref="applicationGeneralImage"
-          />
-          <div class="application-general-image-edit-container">
-            <Icon class="application-general-image-edit-icon" icon="pencil" />
-          </div>
-        </div>
-        <div>
-          <CustomInput
-            class="block readonly"
-            type="text"
-            :value="application.bundleId"
-            readonly
-          />
-          <CustomInput class="block" type="text" v-model="application.name" />
-        </div>
-        <ApplicationChangeActions
-          v-model="ShowGeneralInfoChangeActions"
-          :onSaveBtnClicked="onInfoSectionSaveBtnClicked"
-          :error="generalInfoChangeActionsError"
-        />
-      </div>
-    </section>
-  </div> -->
 </template>
 
 <script lang="ts">
@@ -187,6 +138,7 @@ export default class ApplicationGeneralPage extends Vue {
 
   protected async fetch() {
     this.applicationId = this.$route.params.id;
+
     await this.loadApplication();
   }
 

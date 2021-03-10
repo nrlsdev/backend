@@ -1,7 +1,7 @@
 <template>
   <div class="application-layout">
     <NavbarWithSidebar class="application-layout-navbar" :class="$mq" />
-    <Sidebar
+    <ApplicationSidebar
       class="application-layout-sidebar"
       :class="$mq"
       v-if="showSidebar || $mq !== 'sm'"

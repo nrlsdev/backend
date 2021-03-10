@@ -1,27 +1,31 @@
 <template>
-  <b-modal :id="id" :title="title" hide-footer centered>
+  <b-modal :id="id" :title="title" hide-footer centered :size="size">
     <slot />
     <div>
       <span class="modal-error" v-if="error">{{ error }}</span>
     </div>
-    <div class="modal-footer-container">
+    <div
+      :class="
+        hidePositiveButton
+          ? 'modal-footer-container-1'
+          : 'modal-footer-container-2'
+      "
+    >
       <CustomButton
         class="modal-btn"
-        @click.native="
-          negativeBtnClickHandler
-            ? negativeBtnClickHandler()
-            : defaultNegativeBtnClickHandler()
-        "
+        @click.native="defaultNegativeBtnClickHandler()"
         >{{ $t(negativeBtnText) }}</CustomButton
       >
-
       <CustomButton
-        class="branded"
-        @click.native="
-          positiveBtnClickHandler
-            ? positiveBtnClickHandler()
-            : defaultPositiveBtnClickHandler()
-        "
+        :class="isDeleteModal ? 'delete' : 'branded'"
+        @click.native="defaultPositiveBtnClickHandler()"
+        v-if="isDeleteModal && !hidePositiveButton"
+        >{{ $t(isDeleteModal ? 'StrDelete' : positiveBtnText) }}</CustomButton
+      >
+      <CustomButton
+        :class="danger ? 'delete' : 'branded'"
+        @click.native="defaultPositiveBtnClickHandler()"
+        v-else
         >{{ $t(positiveBtnText) }}</CustomButton
       >
     </div>
@@ -79,10 +83,59 @@ export default class Modal extends Vue {
   })
   protected error!: string;
 
-  protected defaultPositiveBtnClickHandler() {}
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: false,
+  })
+  protected isDeleteModal!: boolean;
 
-  protected defaultNegativeBtnClickHandler() {
-    Modal.setVisible(this.$root, this.id, false);
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: false,
+  })
+  protected danger!: boolean;
+
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: false,
+  })
+  protected hidePositiveButton!: boolean;
+
+  @Prop({
+    type: String,
+    required: false,
+    default: 'md',
+  })
+  protected size!: string;
+
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: false,
+  })
+  protected scrollable!: boolean;
+
+  protected async defaultPositiveBtnClickHandler() {
+    const close: boolean = this.positiveBtnClickHandler
+      ? (await this.positiveBtnClickHandler()) || false
+      : false;
+
+    if (close) {
+      Modal.setVisible(this.$root, this.id, false);
+    }
+  }
+
+  protected async defaultNegativeBtnClickHandler() {
+    const close: boolean = this.negativeBtnClickHandler
+      ? (await this.negativeBtnClickHandler()) || true
+      : true;
+
+    if (close) {
+      Modal.setVisible(this.$root, this.id, false);
+    }
   }
 
   public static setVisible(vue: Vue, id: string, visibile: boolean) {
@@ -96,7 +149,14 @@ export default class Modal extends Vue {
 </script>
 
 <style scoped>
-.modal-footer-container {
+.modal-footer-container-1 {
+  margin-top: 32px !important;
+  display: grid;
+  grid-template-columns: auto;
+  gap: 8px;
+}
+
+.modal-footer-container-2 {
   margin-top: 32px !important;
   display: grid;
   grid-template-columns: auto auto;

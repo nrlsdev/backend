@@ -10,6 +10,7 @@ import { compare, hash } from 'bcryptjs';
 import { Constants } from '@backend/constants';
 import { Logger } from '@backend/logger';
 import { MongoError } from 'mongodb';
+import { getReasonPhrase, StatusCodes } from '@backend/server';
 
 @modelOptions({
   options: {
@@ -33,6 +34,9 @@ export class SystemUserSchema implements SystemUser {
   @prop({ unique: false, required: true })
   public password!: string;
 
+  @prop({ unique: true, required: false })
+  public customerId?: string;
+
   public static async signUp(
     this: ReturnModelType<typeof SystemUserSchema>,
     systemUser: SystemUser,
@@ -55,7 +59,7 @@ export class SystemUserSchema implements SystemUser {
 
       await dbSystemUser.save();
     } catch (exception) {
-      SystemUserSchema.logger.error('createSystemUser', exception);
+      SystemUserSchema.logger.fatal('createSystemUser', exception);
       return exception as MongoError;
     }
 
@@ -70,7 +74,7 @@ export class SystemUserSchema implements SystemUser {
     const systemUser = await this.findUserByEmail(email);
 
     if (!systemUser) {
-      SystemUserSchema.logger.error(
+      SystemUserSchema.logger.fatal(
         'signInSystemUser',
         'No systemuser with this email found.',
       );
@@ -87,7 +91,7 @@ export class SystemUserSchema implements SystemUser {
     );
 
     if (!doPasswordsMatch) {
-      SystemUserSchema.logger.error(
+      SystemUserSchema.logger.fatal(
         'signInSystemUser',
         'Passwords do not match.',
       );
@@ -124,6 +128,63 @@ export class SystemUserSchema implements SystemUser {
       },
     };
   }
+
+  // Payment Information
+  public static async getCustomerId(
+    this: ReturnModelType<typeof SystemUserSchema>,
+    userId: string,
+  ) {
+    const systemUser = await this.findUserById(userId);
+
+    if (!systemUser) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'Wrong userId. Should not happen.',
+        customerId: undefined,
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+      customerId: systemUser.customerId,
+    };
+  }
+
+  public static async setCustomerId(
+    this: ReturnModelType<typeof SystemUserSchema>,
+    userId: string,
+    customerId: string,
+  ) {
+    const systemUser = await this.findUserById(userId);
+
+    if (!systemUser) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'Wrong userId. Should not happen.',
+      };
+    }
+
+    systemUser.customerId = customerId;
+
+    try {
+      systemUser.save();
+    } catch (exception) {
+      SystemUserSchema.logger.fatal('setCustomerId', exception);
+
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
+  // Helper
 
   public static async findUserById(
     this: ReturnModelType<typeof SystemUserSchema>,

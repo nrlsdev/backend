@@ -5,7 +5,7 @@ import {
   MutationAction,
 } from 'vuex-module-decorators';
 import { store } from '@/store';
-import { getUserData } from '@/api/system-user';
+import { getUserData } from '@/api/system-user/system-user';
 
 export interface UserData {
   email: string;

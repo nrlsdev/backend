@@ -194,6 +194,18 @@ export default class ApplicationTeamPage extends Vue {
 
   protected async loadApplication() {
     this.application = await getApplicationById(this.applicationId);
+    if (this.application) {
+      this.application!.authorizedUsers = this.application?.authorizedUsers.filter(
+        (user: any) => {
+          return user.user !== null;
+        },
+      );
+      this.application!.invitedUsers = this.application?.invitedUsers.filter(
+        (user: any) => {
+          return user.user !== null;
+        },
+      );
+    }
   }
 
   protected onInviteUserBtnClicked() {
@@ -231,12 +243,12 @@ export default class ApplicationTeamPage extends Vue {
 
     if (error) {
       this.editUserModalError = error;
-      return;
+      return false;
     }
 
-    this.loadApplication();
+    await this.loadApplication();
 
-    Modal.setVisible(this.$root, this.editUserModalId, false);
+    return true;
   }
 
   protected async onInviteUser() {
@@ -248,11 +260,12 @@ export default class ApplicationTeamPage extends Vue {
 
     if (error) {
       this.invitedUserModalError = error;
-      return;
+      return false;
     }
 
     await this.loadApplication();
-    Modal.setVisible(this.$root, this.inviteUserModalId, false);
+
+    return true;
   }
 
   protected getRoleName(role: number) {

@@ -1,4 +1,4 @@
-import { Application } from '@backend/systeminterfaces';
+import { Application, Subscription } from '@backend/systeminterfaces';
 import { ApplicationModel } from './application-schema';
 
 export class ApplicationEntity {
@@ -110,6 +110,54 @@ export class ApplicationEntity {
       applicationId,
       role,
       userId,
+    );
+
+    return result;
+  }
+
+  // subscription
+  public async getActiveSubscription(applicationId: string) {
+    const result = await ApplicationModel.getActiveSubscription(applicationId);
+
+    return result;
+  }
+
+  public async subscribeApplication(
+    applicationId: string,
+    subscription: Subscription,
+  ) {
+    const result = await ApplicationModel.subscribeApplication(
+      applicationId,
+      subscription,
+    );
+
+    return result;
+  }
+
+  public async getAllApplicationSubscriptionIds(applicationId: string) {
+    const result = await ApplicationModel.getAllApplicationSubscriptionIds(
+      applicationId,
+    );
+
+    return result;
+  }
+
+  public async cancelSubscription(applicationId: string, expiresAt: number) {
+    const result = await ApplicationModel.cancelSubscription(
+      applicationId,
+      expiresAt,
+    );
+
+    return result;
+  }
+
+  public async changeSubscription(
+    applicationId: string,
+    subscriptionOptionId: number,
+  ) {
+    const result = await ApplicationModel.changeSubscription(
+      applicationId,
+      subscriptionOptionId,
     );
 
     return result;

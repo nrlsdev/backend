@@ -3,13 +3,13 @@
     v-if="type !== 'textarea'"
     :type="type"
     :value="value"
-    :placeholder="placeholder"
+    :placeholder="$t(placeholder)"
     @input="updateInput($event.target.value)"
   />
   <textarea
     v-else
     :value="value"
-    :placeholder="placeholder"
+    :placeholder="$t(placeholder)"
     rows="15"
     @input="updateInput($event.target.value)"
   ></textarea>

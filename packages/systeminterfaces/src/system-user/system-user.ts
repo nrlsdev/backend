@@ -4,4 +4,5 @@ export interface SystemUser {
   firstname: string;
   lastname: string;
   password: string;
+  customerId?: string;
 }

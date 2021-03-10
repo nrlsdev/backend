@@ -9,6 +9,7 @@ import {
 import { applicationTeamRouter } from './team/team-router';
 import { applicationGeneralRouter } from './general/general-router';
 import { applicationAuthenticationRouter } from './authentication/authentication-router';
+import { applicationSubscriptionRouter } from './subscription/subscription-router';
 
 const applicationRouter: Router = Router();
 const authorizedApplicationRouter: Router = Router({ mergeParams: true });
@@ -31,6 +32,8 @@ authorizedApplicationRouter.use(
   '/authentication',
   applicationAuthenticationRouter,
 );
+
+authorizedApplicationRouter.use('/subscription', applicationSubscriptionRouter);
 
 applicationRouter.use('/:applicationId', authorizedApplicationRouter);
 

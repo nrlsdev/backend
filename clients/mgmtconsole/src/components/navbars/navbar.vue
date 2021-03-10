@@ -37,15 +37,6 @@
           </div>
           <div
             class="navbar-account-popover-item navbar-account-popover-item-link"
-            @click="onNavbarPopoverSubscriptionsItemClicked"
-          >
-            <label class="navbar-account-popover-item-link-label">{{
-              $t('StrSubscriptions')
-            }}</label>
-            <Icon icon="credit-card" />
-          </div>
-          <div
-            class="navbar-account-popover-item navbar-account-popover-item-link"
             @click="onNavbarPopoverSignOutItemClicked"
           >
             <label class="navbar-account-popover-item-link-label">{{
@@ -63,7 +54,7 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { SystemUserModule } from '../../store/modules/system-user';
-import { signOut } from '../../api/system-user-authentication';
+import { signOut } from '../../api/system-user/system-user-authentication';
 
 @Component
 export default class Navbar extends Vue {
@@ -96,12 +87,7 @@ export default class Navbar extends Vue {
 
   protected onNavbarPopoverSettingsItemClicked() {
     this.showAccountPopover = false;
-    this.$router.push('/settings');
-  }
-
-  protected onNavbarPopoverSubscriptionsItemClicked() {
-    this.showAccountPopover = false;
-    this.$router.push('/settings'); // ToDo
+    this.$router.push('/user/settings/general');
   }
 
   protected async onNavbarPopoverSignOutItemClicked() {
