@@ -41,6 +41,7 @@ export async function signUp(request: Request, response: Response) {
       host === '' ? 'localhost' : host
     }:${port}/auth/emailandpassword/${activationCode}`;
 
+    // ToDo
     noreplyMailer.sendMail({
       to: email,
       subject: 'Created Account for {APP_NAME}',
