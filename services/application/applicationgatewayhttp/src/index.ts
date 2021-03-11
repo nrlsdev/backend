@@ -12,7 +12,11 @@ import {
 } from './authentication/session/session';
 import { setupEmailAndPasswordAuthentication } from './authentication/email-and-password/email-and-password-controller';
 
-const { applicationgatewayhttp } = ApplicationConfiguration;
+const {
+  applicationgatewayhttp,
+  applicationSession,
+  applicationdbconnector,
+} = ApplicationConfiguration;
 const authenticationServer: Server = new Server(
   applicationgatewayhttp.authentication.host,
   applicationgatewayhttp.authentication.port,
@@ -24,17 +28,19 @@ const applicationServer: Server = new Server(
   true,
 );
 const sessionOptions: ServerSessionOptions = {
-  secret: 'MY SECRET', // ToDo: Config
-  resave: false, // ToDo: Config
-  saveUninitialized: false, // ToDo: Config
+  secret: applicationSession.secret,
+  resave: applicationSession.resave,
+  saveUninitialized: applicationSession.saveUninitialized,
   cookie: {
-    maxAge: 86400000, // ToDo: Config
-    httpOnly: true, // ToDo: Config
-    secure: true, // ToDo: Config
+    maxAge: Number(applicationSession.cookieMaxAge),
+    httpOnly: applicationSession.cookieHttpOnly,
+    secure: applicationSession.cookieSecure,
   },
   mongoSessionStorage: {
-    uri: 'mongodb://devdb:devdb@ckc3fp0ra5nyqrct.myfritz.net:37011/devdb', // ToDo: Config
-    collection: 'application_user_sessions', // ToDo: Config
+    uri: `
+    mongodb://${applicationdbconnector.dbUsername}:${applicationdbconnector.dbPassword}@${applicationdbconnector.dbHost}:${applicationdbconnector.dbPort}/${applicationdbconnector.dbName}
+    `, // ToDo: DB String generator
+    collection: applicationSession.mongoStorageCollection,
   },
 };
 

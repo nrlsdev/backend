@@ -42,6 +42,20 @@ function getApplicationConfiguration(development: boolean) {
           0) as number,
       },
     },
+    applicationSession: {
+      secret: process.env.APPLICATION_SESSION_SECRET || '',
+      resave: (process.env.APPLICATION_SESSION_RESAVE || false) as boolean,
+      saveUninitialized: (process.env.APPLICATION_SESSION_SAVE_UNINITIALIZED ||
+        false) as boolean,
+      cookieMaxAge: (process.env.APPLICATION_SESSION_COOKIE_MAX_AGE ||
+        0) as number,
+      cookieHttpOnly: (process.env.APPLICATION_SESSION_COOKIE_HTTP_ONLY ||
+        false) as boolean,
+      cookieSecure: (process.env.APPLICATION_SESSION_COOKIE_SECURE ||
+        false) as boolean,
+      mongoStorageCollection:
+        process.env.APPLICATION_SESSION_MONGO_STORAGE_COLLECTION || '',
+    },
     mail: {
       noreply: {
         host: process.env.APPLICATION_MAIL_NOREPLY_HOST || '',

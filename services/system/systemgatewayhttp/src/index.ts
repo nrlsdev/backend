@@ -1,9 +1,7 @@
 import { Server } from '@backend/server';
 import { SystemConfiguration } from '@backend/systemconfiguration';
-import { v4 as uuid } from 'uuid';
-import expressSession, { SessionOptions } from 'express-session';
 import { initialize, session as passportSession } from 'passport';
-import MongoStore from 'connect-mongodb-session';
+import { ServerSessionOptions } from '@backend/server/src/server';
 import { applicationRouter } from './application/application-router';
 import { systemuserRouter } from './systemuser/systemuser-router';
 import { setupLocalAuthentication } from './authentication/authentication-controller';
@@ -17,33 +15,28 @@ const {
   systemHost,
   systemPort,
 } = SystemConfiguration.systemgatewayhttp;
-const {
-  jsonWebTokenSecret,
-  jsonWebTokenLifetime,
-} = SystemConfiguration.systemAuthentication;
+const { systemdbconnector, systemSession } = SystemConfiguration;
 const authenticationServer: Server = new Server(
   authenticationHost,
   authenticationPort,
   true,
 );
 const systemServer: Server = new Server(systemHost, systemPort, true);
-const Store = MongoStore(expressSession);
-const session: SessionOptions = {
-  genid: () => {
-    return uuid();
-  },
-  secret: jsonWebTokenSecret,
-  resave: false,
-  saveUninitialized: false,
+const sessionOptions: ServerSessionOptions = {
+  secret: systemSession.secret,
+  resave: systemSession.resave,
+  saveUninitialized: systemSession.saveUninitialized,
   cookie: {
-    maxAge: Number(jsonWebTokenLifetime),
-    httpOnly: true,
-    secure: true,
+    maxAge: Number(systemSession.cookieMaxAge),
+    httpOnly: systemSession.cookieHttpOnly,
+    secure: systemSession.cookieSecure,
   },
-  store: new Store({
-    uri: 'mongodb://devdb:devdb@ckc3fp0ra5nyqrct.myfritz.net:37011/devdb', // ToDo: Get database url
-    collection: 'system_user_sessions', // ToDo: set name in config
-  }),
+  mongoSessionStorage: {
+    uri: `
+    mongodb://${systemdbconnector.dbUsername}:${systemdbconnector.dbPassword}@${systemdbconnector.dbHost}:${systemdbconnector.dbPort}/${systemdbconnector.dbName}
+    `, // ToDo: DB String generator
+    collection: systemSession.mongoStorageCollection,
+  },
 };
 
 authenticationServer.useCorsMiddleware({
@@ -53,7 +46,7 @@ authenticationServer.useCorsMiddleware({
 authenticationServer.useJsonMiddleware();
 authenticationServer.useLanguageMiddleware();
 authenticationServer.useCookieParserMiddleware();
-authenticationServer.Application.use(expressSession(session));
+authenticationServer.useExpressSession(sessionOptions);
 authenticationServer.Application.use(initialize());
 authenticationServer.Application.use(passportSession());
 
@@ -70,7 +63,7 @@ systemServer.useCorsMiddleware({
 systemServer.useJsonMiddleware();
 systemServer.useLanguageMiddleware();
 systemServer.useCookieParserMiddleware();
-systemServer.Application.use(expressSession(session));
+systemServer.useExpressSession(sessionOptions);
 systemServer.Application.use(initialize());
 systemServer.Application.use(passportSession());
 systemServer.Application.use(sessionAuthenticationChecker);
