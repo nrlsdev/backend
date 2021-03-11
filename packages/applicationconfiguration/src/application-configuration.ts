@@ -42,5 +42,14 @@ function getApplicationConfiguration(development: boolean) {
           0) as number,
       },
     },
+    mail: {
+      noreply: {
+        host: process.env.APPLICATION_MAIL_NOREPLY_HOST || '',
+        port: (process.env.APPLICATION_MAIL_NOREPLY_PORT || 0) as number,
+        email: process.env.APPLICATION_MAIL_NOREPLY_EMAIL || '',
+        user: process.env.APPLICATION_MAIL_NOREPLY_USER || '',
+        password: process.env.APPLICATION_MAIL_NOREPLY_PASSWORD || '',
+      },
+    },
   };
 }
