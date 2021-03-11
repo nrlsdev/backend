@@ -6,8 +6,12 @@ import {
   RequestMessage,
 } from '@backend/messagehandler';
 import { ApplicationConfiguration } from '@backend/applicationconfiguration';
-import { ErrorMessage } from '@backend/applicationmessagefactory';
+import {
+  ApplicationUserMessage,
+  ErrorMessage,
+} from '@backend/applicationmessagefactory';
 import { Database } from './database/database';
+import { signUpEmailAndPassword } from './database/controller/appliction-user/application-user-email-and-password-controller';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
 const { mhHost, mhPort } = ApplicationConfiguration.applicationmessagehandler;
@@ -47,12 +51,16 @@ async function connectToDatabase() {
 
 async function onApplicationUserMessage(requestMessage: RequestMessage) {
   const { type } = requestMessage.meta;
+  const { data }: any = requestMessage.body;
 
   if (!type) {
     return ErrorMessage.unprocessableEntityErrorResponse();
   }
 
   switch (type) {
+    case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_SIGNUP: {
+      return signUpEmailAndPassword(data.email, data.password);
+    }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
         `Messgae of type '${type}' not implemented!`,
