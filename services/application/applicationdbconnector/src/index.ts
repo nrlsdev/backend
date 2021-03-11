@@ -13,7 +13,9 @@ import {
 import { Database } from './database/database';
 import {
   signUpEmailAndPassword,
+  signInEmailAndPassword,
   activateEmailAndPassword,
+  getApplicationUserById,
 } from './database/controller/appliction-user/application-user-email-and-password-controller';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
@@ -68,8 +70,14 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
         data.activationCode,
       );
     }
+    case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_SIGNIN: {
+      return signInEmailAndPassword(data.email, data.password);
+    }
     case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_ACTIVATE: {
       return activateEmailAndPassword(data.activationCode);
+    }
+    case ApplicationUserMessage.TYPE_APPLICATION_GET_APPLICATION_USER_BY_ID: {
+      return getApplicationUserById(data.id);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

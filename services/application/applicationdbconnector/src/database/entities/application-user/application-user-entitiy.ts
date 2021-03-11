@@ -25,10 +25,25 @@ export class ApplicationUserEntity {
     return result;
   }
 
+  public async signInEmailAndPassword(email: string, password: string) {
+    const result = await ApplicationUserModel.signInEmailAndPassword(
+      email,
+      password,
+    );
+
+    return result;
+  }
+
   public async activateEmailAndPassword(activationCode: string) {
     const result = await ApplicationUserModel.activateEmailAndPassword(
       activationCode,
     );
+
+    return result;
+  }
+
+  public async getApplicationUserById(id: string) {
+    const result = await ApplicationUserModel.getApplicationUserById(id);
 
     return result;
   }

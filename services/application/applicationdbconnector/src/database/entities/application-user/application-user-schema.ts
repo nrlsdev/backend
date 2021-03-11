@@ -10,7 +10,7 @@ import { Logger } from '@backend/logger';
 import { getReasonPhrase, StatusCodes } from '@backend/server';
 import { Constants } from '@backend/constants';
 import { MongoError } from 'mongodb';
-import { hash } from 'bcryptjs';
+import { hash, compare } from 'bcryptjs';
 import { ApplicationUserAccountsSchema } from './application-user-accounts-schema';
 import { MongoErrorCode } from '../../error-codes';
 
@@ -81,6 +81,60 @@ export class ApplicationUserSchema implements ApplicationUser {
     };
   }
 
+  public static async signInEmailAndPassword(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    email: string,
+    password: string,
+  ) {
+    const user = await this.findUserByEmail(email);
+
+    if (!user) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'Invalid E-Mail or Password.',
+        user: undefined,
+      };
+    }
+
+    if (!user.accounts.emailAndPassword) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'Invalid E-Mail or Password.',
+        user: undefined,
+      };
+    }
+
+    if (!user.accounts.emailAndPassword.activated) {
+      return {
+        statusCode: StatusCodes.UNAUTHORIZED,
+        error: 'You have to activate your account first.',
+        user: undefined,
+      };
+    }
+
+    const doPasswordsMatch: boolean = await compare(
+      password,
+      user.accounts.emailAndPassword.password,
+    );
+
+    if (!doPasswordsMatch) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'Invalid E-Mail or Password.',
+        user: undefined,
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+      user: {
+        _id: user._id,
+        email: user.accounts.emailAndPassword.email,
+      },
+    };
+  }
+
   public static async activateEmailAndPassword(
     this: ReturnModelType<typeof ApplicationUserSchema>,
     activationCode: string,
@@ -125,6 +179,40 @@ export class ApplicationUserSchema implements ApplicationUser {
       statusCode: StatusCodes.OK,
       error: undefined,
     };
+  }
+
+  public static async getApplicationUserById(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    id: string,
+  ) {
+    const systemUser = await this.findById(id);
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+      user: systemUser as ApplicationUser,
+    };
+  }
+
+  // helper
+  public static async findUserById(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    id: string,
+  ) {
+    const systemUser = await this.findById(id);
+
+    return systemUser;
+  }
+
+  public static async findUserByEmail(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    email: string,
+  ) {
+    const systemUser = await this.findOne({
+      'accounts.emailAndPassword.email': email,
+    });
+
+    return systemUser;
   }
 }
 

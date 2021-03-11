@@ -3,11 +3,19 @@ import {
   MessageSeverityType,
   ResponseMessage,
 } from '@backend/messagehandler';
-import { Request, Response } from '@backend/server';
-import { ApplicationUserMessage } from '@backend/applicationmessagefactory';
+import { Request, Response, NextFunction, StatusCodes } from '@backend/server';
+import { Logger } from '@backend/logger';
+import {
+  ApplicationUserMessage,
+  ErrorMessage,
+} from '@backend/applicationmessagefactory';
 import { ApplicationConfiguration } from '@backend/applicationconfiguration';
+import { authenticate, use } from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
 import { messageManager } from '../../message-manager';
 import { noreplyMailer } from '../../mail-manager';
+
+const logger: Logger = new Logger('email-and-password-controller');
 
 const {
   protocol,
@@ -15,7 +23,7 @@ const {
   port,
 } = ApplicationConfiguration.applicationgatewayhttp.authentication;
 
-export async function signup(request: Request, response: Response) {
+export async function signUp(request: Request, response: Response) {
   const { email, password } = request.body;
   const activationCode: string = Date.now().toString();
   const signUpResponse: ResponseMessage = await messageManager.sendReplyToMessage(
@@ -43,9 +51,76 @@ export async function signup(request: Request, response: Response) {
   response.status(signUpResponse.meta.statusCode).send(signUpResponse).end();
 }
 
+export async function signIn(
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) {
+  // eslint-disable-next-line consistent-return
+  authenticate('local', (error, user, info) => {
+    if (error) {
+      const errorResponseMessage: ResponseMessage = ErrorMessage.unauthorizedErrorResponse(
+        'Invalid E-Mail or Password.',
+      );
+
+      logger.error('signIn', 'Invalid E-Mail or Password. (got error)');
+      logger.error('signIn', JSON.stringify(error));
+
+      return response
+        .status(errorResponseMessage.meta.statusCode)
+        .send(errorResponseMessage)
+        .end();
+    }
+
+    if (info) {
+      const errorResponseMessage: ResponseMessage = ErrorMessage.unauthorizedErrorResponse(
+        'Invalid E-Mail or Password.',
+      );
+
+      logger.error('signIn', 'Invalid E-Mail or Password. (got info)');
+      logger.error('signIn', JSON.stringify(info));
+
+      return response
+        .status(errorResponseMessage.meta.statusCode)
+        .send(errorResponseMessage)
+        .end();
+    }
+
+    if (!user) {
+      const errorResponseMessage: ResponseMessage = ErrorMessage.unauthorizedErrorResponse(
+        'Invalid E-Mail or Password.',
+      );
+
+      logger.error('signIn', 'No user with this credentials found.');
+
+      return response
+        .status(errorResponseMessage.meta.statusCode)
+        .send(errorResponseMessage)
+        .end();
+    }
+
+    request.logIn(user, (loginError: any) => {
+      if (error) {
+        const errorResponseMessage: ResponseMessage = ErrorMessage.unauthorizedErrorResponse(
+          'Invalid E-Mail or Password.',
+        );
+
+        logger.error('signIn', loginError);
+
+        return response
+          .status(errorResponseMessage.meta.statusCode)
+          .send(errorResponseMessage)
+          .end();
+      }
+
+      return response.status(StatusCodes.OK).send({}).end();
+    });
+  })(request, response, next);
+}
+
 export async function activateAccount(request: Request, response: Response) {
   const { activationCode } = request.params;
-  const signUpResponse: ResponseMessage = await messageManager.sendReplyToMessage(
+  const activateResponse: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationUserMessage.applicationUserEmailAndPasswordActivateRequest(
       activationCode,
     ),
@@ -53,5 +128,41 @@ export async function activateAccount(request: Request, response: Response) {
     MessageSeverityType.APPLICATION_USER,
   );
 
-  response.status(signUpResponse.meta.statusCode).send(signUpResponse).end();
+  response
+    .status(activateResponse.meta.statusCode)
+    .send(activateResponse)
+    .end();
+}
+
+export function setupEmailAndPasswordAuthentication() {
+  use(
+    new LocalStrategy(
+      // ToDo: Config -> email and password name fields
+      { usernameField: 'email', passwordField: 'password' },
+      async (email, password, done) => {
+        const signInResponse: ResponseMessage = await messageManager.sendReplyToMessage(
+          ApplicationUserMessage.applicationUserEmailAndPasswordSignInRequest(
+            email,
+            password,
+          ),
+          MessageQueueType.APPLICATION_DBCONNECTOR,
+          MessageSeverityType.APPLICATION_USER,
+        );
+        const { data }: any = signInResponse.body;
+
+        if (
+          signInResponse.body.error ||
+          signInResponse.meta.statusCode !== StatusCodes.OK ||
+          !data
+        ) {
+          return done(signInResponse, false);
+        }
+
+        return done(null, {
+          _id: data.id,
+          email: data.email,
+        });
+      },
+    ),
+  );
 }
