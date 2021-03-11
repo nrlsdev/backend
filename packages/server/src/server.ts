@@ -8,8 +8,33 @@ import {
   createServer as createHTTPSServer,
   ServerOptions,
 } from 'https';
+import expressSession, { SessionOptions } from 'express-session';
+import { v4 as uuid } from 'uuid';
+import MongoStore from 'connect-mongodb-session';
 import { getSSLCert, getSSLKey } from './cert-manager';
 import { language } from './middleware/language';
+
+const Store = MongoStore(expressSession);
+
+export interface ServerSessionOptions {
+  secret: string;
+
+  resave: boolean;
+
+  saveUninitialized: boolean;
+
+  cookie: {
+    maxAge: number;
+    httpOnly: boolean;
+    secure: boolean;
+  };
+
+  mongoSessionStorage: {
+    uri: string;
+
+    collection: string;
+  };
+}
 
 export class Server {
   private static logger: Logger;
@@ -93,5 +118,22 @@ export class Server {
 
   public useLanguageMiddleware() {
     this.application.use(language);
+  }
+
+  public useExpressSession(sessionOptions: ServerSessionOptions) {
+    const session: SessionOptions = {
+      genid: () => {
+        return uuid();
+      },
+      secret: sessionOptions.secret,
+      resave: sessionOptions.resave,
+      saveUninitialized: sessionOptions.saveUninitialized,
+      cookie: sessionOptions.cookie,
+      store: new Store({
+        uri: sessionOptions.mongoSessionStorage.uri,
+        collection: sessionOptions.mongoSessionStorage.collection,
+      }),
+    };
+    this.application.use(expressSession(session));
   }
 }

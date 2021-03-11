@@ -1,6 +1,6 @@
-import { ApplicationUserAuthentication } from './application-user-authentication';
+import { ApplicationUserAccounts } from './application-user-accounts';
 
 export interface ApplicationUser {
   _id?: any;
-  authentication: ApplicationUserAuthentication;
+  accounts: ApplicationUserAccounts;
 }

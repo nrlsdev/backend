@@ -38,10 +38,18 @@ function getSystemConfiguration(development: boolean) {
       systemHost: process.env.SYSTEMGATEWAYHTTP_SYSTEM_HOST || '',
       systemPort: (process.env.SYSTEMGATEWAYHTTP_SYSTEM_PORT || 0) as number,
     },
-    systemAuthentication: {
-      jsonWebTokenSecret: process.env.JSON_WEB_TOKEN_SECRET || '',
-      jsonWebTokenLifetime: (process.env.JSON_WEB_TOKEN_LIFETIME ||
-        0) as number,
+    systemSession: {
+      secret: process.env.SYSTEM_SESSION_SECRET || '',
+      resave: (process.env.SYSTEM_SESSION_RESAVE || false) as boolean,
+      saveUninitialized: (process.env.SYSTEM_SESSION_SAVE_UNINITIALIZED ||
+        false) as boolean,
+      cookieMaxAge: (process.env.SYSTEM_SESSION_COOKIE_MAX_AGE || 0) as number,
+      cookieHttpOnly: (process.env.SYSTEM_SESSION_COOKIE_HTTP_ONLY ||
+        false) as boolean,
+      cookieSecure: (process.env.SYSTEM_SESSION_COOKIE_SECURE ||
+        false) as boolean,
+      mongoStorageCollection:
+        process.env.SYSTEM_SESSION_MONGO_STORAGE_COLLECTION || '',
     },
     systemWebPage: {
       protocol: process.env.SYSTEMWEBPAGE_PROTOCOL || '',

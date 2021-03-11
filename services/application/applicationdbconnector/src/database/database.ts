@@ -7,7 +7,7 @@ import {
   Schema,
 } from 'mongoose';
 import { ConnectionState } from './connection-state';
-import { ApplicationUserEntity } from './entities/application-user/application-user-entity';
+import { ApplicationUserEntity } from './entities/application-user/application-user-entitiy';
 
 export class Database {
   private static logger: Logger = new Logger('Database');

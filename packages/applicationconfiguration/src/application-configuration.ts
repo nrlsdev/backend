@@ -28,15 +28,41 @@ function getApplicationConfiguration(development: boolean) {
       mhPort: (process.env.APPLICATION_MESSAGEHANDLER_PORT || 0) as number,
     },
     applicationgatewayhttp: {
-      private: {
-        protocol: process.env.APPLICATIONGATEWAYHTTP_PRIVATE_PROTOCOL || '',
-        host: process.env.APPLICATIONGATEWAYHTTP_PRIVATE_HOST || '',
-        port: (process.env.APPLICATIONGATEWAYHTTP_PRIVATE_PORT || 0) as number,
+      authentication: {
+        protocol:
+          process.env.APPLICATIONGATEWAYHTTP_AUTHENTICATION_PROTOCOL || '',
+        host: process.env.APPLICATIONGATEWAYHTTP_AUTHENTICATION_HOST || '',
+        port: (process.env.APPLICATIONGATEWAYHTTP_AUTHENTICATION_PORT ||
+          0) as number,
       },
-      public: {
-        protocol: process.env.APPLICATIONGATEWAYHTTP_PUBLIC_PROTOCOL || '',
-        host: process.env.APPLICATIONGATEWAYHTTP_PUBLIC_HOST || '',
-        port: (process.env.APPLICATIONGATEWAYHTTP_PUBLIC_PORT || 0) as number,
+      application: {
+        protocol: process.env.APPLICATIONGATEWAYHTTP_APPLICATION_PROTOCOL || '',
+        host: process.env.APPLICATIONGATEWAYHTTP_APPLICATION_HOST || '',
+        port: (process.env.APPLICATIONGATEWAYHTTP_APPLICATION_PORT ||
+          0) as number,
+      },
+    },
+    applicationSession: {
+      secret: process.env.APPLICATION_SESSION_SECRET || '',
+      resave: (process.env.APPLICATION_SESSION_RESAVE || false) as boolean,
+      saveUninitialized: (process.env.APPLICATION_SESSION_SAVE_UNINITIALIZED ||
+        false) as boolean,
+      cookieMaxAge: (process.env.APPLICATION_SESSION_COOKIE_MAX_AGE ||
+        0) as number,
+      cookieHttpOnly: (process.env.APPLICATION_SESSION_COOKIE_HTTP_ONLY ||
+        false) as boolean,
+      cookieSecure: (process.env.APPLICATION_SESSION_COOKIE_SECURE ||
+        false) as boolean,
+      mongoStorageCollection:
+        process.env.APPLICATION_SESSION_MONGO_STORAGE_COLLECTION || '',
+    },
+    mail: {
+      noreply: {
+        host: process.env.APPLICATION_MAIL_NOREPLY_HOST || '',
+        port: (process.env.APPLICATION_MAIL_NOREPLY_PORT || 0) as number,
+        email: process.env.APPLICATION_MAIL_NOREPLY_EMAIL || '',
+        user: process.env.APPLICATION_MAIL_NOREPLY_USER || '',
+        password: process.env.APPLICATION_MAIL_NOREPLY_PASSWORD || '',
       },
     },
   };

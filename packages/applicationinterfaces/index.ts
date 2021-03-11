@@ -1,3 +1,3 @@
 export { ApplicationUser } from './src/application-user/application-user';
-export { ApplicationUserAuthentication } from './src/application-user/application-user-authentication';
-export { ApplicationUserAuthenticationEmailAndPassword } from './src/application-user/application-user-authentication-email-and-password';
+export { ApplicationUserAccounts } from './src/application-user/application-user-accounts';
+export { ApplicationUserEmailAndPasswordAccount } from './src/application-user/application-user-email-and-password-account';

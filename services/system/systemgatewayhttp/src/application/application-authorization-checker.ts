@@ -23,7 +23,7 @@ export function checkApplicationAuthorization(role: ApplicationRole) {
     const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
       ApplicationMessage.getUserApplicationRoleRequest(applicationId, userId),
       MessageQueueType.SYSTEM_DBCONNECTOR,
-      MessageSeverityType.APPLICATION,
+      MessageSeverityType.SYSTEM_APPLICATION,
     );
     const { statusCode } = responseMessage.meta;
     const { data } = responseMessage.body as any;

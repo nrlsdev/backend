@@ -12,9 +12,11 @@ import {
 } from '@backend/applicationmessagefactory';
 import { Database } from './database/database';
 import {
-  emailAndPasswordSignUp,
-  emailAndPasswordSignIn,
-} from './controller/application-user/email-and-password.ts/email-and-password';
+  signUpEmailAndPassword,
+  signInEmailAndPassword,
+  activateEmailAndPassword,
+  getApplicationUserById,
+} from './database/controller/appliction-user/application-user-email-and-password-controller';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
 const { mhHost, mhPort } = ApplicationConfiguration.applicationmessagehandler;
@@ -30,14 +32,8 @@ async function startup() {
 
   messageManager.createRPCServer(
     MessageQueueType.APPLICATION_DBCONNECTOR,
-    MessageSeverityType.APPLICATION_PRIVATE,
-    onPrivateApplicationMessage,
-  );
-
-  messageManager.createRPCServer(
-    MessageQueueType.APPLICATION_DBCONNECTOR,
-    MessageSeverityType.APPLICATION_PUBLIC,
-    onPublicApplicationMessage,
+    MessageSeverityType.APPLICATION_USER,
+    onApplicationUserMessage,
   );
 }
 
@@ -52,13 +48,13 @@ async function connectToDatabase() {
 
   try {
     await Database.connect(dbHost, dbPort, dbName, dbUsername, dbPassword);
-    logger.info('connectToDatabase', 'Connected to the system database');
+    logger.info('connectToDatabase', 'Connected to the application database');
   } catch (exception) {
     logger.error('connectToDatabase', exception.message);
   }
 }
 
-async function onPrivateApplicationMessage(requestMessage: RequestMessage) {
+async function onApplicationUserMessage(requestMessage: RequestMessage) {
   const { type } = requestMessage.meta;
   const { data }: any = requestMessage.body;
 
@@ -68,27 +64,21 @@ async function onPrivateApplicationMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_SIGNUP: {
-      return emailAndPasswordSignUp(data.email, data.password);
-    }
-    case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_SIGNIN: {
-      return emailAndPasswordSignIn(data.email, data.password);
-    }
-    default: {
-      return ErrorMessage.unprocessableEntityErrorResponse(
-        `Messgae of type '${type}' not implemented!`,
+      return signUpEmailAndPassword(
+        data.email,
+        data.password,
+        data.activationCode,
       );
     }
-  }
-}
-
-async function onPublicApplicationMessage(requestMessage: RequestMessage) {
-  const { type } = requestMessage.meta;
-
-  if (!type) {
-    return ErrorMessage.unprocessableEntityErrorResponse();
-  }
-
-  switch (type) {
+    case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_SIGNIN: {
+      return signInEmailAndPassword(data.email, data.password);
+    }
+    case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_ACTIVATE: {
+      return activateEmailAndPassword(data.activationCode);
+    }
+    case ApplicationUserMessage.TYPE_APPLICATION_GET_APPLICATION_USER_BY_ID: {
+      return getApplicationUserById(data.id);
+    }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
         `Messgae of type '${type}' not implemented!`,

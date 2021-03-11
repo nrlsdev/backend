@@ -27,10 +27,11 @@ export async function inviteUserToTeam(request: Request, response: Response) {
 
     return;
   }
+
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationTeamMessage.inviteUserToTeamRequest(email, role, applicationId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   if (responseMessage.meta.statusCode === StatusCodes.OK) {
@@ -72,7 +73,7 @@ export async function acceptInvitation(request: Request, response: Response) {
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationTeamMessage.acceptInvitationRequest(invitationCode, userId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
@@ -95,7 +96,7 @@ export async function deleteInvitation(request: Request, response: Response) {
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationTeamMessage.deleteInvitationRequest(applicationId, userId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
@@ -126,7 +127,7 @@ export async function updateAuthorizedUser(
       userId,
     ),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();

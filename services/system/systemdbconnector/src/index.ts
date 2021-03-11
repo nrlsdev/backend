@@ -66,7 +66,7 @@ async function startup() {
 
   messageManager.createRPCServer(
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
     onApplicationMessage,
   );
 }

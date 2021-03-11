@@ -13,11 +13,18 @@
   "dependencies": {
     "@backend/applicationconfiguration": "^1.0.0",
     "@backend/applicationmessagefactory": "^1.0.0",
+    "@backend/applicationinterfaces": "^1.0.0",
     "@backend/logger": "^1.0.0",
     "@backend/messagehandler": "^1.0.0",
     "@backend/server": "^1.0.0",
     "cross-env": "^7.0.3",
     "nodemon": "^2.0.6",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "ts-node": "^9.1.0"
+  },
+  "devDependencies": {
+    "@types/passport": "^1.0.6",
+    "@types/passport-local": "^1.0.33"
   }
 }

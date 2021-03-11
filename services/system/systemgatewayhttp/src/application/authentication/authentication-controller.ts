@@ -47,7 +47,7 @@ export async function updateAuthenticationMethod(
       applicationId,
     ),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();

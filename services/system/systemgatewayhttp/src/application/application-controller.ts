@@ -27,7 +27,7 @@ export async function createApplication(request: Request, response: Response) {
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationMessage.createApplicationRequest(bundleId, name, userId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
@@ -42,7 +42,7 @@ export async function getAllApplicationsUserHasAuthorizationFor(
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationMessage.getAllApplicationsUserHasAuthorizationForRequest(userId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
@@ -55,7 +55,7 @@ export async function getApplicationById(request: Request, response: Response) {
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationMessage.getApplicationByIdRequest(applicationId, userId),
     MessageQueueType.SYSTEM_DBCONNECTOR,
-    MessageSeverityType.APPLICATION,
+    MessageSeverityType.SYSTEM_APPLICATION,
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
