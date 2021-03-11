@@ -11,7 +11,10 @@ import {
   ErrorMessage,
 } from '@backend/applicationmessagefactory';
 import { Database } from './database/database';
-import { signUpEmailAndPassword } from './database/controller/appliction-user/application-user-email-and-password-controller';
+import {
+  signUpEmailAndPassword,
+  activateEmailAndPassword,
+} from './database/controller/appliction-user/application-user-email-and-password-controller';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
 const { mhHost, mhPort } = ApplicationConfiguration.applicationmessagehandler;
@@ -59,7 +62,14 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_SIGNUP: {
-      return signUpEmailAndPassword(data.email, data.password);
+      return signUpEmailAndPassword(
+        data.email,
+        data.password,
+        data.activationCode,
+      );
+    }
+    case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_ACTIVATE: {
+      return activateEmailAndPassword(data.activationCode);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

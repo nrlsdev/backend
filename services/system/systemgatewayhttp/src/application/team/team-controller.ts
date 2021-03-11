@@ -27,6 +27,7 @@ export async function inviteUserToTeam(request: Request, response: Response) {
 
     return;
   }
+
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationTeamMessage.inviteUserToTeamRequest(email, role, applicationId),
     MessageQueueType.SYSTEM_DBCONNECTOR,

@@ -21,4 +21,16 @@ export class ApplicationUserEmailAndPasswordAccountSchema
     required: true,
   })
   public password!: string;
+
+  @prop({
+    unique: false,
+    required: false,
+  })
+  public activationCode?: string;
+
+  @prop({
+    unique: false,
+    required: true,
+  })
+  public activated!: boolean;
 }

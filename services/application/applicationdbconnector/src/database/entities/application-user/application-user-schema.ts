@@ -7,7 +7,7 @@ import {
   ReturnModelType,
 } from '@typegoose/typegoose';
 import { Logger } from '@backend/logger';
-import { StatusCodes } from '@backend/server';
+import { getReasonPhrase, StatusCodes } from '@backend/server';
 import { Constants } from '@backend/constants';
 import { MongoError } from 'mongodb';
 import { hash } from 'bcryptjs';
@@ -28,6 +28,7 @@ export class ApplicationUserSchema implements ApplicationUser {
     unique: false,
     required: true,
     default: {},
+    _id: false,
     type: ApplicationUserAccountsSchema,
   })
   public accounts!: ApplicationUserAccountsSchema;
@@ -36,6 +37,7 @@ export class ApplicationUserSchema implements ApplicationUser {
     this: ReturnModelType<typeof ApplicationUserSchema>,
     email: string,
     password: string,
+    activationCode: string,
   ) {
     try {
       const hashedPassword: string = await hash(
@@ -48,6 +50,8 @@ export class ApplicationUserSchema implements ApplicationUser {
           emailAndPassword: {
             email,
             password: hashedPassword,
+            activationCode,
+            activated: false,
           },
         },
       });
@@ -71,6 +75,52 @@ export class ApplicationUserSchema implements ApplicationUser {
       };
     }
 
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
+  public static async activateEmailAndPassword(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    activationCode: string,
+  ) {
+    const user = await this.findOne({
+      'accounts.emailAndPassword.activationCode': activationCode,
+    });
+
+    if (!user) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No valid activation code.',
+      };
+    }
+
+    if (user.accounts.emailAndPassword) {
+      user.accounts.emailAndPassword.activated = true;
+      user.accounts.emailAndPassword.activationCode = undefined;
+    } else {
+      ApplicationUserSchema.logger.fatal(
+        'activateEmailAndPassword',
+        'No email and password account found to activate.',
+      );
+
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No email and password account found to activate.',
+      };
+    }
+
+    try {
+      user.save();
+    } catch (exception) {
+      ApplicationUserSchema.logger.fatal('activateEmailAndPassword', exception);
+
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+      };
+    }
     return {
       statusCode: StatusCodes.OK,
       error: undefined,
