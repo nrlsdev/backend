@@ -33,4 +33,10 @@ export class ErrorMessage {
   ) {
     return ErrorMessage.errorResponse(StatusCodes.UNAUTHORIZED, error);
   }
+
+  public static internalServerErrorResponse(
+    error: string = getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+  ) {
+    return ErrorMessage.errorResponse(StatusCodes.INTERNAL_SERVER_ERROR, error);
+  }
 }

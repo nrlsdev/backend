@@ -5,15 +5,12 @@ import {
   activateAccount,
 } from './email-and-password-controller';
 
-const publicEmailAndPasswordAuthenticationRouter: Router = Router();
+const emailAndPasswordAuthenticationRouter: Router = Router();
 
-publicEmailAndPasswordAuthenticationRouter.post('/signup', signUp);
+emailAndPasswordAuthenticationRouter.post('/signup', signUp);
 
-publicEmailAndPasswordAuthenticationRouter.post('/signin', signIn);
+emailAndPasswordAuthenticationRouter.post('/signin', signIn);
 
-publicEmailAndPasswordAuthenticationRouter.get(
-  '/:activationCode',
-  activateAccount,
-);
+emailAndPasswordAuthenticationRouter.get('/:activationCode', activateAccount);
 
-export { publicEmailAndPasswordAuthenticationRouter };
+export { emailAndPasswordAuthenticationRouter };

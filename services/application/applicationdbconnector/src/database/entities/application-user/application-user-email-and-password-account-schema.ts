@@ -13,6 +13,7 @@ export class ApplicationUserEmailAndPasswordAccountSchema
   @prop({
     unique: true,
     required: true,
+    sparse: true,
   })
   public email!: string;
 
