@@ -244,6 +244,57 @@ export class ApplicationUserSchema implements ApplicationUser {
     };
   }
 
+  // twitter
+  public static async getApplicationUserByTwitterId(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    id: string,
+  ) {
+    const applicationUser = await this.findOne({ 'accounts.twitter.id': id });
+
+    return applicationUser as ApplicationUser;
+  }
+
+  public static async applicationUserTwitterSignUp(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    id: string,
+  ) {
+    try {
+      await this.create({
+        accounts: {
+          twitter: {
+            id,
+          },
+        },
+      });
+    } catch (exception) {
+      ApplicationUserSchema.logger.fatal(
+        'applicationUserTwitterSignUp',
+        exception,
+      );
+
+      if (exception instanceof MongoError) {
+        const mongoError: MongoError = exception as MongoError;
+
+        if (mongoError.code === MongoErrorCode.DUPLICATE_KEY) {
+          return {
+            statusCode: StatusCodes.CONFLICT,
+            error: 'User with this twitter account already exists.',
+          };
+        }
+      }
+
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: 'Could not signup with twitter.',
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
   // helper
   public static async getApplicationUserById(
     this: ReturnModelType<typeof ApplicationUserSchema>,

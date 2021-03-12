@@ -16,6 +16,14 @@ export class SessionUser implements Express.User {
 
     accessToken: string;
   };
+
+  public twitter?: {
+    id: string;
+
+    accessTokenKey: string;
+
+    accessTokenSecret: string;
+  };
 }
 
 export function setupUserDeSerialization() {
@@ -30,6 +38,7 @@ export function setupUserDeSerialization() {
       _id: user._id,
       email: user.email,
       facebook: user.facebook,
+      twitter: user.twitter,
     });
   });
 
@@ -51,6 +60,7 @@ export function setupUserDeSerialization() {
         _id: user._id,
         email: user.email,
         facebook: user.facebook,
+        twitter: user.twitter,
       });
     },
   );

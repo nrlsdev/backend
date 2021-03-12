@@ -58,6 +58,19 @@ export class ApplicationUserEntity {
     return result;
   }
 
+  // twitter
+  public async getApplicationUserByTwitterId(id: string) {
+    const result = await ApplicationUserModel.getApplicationUserByTwitterId(id);
+
+    return result;
+  }
+
+  public async applicationUserTwitterSignUp(id: string) {
+    const result = await ApplicationUserModel.applicationUserTwitterSignUp(id);
+
+    return result;
+  }
+
   // helper
   public async getApplicationUserById(id: string) {
     const result = await ApplicationUserModel.getApplicationUserById(id);

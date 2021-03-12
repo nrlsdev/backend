@@ -95,6 +95,13 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
     case ApplicationUserMessage.TYPE_APPLICATION_USER_FACEBOOK_SIGNUP: {
       return applicationUserFacebookSignUp(data.id);
     }
+    // twitter
+    case ApplicationUserMessage.TYPE_APPLICATION_GET_APPLICATION_USER_BY_TWITTER_ID: {
+      return getApplicationUserByTwitterId(data.id);
+    }
+    case ApplicationUserMessage.TYPE_APPLICATION_USER_TWITTER_SIGNUP: {
+      return applicationUserTwitterSignUp(data.id);
+    }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
         `Messgae of type '${type}' not implemented!`,
