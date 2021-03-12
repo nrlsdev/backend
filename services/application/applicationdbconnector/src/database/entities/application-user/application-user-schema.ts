@@ -33,6 +33,7 @@ export class ApplicationUserSchema implements ApplicationUser {
   })
   public accounts!: ApplicationUserAccountsSchema;
 
+  // email and password
   public static async signUpEmailAndPassword(
     this: ReturnModelType<typeof ApplicationUserSchema>,
     email: string,
@@ -56,7 +57,7 @@ export class ApplicationUserSchema implements ApplicationUser {
         },
       });
     } catch (exception) {
-      ApplicationUserSchema.logger.fatal('signUp', exception);
+      ApplicationUserSchema.logger.fatal('signUpEmailAndPassword', exception);
 
       if (exception instanceof MongoError) {
         const mongoError: MongoError = exception as MongoError;
@@ -86,7 +87,7 @@ export class ApplicationUserSchema implements ApplicationUser {
     email: string,
     password: string,
   ) {
-    const user = await this.findUserByEmail(email);
+    const user = await this.getApplicationUserByEmail(email);
 
     if (!user) {
       return {
@@ -181,38 +182,89 @@ export class ApplicationUserSchema implements ApplicationUser {
     };
   }
 
-  public static async getApplicationUserById(
+  public static async getApplicationUserByEmail(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    email: string,
+  ) {
+    const applicationUser = await this.findOne({
+      'accounts.emailAndPassword.email': email,
+    });
+
+    return applicationUser as ApplicationUser;
+  }
+
+  // facebook
+  public static async getApplicationUserByFacebook(
     this: ReturnModelType<typeof ApplicationUserSchema>,
     id: string,
   ) {
-    const systemUser = await this.findById(id);
+    const applicationUser = await this.findOne({ 'accounts.facebook.id': id });
+
+    return applicationUser as ApplicationUser;
+  }
+
+  public static async applicationUserFacebookSignUp(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    id: string,
+  ) {
+    try {
+      await this.create({
+        accounts: {
+          facebook: {
+            id,
+          },
+        },
+      });
+    } catch (exception) {
+      ApplicationUserSchema.logger.fatal(
+        'applicationUserFacebookSignUp',
+        exception,
+      );
+
+      if (exception instanceof MongoError) {
+        const mongoError: MongoError = exception as MongoError;
+
+        if (mongoError.code === MongoErrorCode.DUPLICATE_KEY) {
+          return {
+            statusCode: StatusCodes.CONFLICT,
+            error: 'User with this facebook account already exists.',
+          };
+        }
+      }
+
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: 'Could not signup with facebook.',
+      };
+    }
 
     return {
       statusCode: StatusCodes.OK,
       error: undefined,
-      user: systemUser as ApplicationUser,
     };
   }
 
   // helper
+  public static async getApplicationUserById(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    id: string,
+  ) {
+    const applicationUser = await this.findById(id);
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+      user: applicationUser as ApplicationUser,
+    };
+  }
+
   public static async findUserById(
     this: ReturnModelType<typeof ApplicationUserSchema>,
     id: string,
   ) {
-    const systemUser = await this.findById(id);
+    const applicationUser = await this.findById(id);
 
-    return systemUser;
-  }
-
-  public static async findUserByEmail(
-    this: ReturnModelType<typeof ApplicationUserSchema>,
-    email: string,
-  ) {
-    const systemUser = await this.findOne({
-      'accounts.emailAndPassword.email': email,
-    });
-
-    return systemUser;
+    return applicationUser;
   }
 }
 

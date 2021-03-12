@@ -11,6 +11,7 @@ export class ApplicationUserEntity {
     return ApplicationUserEntity.instance || new ApplicationUserEntity();
   }
 
+  // email and password
   public async signUpEmailAndPassword(
     email: string,
     password: string,
@@ -42,6 +43,20 @@ export class ApplicationUserEntity {
     return result;
   }
 
+  // facebook
+  public async getApplicationUserByFacebook(id: string) {
+    const result = await ApplicationUserModel.getApplicationUserByFacebook(id);
+
+    return result;
+  }
+
+  public async applicationUserFacebookSignUp(id: string) {
+    const result = await ApplicationUserModel.applicationUserFacebookSignUp(id);
+
+    return result;
+  }
+
+  // helper
   public async getApplicationUserById(id: string) {
     const result = await ApplicationUserModel.getApplicationUserById(id);
 
