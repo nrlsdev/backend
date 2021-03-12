@@ -221,4 +221,24 @@ export class ApplicationUserMessage {
       },
     };
   }
+
+  public static loginWithFacebookSuccessResponse(
+    id: string,
+    accessToken: string,
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          id,
+          accessToken,
+        },
+        error,
+      },
+    };
+  }
 }

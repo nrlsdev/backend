@@ -1,17 +1,8 @@
 import { serializeUser, deserializeUser } from 'passport';
 import { Logger } from '@backend/logger';
-import { ApplicationUser } from '@backend/applicationinterfaces';
-import {
-  ApplicationUserMessage,
-  ErrorMessage,
-} from '@backend/applicationmessagefactory';
-import {
-  ResponseMessage,
-  MessageQueueType,
-  MessageSeverityType,
-} from '@backend/messagehandler';
+import { ErrorMessage } from '@backend/applicationmessagefactory';
+import { ResponseMessage } from '@backend/messagehandler';
 import { Request, Response, NextFunction } from '@backend/server';
-import { messageManager } from '../../message-manager';
 
 const logger: Logger = new Logger('user-de-serialization');
 
@@ -20,7 +11,11 @@ export class SessionUser implements Express.User {
 
   public email?: string;
 
-  public facebook?: string;
+  public facebook?: {
+    id: string;
+
+    accessToken: string;
+  };
 }
 
 export function setupUserDeSerialization() {
@@ -46,36 +41,16 @@ export function setupUserDeSerialization() {
         user?: false | Express.User | null | undefined | SessionUser,
       ) => void,
     ) => {
-      if (!user._id) {
+      if (!user) {
         logger.error('deserializeUser', 'User could not be deserialized.');
 
         return done(null, false);
       }
 
-      const getApplicationUserResponse: ResponseMessage = await messageManager.sendReplyToMessage(
-        ApplicationUserMessage.getApplicationUserByIdRequest(user._id),
-        MessageQueueType.APPLICATION_DBCONNECTOR,
-        MessageSeverityType.APPLICATION_USER,
-      );
-      const applicationUser:
-        | ApplicationUser
-        | undefined = getApplicationUserResponse.body.data as
-        | ApplicationUser
-        | undefined;
-
-      if (!applicationUser) {
-        logger.error(
-          'deserializeUser',
-          `User with id '${user._id}' not found.`,
-        );
-
-        return done(null, false);
-      }
-
       return done(null, {
-        _id: applicationUser._id,
-        email: applicationUser.accounts.emailAndPassword?.email || undefined,
-        facebook: applicationUser.accounts.facebook?.id || undefined,
+        _id: user._id,
+        email: user.email,
+        facebook: user.facebook,
       });
     },
   );

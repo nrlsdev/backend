@@ -85,36 +85,33 @@ export function setupFacebookAuthentication() {
           return done(null, false);
         }
 
-        done(
-          null,
-          {
-            _id: applicationUser._id,
-            facebook: applicationUser.accounts.facebook.id,
-          },
-          {
+        done(null, {
+          _id: applicationUser._id,
+          facebook: {
+            id: applicationUser.accounts.facebook.id,
             accessToken,
           },
-        );
+        });
       },
     ),
   );
 }
 
-export function onFacebookSuccess(_request: Request, response: Response) {
-  const responseMessage: ResponseMessage = {
-    meta: {
-      statusCode: StatusCodes.OK,
-    },
-    body: {},
-  };
+export function onFacebookSuccess(request: Request, response: Response) {
+  const { id, accessToken } = (request.session as any).passport.user.facebook;
+  const responseMessage: ResponseMessage = ApplicationUserMessage.loginWithFacebookSuccessResponse(
+    id,
+    accessToken,
+    StatusCodes.OK,
+  );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
 
-export function onFacebookFailure(request: Request, response: Response) {
+export function onFacebookFailure(_request: Request, response: Response) {
   const responseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse(
     'Facebook failure redirect.',
   );
-  console.log(request.body);
+
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
