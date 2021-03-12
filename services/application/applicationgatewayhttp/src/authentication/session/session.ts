@@ -19,6 +19,8 @@ export class SessionUser implements Express.User {
   public _id?: string;
 
   public email?: string;
+
+  public facebook?: string;
 }
 
 export function setupUserDeSerialization() {
@@ -32,6 +34,7 @@ export function setupUserDeSerialization() {
     return done(null, {
       _id: user._id,
       email: user.email,
+      facebook: user.facebook,
     });
   });
 
@@ -72,6 +75,7 @@ export function setupUserDeSerialization() {
       return done(null, {
         _id: applicationUser._id,
         email: applicationUser.accounts.emailAndPassword?.email || undefined,
+        facebook: applicationUser.accounts.facebook?.id || undefined,
       });
     },
   );
