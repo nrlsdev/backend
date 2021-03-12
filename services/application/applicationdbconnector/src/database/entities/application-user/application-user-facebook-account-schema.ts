@@ -13,6 +13,7 @@ export class ApplicationUserFacebookAccountSchema
   @prop({
     unique: true,
     required: true,
+    sparse: true,
   })
   public id!: string;
 }
