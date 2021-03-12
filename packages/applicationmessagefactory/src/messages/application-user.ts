@@ -14,6 +14,12 @@ export class ApplicationUserMessage {
   public static readonly TYPE_APPLICATION_GET_APPLICATION_USER_BY_ID: string =
     'appliation_get_application_user_by_id';
 
+  public static readonly TYPE_APPLICATION_GET_APPLICATION_USER_BY_FACEBOOK_ID: string =
+    'appliation_get_application_user_by_facebook_id';
+
+  public static readonly TYPE_APPLICATION_USER_FACEBOOK_SIGNUP: string =
+    'appliation_user_facebook_signup';
+
   // email and password
   // signup
   public static applicationUserEmailAndPasswordSignUpRequest(
@@ -146,6 +152,71 @@ export class ApplicationUserMessage {
       },
       body: {
         data: applicationUser,
+        error,
+      },
+    };
+  }
+
+  // facebook
+  // get facebook id
+  public static getApplicationUserByFacebookRequest(
+    id: string,
+  ): RequestMessage {
+    return {
+      meta: {
+        type:
+          ApplicationUserMessage.TYPE_APPLICATION_GET_APPLICATION_USER_BY_FACEBOOK_ID,
+      },
+      body: {
+        data: {
+          id,
+        },
+      },
+    };
+  }
+
+  public static getApplicationUserByFacebookResponse(
+    statusCode: number,
+    applicationUser: ApplicationUser | null,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          applicationUser,
+        },
+        error,
+      },
+    };
+  }
+
+  public static applicationUserFacebookSignUpRequest(
+    id: string,
+  ): RequestMessage {
+    return {
+      meta: {
+        type: ApplicationUserMessage.TYPE_APPLICATION_USER_FACEBOOK_SIGNUP,
+      },
+      body: {
+        data: {
+          id,
+        },
+      },
+    };
+  }
+
+  public static applicationUserFacebookSignUpResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
         error,
       },
     };

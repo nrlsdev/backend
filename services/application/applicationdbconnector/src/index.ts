@@ -17,6 +17,10 @@ import {
   activateEmailAndPassword,
   getApplicationUserById,
 } from './database/controller/appliction-user/application-user-email-and-password-controller';
+import {
+  getApplicationUserByFacebook,
+  applicationUserFacebookSignUp,
+} from './database/controller/appliction-user/application-user-facebook-controller';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
 const { mhHost, mhPort } = ApplicationConfiguration.applicationmessagehandler;
@@ -63,6 +67,7 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
   }
 
   switch (type) {
+    // email and password
     case ApplicationUserMessage.TYPE_APPLICATION_USER_EMAIL_AND_PASSWORD_SIGNUP: {
       return signUpEmailAndPassword(
         data.email,
@@ -78,6 +83,13 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
     }
     case ApplicationUserMessage.TYPE_APPLICATION_GET_APPLICATION_USER_BY_ID: {
       return getApplicationUserById(data.id);
+    }
+    // facebook
+    case ApplicationUserMessage.TYPE_APPLICATION_GET_APPLICATION_USER_BY_FACEBOOK_ID: {
+      return getApplicationUserByFacebook(data.id);
+    }
+    case ApplicationUserMessage.TYPE_APPLICATION_USER_FACEBOOK_SIGNUP: {
+      return applicationUserFacebookSignUp(data.id);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

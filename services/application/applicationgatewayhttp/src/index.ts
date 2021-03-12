@@ -11,6 +11,7 @@ import {
   setupUserDeSerialization,
 } from './authentication/session/session';
 import { setupEmailAndPasswordAuthentication } from './authentication/email-and-password/email-and-password-controller';
+import { setupFacebookAuthentication } from './authentication/facebook/facebook-controller';
 
 const {
   applicationgatewayhttp,
@@ -73,6 +74,7 @@ applicationServer.Application.use(sessionAuthenticationChecker);
 
 setupUserDeSerialization();
 setupEmailAndPasswordAuthentication();
+setupFacebookAuthentication();
 
 authenticationServer.start();
 
