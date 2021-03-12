@@ -20,6 +20,12 @@ export class ApplicationUserMessage {
   public static readonly TYPE_APPLICATION_USER_FACEBOOK_SIGNUP: string =
     'appliation_user_facebook_signup';
 
+  public static readonly TYPE_APPLICATION_GET_APPLICATION_USER_BY_TWITTER_ID: string =
+    'appliation_get_application_user_by_twitter_id';
+
+  public static readonly TYPE_APPLICATION_USER_TWITTER_SIGNUP: string =
+    'appliation_user_twitter_signup';
+
   // email and password
   // signup
   public static applicationUserEmailAndPasswordSignUpRequest(
@@ -158,7 +164,7 @@ export class ApplicationUserMessage {
   }
 
   // facebook
-  // get facebook id
+  // get user by facebook id
   public static getApplicationUserByFacebookRequest(
     id: string,
   ): RequestMessage {
@@ -236,6 +242,91 @@ export class ApplicationUserMessage {
         data: {
           id,
           accessToken,
+        },
+        error,
+      },
+    };
+  }
+
+  // Twitter
+  // get user by facebook id
+  public static getApplicationUserByTwitterRequest(id: string): RequestMessage {
+    return {
+      meta: {
+        type:
+          ApplicationUserMessage.TYPE_APPLICATION_GET_APPLICATION_USER_BY_TWITTER_ID,
+      },
+      body: {
+        data: {
+          id,
+        },
+      },
+    };
+  }
+
+  public static getApplicationUserByTwitterResponse(
+    statusCode: number,
+    applicationUser: ApplicationUser | null,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          applicationUser,
+        },
+        error,
+      },
+    };
+  }
+
+  public static applicationUserTwitterSignUpRequest(
+    id: string,
+  ): RequestMessage {
+    return {
+      meta: {
+        type: ApplicationUserMessage.TYPE_APPLICATION_USER_TWITTER_SIGNUP,
+      },
+      body: {
+        data: {
+          id,
+        },
+      },
+    };
+  }
+
+  public static applicationUserTwitterSignUpResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
+
+  public static loginWithTwitterSuccessResponse(
+    id: string,
+    accessTokenKey: string,
+    accessTokenSecret: string,
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          id,
+          accessTokenKey,
+          accessTokenSecret,
         },
         error,
       },

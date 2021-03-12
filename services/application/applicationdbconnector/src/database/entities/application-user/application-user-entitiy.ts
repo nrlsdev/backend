@@ -44,14 +44,29 @@ export class ApplicationUserEntity {
   }
 
   // facebook
-  public async getApplicationUserByFacebook(id: string) {
-    const result = await ApplicationUserModel.getApplicationUserByFacebook(id);
+  public async getApplicationUserByFacebookId(id: string) {
+    const result = await ApplicationUserModel.getApplicationUserByFacebookId(
+      id,
+    );
 
     return result;
   }
 
   public async applicationUserFacebookSignUp(id: string) {
     const result = await ApplicationUserModel.applicationUserFacebookSignUp(id);
+
+    return result;
+  }
+
+  // twitter
+  public async getApplicationUserByTwitterId(id: string) {
+    const result = await ApplicationUserModel.getApplicationUserByTwitterId(id);
+
+    return result;
+  }
+
+  public async applicationUserTwitterSignUp(id: string) {
+    const result = await ApplicationUserModel.applicationUserTwitterSignUp(id);
 
     return result;
   }

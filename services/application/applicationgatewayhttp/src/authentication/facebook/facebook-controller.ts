@@ -43,12 +43,12 @@ export function setupFacebookAuthentication() {
       ) => {
         const { id } = profile;
 
-        let facebookIdUserResponse: ResponseMessage = await messageManager.sendReplyToMessage(
+        let getApplicationUserByFacebookIdResponse: ResponseMessage = await messageManager.sendReplyToMessage(
           ApplicationUserMessage.getApplicationUserByFacebookRequest(id),
           MessageQueueType.APPLICATION_DBCONNECTOR,
           MessageSeverityType.APPLICATION_USER,
         );
-        let { data }: any = facebookIdUserResponse.body;
+        let { data }: any = getApplicationUserByFacebookIdResponse.body;
 
         if (!data.applicationUser) {
           const createFacebookUserResponse: ResponseMessage = await messageManager.sendReplyToMessage(
@@ -66,12 +66,12 @@ export function setupFacebookAuthentication() {
             return done(null, false);
           }
 
-          facebookIdUserResponse = await messageManager.sendReplyToMessage(
+          getApplicationUserByFacebookIdResponse = await messageManager.sendReplyToMessage(
             ApplicationUserMessage.getApplicationUserByFacebookRequest(id),
             MessageQueueType.APPLICATION_DBCONNECTOR,
             MessageSeverityType.APPLICATION_USER,
           );
-          data = facebookIdUserResponse.body.data;
+          data = getApplicationUserByFacebookIdResponse.body.data;
         }
 
         const { applicationUser }: { applicationUser: ApplicationUser } = data;
@@ -110,7 +110,7 @@ export function onFacebookSuccess(request: Request, response: Response) {
 
 export function onFacebookFailure(_request: Request, response: Response) {
   const responseMessage: ResponseMessage = ErrorMessage.internalServerErrorResponse(
-    'Facebook failure redirect.',
+    'Facebook authentication failured.',
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();

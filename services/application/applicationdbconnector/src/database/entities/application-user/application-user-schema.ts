@@ -194,7 +194,7 @@ export class ApplicationUserSchema implements ApplicationUser {
   }
 
   // facebook
-  public static async getApplicationUserByFacebook(
+  public static async getApplicationUserByFacebookId(
     this: ReturnModelType<typeof ApplicationUserSchema>,
     id: string,
   ) {
@@ -235,6 +235,57 @@ export class ApplicationUserSchema implements ApplicationUser {
       return {
         statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
         error: 'Could not signup with facebook.',
+      };
+    }
+
+    return {
+      statusCode: StatusCodes.OK,
+      error: undefined,
+    };
+  }
+
+  // twitter
+  public static async getApplicationUserByTwitterId(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    id: string,
+  ) {
+    const applicationUser = await this.findOne({ 'accounts.twitter.id': id });
+
+    return applicationUser as ApplicationUser;
+  }
+
+  public static async applicationUserTwitterSignUp(
+    this: ReturnModelType<typeof ApplicationUserSchema>,
+    id: string,
+  ) {
+    try {
+      await this.create({
+        accounts: {
+          twitter: {
+            id,
+          },
+        },
+      });
+    } catch (exception) {
+      ApplicationUserSchema.logger.fatal(
+        'applicationUserTwitterSignUp',
+        exception,
+      );
+
+      if (exception instanceof MongoError) {
+        const mongoError: MongoError = exception as MongoError;
+
+        if (mongoError.code === MongoErrorCode.DUPLICATE_KEY) {
+          return {
+            statusCode: StatusCodes.CONFLICT,
+            error: 'User with this twitter account already exists.',
+          };
+        }
+      }
+
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: 'Could not signup with twitter.',
       };
     }
 

@@ -18,9 +18,13 @@ import {
   getApplicationUserById,
 } from './database/controller/appliction-user/application-user-email-and-password-controller';
 import {
-  getApplicationUserByFacebook,
+  getApplicationUserByFacebookId,
   applicationUserFacebookSignUp,
 } from './database/controller/appliction-user/application-user-facebook-controller';
+import {
+  getApplicationUserByTwitterId,
+  applicationUserTwitterSignUp,
+} from './database/controller/appliction-user/application-user-twitter-controller';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
 const { mhHost, mhPort } = ApplicationConfiguration.applicationmessagehandler;
@@ -86,10 +90,17 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
     }
     // facebook
     case ApplicationUserMessage.TYPE_APPLICATION_GET_APPLICATION_USER_BY_FACEBOOK_ID: {
-      return getApplicationUserByFacebook(data.id);
+      return getApplicationUserByFacebookId(data.id);
     }
     case ApplicationUserMessage.TYPE_APPLICATION_USER_FACEBOOK_SIGNUP: {
       return applicationUserFacebookSignUp(data.id);
+    }
+    // twitter
+    case ApplicationUserMessage.TYPE_APPLICATION_GET_APPLICATION_USER_BY_TWITTER_ID: {
+      return getApplicationUserByTwitterId(data.id);
+    }
+    case ApplicationUserMessage.TYPE_APPLICATION_USER_TWITTER_SIGNUP: {
+      return applicationUserTwitterSignUp(data.id);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
