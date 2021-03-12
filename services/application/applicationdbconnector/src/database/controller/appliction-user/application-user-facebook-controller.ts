@@ -2,8 +2,8 @@ import { ApplicationUserMessage } from '@backend/applicationmessagefactory';
 import { StatusCodes } from '@backend/server';
 import { Database } from '../../database';
 
-export async function getApplicationUserByFacebook(id: string) {
-  const result = await Database.applicationUserEntity.getApplicationUserByFacebook(
+export async function getApplicationUserByFacebookId(id: string) {
+  const result = await Database.applicationUserEntity.getApplicationUserByFacebookId(
     id,
   );
 

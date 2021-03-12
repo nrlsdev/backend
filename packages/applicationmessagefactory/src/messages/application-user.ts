@@ -158,7 +158,7 @@ export class ApplicationUserMessage {
   }
 
   // facebook
-  // get facebook id
+  // get user by facebook id
   public static getApplicationUserByFacebookRequest(
     id: string,
   ): RequestMessage {

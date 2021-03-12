@@ -44,8 +44,10 @@ export class ApplicationUserEntity {
   }
 
   // facebook
-  public async getApplicationUserByFacebook(id: string) {
-    const result = await ApplicationUserModel.getApplicationUserByFacebook(id);
+  public async getApplicationUserByFacebookId(id: string) {
+    const result = await ApplicationUserModel.getApplicationUserByFacebookId(
+      id,
+    );
 
     return result;
   }

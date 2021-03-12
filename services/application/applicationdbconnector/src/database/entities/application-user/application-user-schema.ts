@@ -194,7 +194,7 @@ export class ApplicationUserSchema implements ApplicationUser {
   }
 
   // facebook
-  public static async getApplicationUserByFacebook(
+  public static async getApplicationUserByFacebookId(
     this: ReturnModelType<typeof ApplicationUserSchema>,
     id: string,
   ) {
