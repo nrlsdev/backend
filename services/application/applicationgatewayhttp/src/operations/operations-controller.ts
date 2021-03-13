@@ -39,3 +39,14 @@ export async function dbPut(request: Request, response: Response) {
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
+
+export async function dbDelete(request: Request, response: Response) {
+  const { collection, queryObject } = request.body;
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    OperationsMessage.deleteRequest(collection, queryObject),
+    MessageQueueType.APPLICATION_DBCONNECTOR,
+    MessageSeverityType.APPLICATION_OPERATIONS,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}

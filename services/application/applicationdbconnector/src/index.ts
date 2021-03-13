@@ -30,6 +30,7 @@ import {
   dbPost,
   dbGet,
   dbPut,
+  dbDelete,
 } from './database/controller/operations/operations';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
@@ -139,6 +140,9 @@ async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT: {
       return dbPut(data.collection, data.queryObject, data.updateObject);
+    }
+    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE: {
+      return dbDelete(data.collection, data.queryObject);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

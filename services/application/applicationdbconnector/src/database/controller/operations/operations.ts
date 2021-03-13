@@ -83,6 +83,37 @@ export async function dbPut(
     );
   }
 }
+
+export async function dbDelete(collection: string, queryObject: any) {
+  try {
+    const CustomModel = getModelByCollectionName(collection);
+    const dbObject = await CustomModel.find(queryObject);
+
+    if (dbObject.length <= 0) {
+      return OperationsMessage.deleteResponse(
+        StatusCodes.NOT_FOUND,
+        'No object(s) to delete found.',
+      );
+    }
+
+    if (dbObject.length > 1) {
+      return OperationsMessage.deleteResponse(
+        StatusCodes.CONFLICT,
+        'Could not delete object. More than one object found.',
+      );
+    }
+
+    await CustomModel.deleteOne(queryObject);
+
+    return OperationsMessage.deleteResponse(StatusCodes.OK);
+  } catch (exception) {
+    return OperationsMessage.deleteResponse(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      exception.toString(),
+    );
+  }
+}
+
 function getModelByCollectionName(collection: string) {
   let CollectionModel: Model<any, {}> | null = models[collection];
 

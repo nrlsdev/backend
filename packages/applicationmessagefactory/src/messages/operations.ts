@@ -9,6 +9,10 @@ export class OperationsMessage {
 
   public static readonly TYPE_APPLICATION_OPERATIONS_PUT: string =
     'appliation_operations_put';
+
+  public static readonly TYPE_APPLICATION_OPERATIONS_DELETE: string =
+    'appliation_operations_delete';
+
   // post
   public static postRequest(collection: string, data: any): RequestMessage {
     return {
@@ -101,6 +105,38 @@ export class OperationsMessage {
   }
 
   public static putResponse(
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        error,
+      },
+    };
+  }
+
+  // delete
+  public static deleteRequest(
+    collection: string,
+    queryObject: any,
+  ): RequestMessage {
+    return {
+      meta: {
+        type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE,
+      },
+      body: {
+        data: {
+          collection,
+          queryObject,
+        },
+      },
+    };
+  }
+
+  public static deleteResponse(
     statusCode: number,
     error?: string,
   ): ResponseMessage {
