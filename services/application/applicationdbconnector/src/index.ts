@@ -43,6 +43,12 @@ async function startup() {
     MessageSeverityType.APPLICATION_USER,
     onApplicationUserMessage,
   );
+
+  messageManager.createRPCServer(
+    MessageQueueType.APPLICATION_DBCONNECTOR,
+    MessageSeverityType.APPLICATION_OPERATIONS,
+    onApplicationOperationsMessage,
+  );
 }
 
 async function connectToDatabase() {
@@ -102,6 +108,23 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
     case ApplicationUserMessage.TYPE_APPLICATION_USER_TWITTER_SIGNUP: {
       return applicationUserTwitterSignUp(data.id);
     }
+    default: {
+      return ErrorMessage.unprocessableEntityErrorResponse(
+        `Messgae of type '${type}' not implemented!`,
+      );
+    }
+  }
+}
+
+async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
+  const { type } = requestMessage.meta;
+  const { data }: any = requestMessage.body;
+
+  if (!type) {
+    return ErrorMessage.unprocessableEntityErrorResponse();
+  }
+
+  switch (type) {
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
         `Messgae of type '${type}' not implemented!`,
