@@ -9,6 +9,7 @@ import { ApplicationConfiguration } from '@backend/applicationconfiguration';
 import {
   ApplicationUserMessage,
   ErrorMessage,
+  OperationsMessage,
 } from '@backend/applicationmessagefactory';
 import { Database } from './database/database';
 import {
@@ -25,6 +26,9 @@ import {
   getApplicationUserByTwitterId,
   applicationUserTwitterSignUp,
 } from './database/controller/appliction-user/application-user-twitter-controller';
+import {
+  dbPost,
+} from './database/controller/operations/operations';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
 const { mhHost, mhPort } = ApplicationConfiguration.applicationmessagehandler;
@@ -125,6 +129,9 @@ async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
   }
 
   switch (type) {
+    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST: {
+      return dbPost(data.collection, data.data);
+    }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
         `Messgae of type '${type}' not implemented!`,

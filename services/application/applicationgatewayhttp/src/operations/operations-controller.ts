@@ -1,0 +1,19 @@
+import { OperationsMessage } from '@backend/applicationmessagefactory';
+import {
+  MessageQueueType,
+  MessageSeverityType,
+  ResponseMessage,
+} from '@backend/messagehandler';
+import { Request, Response } from '@backend/server';
+import { messageManager } from '../message-manager';
+
+export async function dbPost(request: Request, response: Response) {
+  const { collection, data } = request.body;
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    OperationsMessage.postRequest(collection, data),
+    MessageQueueType.APPLICATION_DBCONNECTOR,
+    MessageSeverityType.APPLICATION_OPERATIONS,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
