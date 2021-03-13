@@ -121,7 +121,7 @@ async function onSystemUserMessage(requestMessage: RequestMessage) {
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
-        `Messgae of type '${type}' not implemented!`,
+        `Message of type '${type}' not implemented!`,
       );
     }
   }
@@ -212,7 +212,7 @@ async function onApplicationMessage(requestMessage: RequestMessage) {
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
-        `Messgae of type '${type}' not implemented!`,
+        `Message of type '${type}' not implemented!`,
       );
     }
   }

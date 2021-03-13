@@ -11,6 +11,11 @@
     "dev": "cross-env NODE_ENV=development nodemon ./src/index.ts --watch src"
   },
   "dependencies": {
+    "@backend/applicationconfiguration": "^1.0.0",
+    "@backend/applicationmessagefactory": "^1.0.0",
+    "@backend/messagehandler": "^1.0.0",
+    "@backend/server": "^1.0.0",
+    "@backend/logger": "^1.0.0",
     "nodemon": "^2.0.6",
     "ts-node": "^9.1.0",
     "ws": "^7.4.4"

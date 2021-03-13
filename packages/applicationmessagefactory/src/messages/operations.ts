@@ -2,16 +2,16 @@ import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
 
 export class OperationsMessage {
   public static readonly TYPE_APPLICATION_OPERATIONS_POST: string =
-    'appliation_operations_post';
+    'application_operations_post';
 
   public static readonly TYPE_APPLICATION_OPERATIONS_GET: string =
-    'appliation_operations_get';
+    'application_operations_get';
 
   public static readonly TYPE_APPLICATION_OPERATIONS_PUT: string =
-    'appliation_operations_put';
+    'application_operations_put';
 
   public static readonly TYPE_APPLICATION_OPERATIONS_DELETE: string =
-    'appliation_operations_delete';
+    'application_operations_delete';
 
   // post
   public static postRequest(collection: string, data: any): RequestMessage {
