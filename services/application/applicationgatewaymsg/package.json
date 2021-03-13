@@ -1,0 +1,22 @@
+{
+  "name": "@backend/applicationgatewaymsg",
+  "version": "1.0.0",
+  "description": "applicationgatewaymsg",
+  "author": "Revanced GmbH",
+  "license": "LicenseRef-LICENSE",
+  "main": "./out/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rd ./out && rm -rd ./node_modules",
+    "dev": "cross-env NODE_ENV=development nodemon ./src/index.ts --watch src"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.1.0",
+    "ws": "^7.4.4"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.0",
+    "@types/ws": "^7.4.0"
+  }
+}
