@@ -50,6 +50,39 @@ export async function dbGet(
   }
 }
 
+export async function dbPut(
+  collection: string,
+  queryObject: any,
+  updateObject: any,
+) {
+  try {
+    const CustomModel = getModelByCollectionName(collection);
+    const dbObject = await CustomModel.find(queryObject);
+
+    if (dbObject.length <= 0) {
+      return OperationsMessage.putResponse(
+        StatusCodes.NOT_FOUND,
+        'No object(s) to update found.',
+      );
+    }
+
+    if (dbObject.length > 1) {
+      return OperationsMessage.putResponse(
+        StatusCodes.CONFLICT,
+        'Could not update object. More than one object found.',
+      );
+    }
+
+    await CustomModel.updateOne(queryObject, updateObject);
+
+    return OperationsMessage.putResponse(StatusCodes.OK);
+  } catch (exception) {
+    return OperationsMessage.putResponse(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      exception.toString(),
+    );
+  }
+}
 function getModelByCollectionName(collection: string) {
   let CollectionModel: Model<any, {}> | null = models[collection];
 
