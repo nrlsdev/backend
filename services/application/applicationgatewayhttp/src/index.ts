@@ -13,6 +13,7 @@ import {
 import { setupEmailAndPasswordAuthentication } from './authentication/email-and-password/email-and-password-controller';
 import { setupFacebookAuthentication } from './authentication/facebook/facebook-controller';
 import { setupTwitterAuthentication } from './authentication/twitter/twitter-controller';
+import { operationsRouter } from './operations/operations-router';
 
 const {
   applicationgatewayhttp,
@@ -72,6 +73,7 @@ applicationServer.useExpressSession(sessionOptions);
 applicationServer.Application.use(initialize());
 applicationServer.Application.use(session());
 applicationServer.Application.use(sessionAuthenticationChecker);
+applicationServer.Application.use('/operations', operationsRouter);
 
 setupUserDeSerialization();
 setupEmailAndPasswordAuthentication();

@@ -9,6 +9,7 @@ import { ApplicationConfiguration } from '@backend/applicationconfiguration';
 import {
   ApplicationUserMessage,
   ErrorMessage,
+  OperationsMessage,
 } from '@backend/applicationmessagefactory';
 import { Database } from './database/database';
 import {
@@ -25,6 +26,12 @@ import {
   getApplicationUserByTwitterId,
   applicationUserTwitterSignUp,
 } from './database/controller/appliction-user/application-user-twitter-controller';
+import {
+  dbPost,
+  dbGet,
+  dbPut,
+  dbDelete,
+} from './database/controller/operations/operations';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
 const { mhHost, mhPort } = ApplicationConfiguration.applicationmessagehandler;
@@ -42,6 +49,12 @@ async function startup() {
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_USER,
     onApplicationUserMessage,
+  );
+
+  messageManager.createRPCServer(
+    MessageQueueType.APPLICATION_DBCONNECTOR,
+    MessageSeverityType.APPLICATION_OPERATIONS,
+    onApplicationOperationsMessage,
   );
 }
 
@@ -101,6 +114,35 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
     }
     case ApplicationUserMessage.TYPE_APPLICATION_USER_TWITTER_SIGNUP: {
       return applicationUserTwitterSignUp(data.id);
+    }
+    default: {
+      return ErrorMessage.unprocessableEntityErrorResponse(
+        `Messgae of type '${type}' not implemented!`,
+      );
+    }
+  }
+}
+
+async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
+  const { type } = requestMessage.meta;
+  const { data }: any = requestMessage.body;
+
+  if (!type) {
+    return ErrorMessage.unprocessableEntityErrorResponse();
+  }
+
+  switch (type) {
+    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST: {
+      return dbPost(data.collection, data.data);
+    }
+    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET: {
+      return dbGet(data.collection, data.queryObject, data.fields);
+    }
+    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT: {
+      return dbPut(data.collection, data.queryObject, data.updateObject);
+    }
+    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE: {
+      return dbDelete(data.collection, data.queryObject);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
