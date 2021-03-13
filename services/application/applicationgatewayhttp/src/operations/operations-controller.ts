@@ -17,3 +17,14 @@ export async function dbPost(request: Request, response: Response) {
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
+
+export async function dbGet(request: Request, response: Response) {
+  const { collection, queryObject, fields } = request.body;
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    OperationsMessage.getRequest(collection, queryObject, fields || []),
+    MessageQueueType.APPLICATION_DBCONNECTOR,
+    MessageSeverityType.APPLICATION_OPERATIONS,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}

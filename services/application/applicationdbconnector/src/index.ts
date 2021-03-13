@@ -28,6 +28,7 @@ import {
 } from './database/controller/appliction-user/application-user-twitter-controller';
 import {
   dbPost,
+  dbGet,
 } from './database/controller/operations/operations';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
@@ -131,6 +132,9 @@ async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
   switch (type) {
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST: {
       return dbPost(data.collection, data.data);
+    }
+    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET: {
+      return dbGet(data.collection, data.queryObject, data.fields);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

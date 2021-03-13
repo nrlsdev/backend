@@ -19,6 +19,37 @@ export async function dbPost(collection: string, data: any) {
   }
 }
 
+export async function dbGet(
+  collection: string,
+  queryObject: any,
+  fields: string[],
+) {
+  try {
+    const CustomModel = getModelByCollectionName(collection);
+    const propertiesToGet = getPropertiesObjectFromArray(fields);
+    const dbObject = await CustomModel.find(queryObject, propertiesToGet);
+
+    if (dbObject.length <= 0) {
+      return OperationsMessage.getResponse(
+        null,
+        StatusCodes.NOT_FOUND,
+        'No object(s) found.',
+      );
+    }
+
+    return OperationsMessage.getResponse(
+      dbObject.length > 1 ? dbObject : dbObject[0],
+      StatusCodes.OK,
+    );
+  } catch (exception) {
+    return OperationsMessage.getResponse(
+      null,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      exception.toString(),
+    );
+  }
+}
+
 function getModelByCollectionName(collection: string) {
   let CollectionModel: Model<any, {}> | null = models[collection];
 
@@ -30,4 +61,17 @@ function getModelByCollectionName(collection: string) {
   CollectionModel = model(collection, CustomSchema);
 
   return CollectionModel;
+}
+
+function getPropertiesObjectFromArray(fields: string[]) {
+  const properties: any = {};
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const key of fields) {
+    properties[key] = 1;
+  }
+
+  properties.__v = 0;
+
+  return properties;
 }
