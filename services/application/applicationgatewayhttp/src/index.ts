@@ -1,7 +1,6 @@
-import { Server } from '@backend/server';
+import { Server, ServerSessionOptions } from '@backend/server';
 import { ApplicationConfiguration } from '@backend/applicationconfiguration';
 import { initialize, session } from 'passport';
-import { ServerSessionOptions } from '@backend/server/src/server';
 import {
   publicAuthenticationRouter,
   privateAuthenticationRouter,

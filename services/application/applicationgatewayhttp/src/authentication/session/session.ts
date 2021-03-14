@@ -81,6 +81,8 @@ export const sessionAuthenticationChecker = (
 
   request.body.userId = (request.session as any).passport.user._id;
   request.body.userEmail = (request.session as any).passport.user.email;
+  request.body.userFacebook = (request.session as any).passport.user.facebook;
+  request.body.userTwitter = (request.session as any).passport.user.twitter;
 
   next();
 };
