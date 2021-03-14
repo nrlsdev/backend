@@ -51,8 +51,14 @@ export class Server {
 
   private sslOptions: ServerOptions = {};
 
+  private session: any = null;
+
   public get Application() {
     return this.application;
+  }
+
+  public get Server() {
+    return this.server;
   }
 
   public get Host() {
@@ -61,6 +67,10 @@ export class Server {
 
   public get Port() {
     return this.port;
+  }
+
+  public get Session() {
+    return this.session;
   }
 
   public constructor(host: string, port: number, ssl: boolean) {
@@ -120,20 +130,24 @@ export class Server {
     this.application.use(language);
   }
 
-  public useExpressSession(sessionOptions: ServerSessionOptions) {
-    const session: SessionOptions = {
+  public useExpressSession(serverSessionOptions: ServerSessionOptions) {
+    const sessionOptions: SessionOptions = {
       genid: () => {
         return uuid();
       },
-      secret: sessionOptions.secret,
-      resave: sessionOptions.resave,
-      saveUninitialized: sessionOptions.saveUninitialized,
-      cookie: sessionOptions.cookie,
+      secret: serverSessionOptions.secret,
+      resave: serverSessionOptions.resave,
+      saveUninitialized: serverSessionOptions.saveUninitialized,
+      cookie: serverSessionOptions.cookie,
       store: new Store({
-        uri: sessionOptions.mongoSessionStorage.uri,
-        collection: sessionOptions.mongoSessionStorage.collection,
+        uri: serverSessionOptions.mongoSessionStorage.uri,
+        collection: serverSessionOptions.mongoSessionStorage.collection,
       }),
     };
-    this.application.use(expressSession(session));
+
+    const session = expressSession(sessionOptions);
+
+    this.session = session;
+    this.application.use(session);
   }
 }
