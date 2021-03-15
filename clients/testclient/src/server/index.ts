@@ -1,0 +1,23 @@
+import { Nuxt, Builder } from 'nuxt';
+import { Server } from '@backend/server';
+import { config } from '../config/nuxt.config';
+
+const host = '192.168.178.36';
+const port = 8000;
+const server: Server = new Server(host, port, true);
+const nuxt: any = new Nuxt(config);
+
+async function startNuxtServer() {
+  await nuxt.ready();
+
+  if (config.dev) {
+    const builder = new Builder(nuxt);
+
+    await builder.build();
+  }
+
+  server.Application.get('*', nuxt.render);
+  server.start();
+}
+
+startNuxtServer();
