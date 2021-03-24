@@ -13,6 +13,7 @@
   "dependencies": {
     "@backend/applicationconfiguration": "^1.0.0",
     "@backend/applicationmessagefactory": "^1.0.0",
+    "@backend/applicationinterfaces": "^1.0.0",
     "@backend/logger": "^1.0.0",
     "@backend/messagehandler": "^1.0.0",
     "@backend/server": "^1.0.0",
