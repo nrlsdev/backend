@@ -1,16 +1,18 @@
-import { Permission, PermissionsEntity } from '@backend/applicationinterfaces';
+import { Permission, DynamicEntity, PermissionEntity } from '@backend/applicationinterfaces';
 import { Model, models, Schema, model, Document, Types } from 'mongoose';
 
 export function getModelByCollectionName(collection: string) {
-  type PermissionsEntityDocument = PermissionsEntity & Document;
-  let DynamicModel: Model<PermissionsEntityDocument, {}> | null =
+  type DynamicEntityDocument = DynamicEntity & Document;
+  type PermissionDocument = PermissionEntity & Document;
+
+  let DynamicModel: Model<DynamicEntityDocument, {}> | null =
     models[collection];
 
   if (DynamicModel) {
     return DynamicModel;
   }
 
-  const DynamicPermissionsSchema = new Schema<PermissionsEntityDocument>(
+  const DynamicPermissionsSchema = new Schema<PermissionDocument>(
     {
       userId: {
         unique: false,
@@ -27,7 +29,7 @@ export function getModelByCollectionName(collection: string) {
     },
   );
 
-  const DynamicSchema = new Schema<PermissionsEntityDocument>(
+  const DynamicSchema = new Schema<DynamicEntityDocument>(
     {
       userPermissions: {
         unique: false,
@@ -35,8 +37,16 @@ export function getModelByCollectionName(collection: string) {
         default: [],
         type: [DynamicPermissionsSchema],
       },
+      creationDate: {
+        unique: false,
+        required: true,
+        default: () => {
+          return Date.now();
+        },
+        type: Number,
+      },
     },
-    { strict: false },
+    { strict: false, collection },
   );
 
   DynamicModel = model(collection, DynamicSchema);

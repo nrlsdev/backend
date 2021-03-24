@@ -10,4 +10,8 @@ export class Constants {
   /* SYSTEM */
   // Systemuser
   public static readonly PASSWORD_BCRYPT_SALT_LENGTH: number = 10;
+
+  /* APPLICATION */
+  // Operations
+  public static readonly OPERATIONS_BLACKLIST_KEYWORDS: string[] = ['_id', '__v', 'userPermissions', 'creationDate'];
 }

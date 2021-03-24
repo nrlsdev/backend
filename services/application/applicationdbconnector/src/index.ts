@@ -133,16 +133,16 @@ async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST: {
-      return dbPost(data.collection, data.data);
+      return dbPost(data.collection, data.data, data.userPermissions, data.userId);
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET: {
-      return dbGet(data.collection, data.queryObject, data.fields);
+      return dbGet(data.collection, data.query, data.userId);
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT: {
-      return dbPut(data.collection, data.queryObject, data.updateObject);
+      return dbPut(data.collection, data.data, data.objectId, data.userId);
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE: {
-      return dbDelete(data.collection, data.queryObject);
+      return dbDelete(data.collection, data.objectId, data.userId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

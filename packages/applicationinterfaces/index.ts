@@ -1,6 +1,6 @@
-export { Permission } from './src/permission/permission';
-export { PermissionEntity } from './src/permission/permission-entity';
-export { PermissionsEntity } from './src/permission/permissions-entity';
+export { Permission } from './src/dynamic/permission';
+export { PermissionEntity } from './src/dynamic/permission-entity';
+export { DynamicEntity } from './src/dynamic/dynamic';
 export { ApplicationUser } from './src/application-user/application-user';
 export { ApplicationUserAccounts } from './src/application-user/application-user-accounts';
 export { ApplicationUserEmailAndPasswordAccount } from './src/application-user/application-user-email-and-password-account';
@@ -11,4 +11,8 @@ export {
   findObjectFromArray,
   minifyObject,
   objectEquals,
+  doesObjectKeyExist,
+  doesObjectKeysExist,
+  doesOneObjectKeysExist,
+  isJsonObject,
 } from './src/object';

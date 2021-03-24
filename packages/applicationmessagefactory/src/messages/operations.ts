@@ -1,3 +1,4 @@
+import { PermissionEntity } from '@backend/applicationinterfaces';
 import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
 
 export class OperationsMessage {
@@ -14,7 +15,7 @@ export class OperationsMessage {
     'application_operations_delete';
 
   // post
-  public static postRequest(collection: string, data: any): RequestMessage {
+  public static postRequest(collection: string, data: any, userPermissions: PermissionEntity[], userId: string): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST,
@@ -23,50 +24,15 @@ export class OperationsMessage {
         data: {
           collection,
           data,
+          userPermissions,
+          userId,
         },
       },
     };
   }
 
   public static postResponse(
-    id: string | undefined,
-    statusCode: number,
-    error?: string,
-  ): ResponseMessage {
-    return {
-      meta: {
-        statusCode,
-      },
-      body: {
-        data: {
-          id,
-        },
-        error,
-      },
-    };
-  }
-
-  // get
-  public static getRequest(
     collection: string,
-    queryObject: any,
-    fields: string[],
-  ): RequestMessage {
-    return {
-      meta: {
-        type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
-      },
-      body: {
-        data: {
-          collection,
-          queryObject,
-          fields,
-        },
-      },
-    };
-  }
-
-  public static getResponse(
     result: any,
     statusCode: number,
     error?: string,
@@ -77,6 +43,43 @@ export class OperationsMessage {
       },
       body: {
         data: {
+          collection,
+          result,
+        },
+        error,
+      },
+    };
+  }
+
+  // get
+  public static getRequest(collection: string, query: any, userId: string): RequestMessage {
+    return {
+      meta: {
+        type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
+      },
+      body: {
+        data: {
+          collection,
+          query,
+          userId,
+        },
+      },
+    };
+  }
+
+  public static getResponse(
+    collection: string,
+    result: any,
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          collection,
           result,
         },
         error,
@@ -85,11 +88,7 @@ export class OperationsMessage {
   }
 
   // put
-  public static putRequest(
-    collection: string,
-    queryObject: any,
-    updateObject: any,
-  ): RequestMessage {
+  public static putRequest(collection: string, data: any, objectId: string, userId: string): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT,
@@ -97,14 +96,17 @@ export class OperationsMessage {
       body: {
         data: {
           collection,
-          queryObject,
-          updateObject,
+          data,
+          objectId,
+          userId,
         },
       },
     };
   }
 
   public static putResponse(
+    collection: string,
+    result: any,
     statusCode: number,
     error?: string,
   ): ResponseMessage {
@@ -113,16 +115,17 @@ export class OperationsMessage {
         statusCode,
       },
       body: {
+        data: {
+          collection,
+          result,
+        },
         error,
       },
     };
   }
 
   // delete
-  public static deleteRequest(
-    collection: string,
-    queryObject: any,
-  ): RequestMessage {
+  public static deleteRequest(collection: string, objectId: string, userId: string): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE,
@@ -130,13 +133,16 @@ export class OperationsMessage {
       body: {
         data: {
           collection,
-          queryObject,
+          objectId,
+          userId,
         },
       },
     };
   }
 
   public static deleteResponse(
+    collection: string,
+    result: any,
     statusCode: number,
     error?: string,
   ): ResponseMessage {
@@ -145,6 +151,10 @@ export class OperationsMessage {
         statusCode,
       },
       body: {
+        data: {
+          collection,
+          result,
+        },
         error,
       },
     };
