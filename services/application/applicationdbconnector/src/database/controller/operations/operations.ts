@@ -40,16 +40,17 @@ export async function dbPost(collection: string, data: any, userPermissions: Per
   return OperationsMessage.postResponse(collection, dbObject, StatusCodes.OK);
 }
 
-export async function dbGet(collection: string, query: any, userId: string) {
+export async function dbGet(collection: string, query: any, fields: string[], includeFields: boolean, userId: string) {
   if (!isJsonObject(query)) {
     return OperationsMessage.getResponse(collection, undefined, StatusCodes.UNPROCESSABLE_ENTITY, 'Query object is not in JSON format.');
   }
 
   const DynamicModel = getModelByCollectionName(collection);
+  const includedFields = getIncludedFieldsObject(fields, includeFields);
   let dbObjects: any[] = [];
 
   try {
-    dbObjects = await DynamicModel.find(query);
+    dbObjects = await DynamicModel.find(query, includedFields);
   } catch (exception) {
     logger.error('dbGet', exception.toString());
 
@@ -80,7 +81,15 @@ export async function dbPut(collection: string, data: any, objectId: string, use
   }
 
   const DynamicModel = getModelByCollectionName(collection);
-  const dbObject = await DynamicModel.findById(objectId);
+  let dbObject;
+
+  try {
+    dbObject = await DynamicModel.findById(objectId);
+  } catch (exception) {
+    logger.error('dbPut', exception.toString());
+
+    return OperationsMessage.deleteResponse(collection, undefined, StatusCodes.INTERNAL_SERVER_ERROR, exception.toString());
+  }
 
   if (!dbObject) {
     return OperationsMessage.putResponse(collection, undefined, StatusCodes.NOT_FOUND, `No object with id '${objectId}' in collection '${collection}' to update found.`);
@@ -105,7 +114,15 @@ export async function dbPut(collection: string, data: any, objectId: string, use
 
 export async function dbDelete(collection: string, objectId: string, userId: string) {
   const DynamicModel = getModelByCollectionName(collection);
-  const dbObject = await DynamicModel.findById(objectId);
+  let dbObject;
+
+  try {
+    dbObject = await DynamicModel.findById(objectId);
+  } catch (exception) {
+    logger.error('dbDelete', exception.toString());
+
+    return OperationsMessage.deleteResponse(collection, undefined, StatusCodes.INTERNAL_SERVER_ERROR, exception.toString());
+  }
 
   if (!dbObject) {
     return OperationsMessage.deleteResponse(collection, undefined, StatusCodes.NOT_FOUND, `No object with id '${objectId}' in collection '${collection}' to delete found.`);
@@ -126,4 +143,20 @@ export async function dbDelete(collection: string, objectId: string, userId: str
 
     return OperationsMessage.deleteResponse(collection, undefined, StatusCodes.INTERNAL_SERVER_ERROR, exception.toString());
   }
+}
+
+function getIncludedFieldsObject(fields: string[], includeFields: boolean) {
+  const includedFields: any = {};
+
+  fields.forEach((field: string) => {
+    includedFields[field] = includeFields ? 1 : 0;
+  });
+
+  if (includeFields) {
+    Constants.OPERATIONS_BLACKLIST_KEYWORDS.forEach((blacklistKeyword: string) => {
+      includedFields[blacklistKeyword] = 1;
+    });
+  }
+
+  return includedFields;
 }

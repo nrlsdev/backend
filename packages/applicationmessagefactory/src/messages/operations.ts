@@ -45,6 +45,7 @@ export class OperationsMessage {
         data: {
           collection,
           result,
+          method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST,
         },
         error,
       },
@@ -52,7 +53,7 @@ export class OperationsMessage {
   }
 
   // get
-  public static getRequest(collection: string, query: any, userId: string): RequestMessage {
+  public static getRequest(collection: string, query: any, fields: string[], includeFields: boolean, userId: string): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
@@ -61,6 +62,8 @@ export class OperationsMessage {
         data: {
           collection,
           query,
+          fields,
+          includeFields,
           userId,
         },
       },
@@ -81,6 +84,7 @@ export class OperationsMessage {
         data: {
           collection,
           result,
+          method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
         },
         error,
       },
@@ -118,6 +122,7 @@ export class OperationsMessage {
         data: {
           collection,
           result,
+          method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT,
         },
         error,
       },
@@ -154,6 +159,7 @@ export class OperationsMessage {
         data: {
           collection,
           result,
+          method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE,
         },
         error,
       },

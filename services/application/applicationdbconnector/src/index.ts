@@ -136,7 +136,7 @@ async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
       return dbPost(data.collection, data.data, data.userPermissions, data.userId);
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET: {
-      return dbGet(data.collection, data.query, data.userId);
+      return dbGet(data.collection, data.query, data.fields, data.includeFields, data.userId);
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT: {
       return dbPut(data.collection, data.data, data.objectId, data.userId);

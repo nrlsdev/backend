@@ -39,4 +39,10 @@ export class ErrorMessage {
   ) {
     return ErrorMessage.errorResponse(StatusCodes.INTERNAL_SERVER_ERROR, error);
   }
+
+  public static badRequestErrorResponse(
+    error: string = getReasonPhrase(StatusCodes.BAD_REQUEST),
+  ) {
+    return ErrorMessage.errorResponse(StatusCodes.BAD_REQUEST, error);
+  }
 }

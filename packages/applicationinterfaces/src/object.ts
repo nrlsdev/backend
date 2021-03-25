@@ -48,6 +48,10 @@ export function copyObject(obj: any) {
 }
 
 export function findObjectFromArray(key: any, value: any, array: any[]) {
+  if (!key || !value || !array) {
+    return [];
+  }
+
   const result = array.filter((object: any) => {
     return object[key].toString() === value.toString();
   });

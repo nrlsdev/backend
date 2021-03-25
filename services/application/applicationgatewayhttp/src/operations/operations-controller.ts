@@ -28,9 +28,9 @@ export async function dbPost(request: Request, response: Response) {
 }
 
 export async function dbGet(request: Request, response: Response) {
-  const { collection, query, userId } = request.body;
+  const { collection, query, fields, includeFields, userId } = request.body;
 
-  if (!collection || !query || !userId) {
+  if (!collection || !query || !fields || includeFields === undefined || !userId) {
     const errorResponseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
 
     response.status(errorResponseMessage.meta.statusCode).send(errorResponseMessage).end();
@@ -39,7 +39,7 @@ export async function dbGet(request: Request, response: Response) {
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    OperationsMessage.getRequest(collection, query, userId),
+    OperationsMessage.getRequest(collection, query, fields, includeFields, userId),
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
   );
