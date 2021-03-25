@@ -86,3 +86,23 @@ export async function dbDelete(request: Request, response: Response) {
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
 }
+
+export async function dbChangePermissions(request: Request, response: Response) {
+  const { collection, objectId, userPermissions, userId } = request.body;
+
+  if (!collection || !objectId || !userPermissions || !userId) {
+    const errorResponseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+    response.status(errorResponseMessage.meta.statusCode).send(errorResponseMessage).end();
+
+    return;
+  }
+
+  const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
+    OperationsMessage.changePermissionRequest(collection, objectId, userPermissions, userId),
+    MessageQueueType.APPLICATION_DBCONNECTOR,
+    MessageSeverityType.APPLICATION_OPERATIONS,
+  );
+
+  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}

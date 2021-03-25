@@ -2,7 +2,7 @@ import { OperationsMessage } from '@backend/applicationmessagefactory';
 import { StatusCodes } from '@backend/server';
 import { Constants } from '@backend/constants';
 import { Logger } from '@backend/logger';
-import { PermissionEntity, doesOneObjectKeysExist, Permission, isJsonObject } from '@backend/applicationinterfaces';
+import { PermissionEntity, doesOneObjectKeysExist, Permission, isJsonObject, findObjectFromArray } from '@backend/applicationinterfaces';
 import { getModelByCollectionName } from '../../entities/dynamic/dynamic-schema';
 
 const logger: Logger = new Logger('operations');
@@ -23,7 +23,7 @@ export async function dbPost(collection: string, data: any, userPermissions: Per
   const dbObject = new DynamicModel(data);
 
   dbObject.userPermissions.push({
-    permissions: [Permission.READ, Permission.UPDATE, Permission.DELETE],
+    permissions: [Permission.READ, Permission.UPDATE, Permission.DELETE, Permission.CHANGE_PERMISSIONS],
     userId,
   });
 
@@ -96,7 +96,7 @@ export async function dbPut(collection: string, data: any, objectId: string, use
   }
 
   if (!PermissionEntity.isUserPermitted(dbObject.userPermissions, userId, Permission.UPDATE)) {
-    return OperationsMessage.putResponse(collection, undefined, StatusCodes.FORBIDDEN, `You do not have update permissions to update object with id '${objectId}' in collection '${collection}'.`);
+    return OperationsMessage.putResponse(collection, undefined, StatusCodes.FORBIDDEN, `You do not have 'update' permissions to update object with id '${objectId}' in collection '${collection}'.`);
   }
 
   try {
@@ -129,7 +129,7 @@ export async function dbDelete(collection: string, objectId: string, userId: str
   }
 
   if (!PermissionEntity.isUserPermitted(dbObject.userPermissions, userId, Permission.DELETE)) {
-    return OperationsMessage.deleteResponse(collection, undefined, StatusCodes.FORBIDDEN, `You do not have delete permissions to delete object with id '${objectId}' in collection '${collection}'.`);
+    return OperationsMessage.deleteResponse(collection, undefined, StatusCodes.FORBIDDEN, `You do not have 'delete' permissions to delete object with id '${objectId}' in collection '${collection}'.`);
   }
 
   try {
@@ -143,6 +143,62 @@ export async function dbDelete(collection: string, objectId: string, userId: str
 
     return OperationsMessage.deleteResponse(collection, undefined, StatusCodes.INTERNAL_SERVER_ERROR, exception.toString());
   }
+}
+
+export async function dbChangePermission(collection: string, objectId: string, userPermissions: PermissionEntity[], userId: string) {
+  const DynamicModel = getModelByCollectionName(collection);
+  let dbObject;
+
+  try {
+    dbObject = await DynamicModel.findById(objectId);
+  } catch (exception) {
+    logger.error('dbChangePermission', exception.toString());
+
+    return OperationsMessage.changePermissionResponse(StatusCodes.INTERNAL_SERVER_ERROR, exception.toString());
+  }
+
+  if (!dbObject) {
+    return OperationsMessage.changePermissionResponse(StatusCodes.NOT_FOUND, `No object with id '${objectId}' in collection '${collection}' to update permissions found.`);
+  }
+
+  if (!PermissionEntity.isUserPermitted(dbObject.userPermissions, userId, Permission.CHANGE_PERMISSIONS)) {
+    return OperationsMessage.changePermissionResponse(StatusCodes.FORBIDDEN,
+      `You do not have 'change_permissions' permissions to change permissions of object with id '${objectId}' in collection '${collection}'.`);
+  }
+
+  let dbUserPermissions: PermissionEntity[] = dbObject.userPermissions;
+
+  userPermissions.forEach((userPermission: PermissionEntity) => {
+    const result = findObjectFromArray('userId', userPermission.userId, dbUserPermissions);
+
+    if (result.length > 0) {
+      for (let i = 0; i < dbUserPermissions.length; i += 1) {
+        if (dbUserPermissions[i].userId.toString() === userPermission.userId.toString()) {
+          if (userPermission.permissions.length > 0) {
+            dbUserPermissions[i] = userPermission;
+          } else {
+            dbUserPermissions = dbUserPermissions.filter((filterObject) => {
+              return filterObject.userId.toString() !== userPermission.userId.toString();
+            });
+          }
+        }
+      }
+    } else {
+      dbUserPermissions.push(userPermission);
+    }
+  });
+
+  dbObject.userPermissions = dbUserPermissions;
+
+  try {
+    await dbObject.save();
+  } catch (exception) {
+    logger.error('dbChangePermission', exception.toString());
+
+    return OperationsMessage.changePermissionResponse(StatusCodes.INTERNAL_SERVER_ERROR, exception.toString());
+  }
+
+  return OperationsMessage.changePermissionResponse(StatusCodes.OK);
 }
 
 function getIncludedFieldsObject(fields: string[], includeFields: boolean) {

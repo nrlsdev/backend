@@ -94,6 +94,12 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST: {
       const { data, userPermissions } = jsonObject;
 
+      if (!collection || !data || !userPermissions || !userId) {
+        responseMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+        break;
+      }
+
       responseMessage = await messageManager.sendReplyToMessage(
         OperationsMessage.postRequest(collection, data, userPermissions, userId),
         MessageQueueType.APPLICATION_DBCONNECTOR,
@@ -107,6 +113,12 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET: {
       const { query, fields, includeFields } = jsonObject;
 
+      if (!collection || !fields || !query || !includeFields || !userId) {
+        responseMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+        break;
+      }
+
       responseMessage = await messageManager.sendReplyToMessage(
         OperationsMessage.getRequest(collection, query, fields, includeFields, userId),
         MessageQueueType.APPLICATION_DBCONNECTOR,
@@ -117,6 +129,12 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT: {
       const { data, objectId } = jsonObject;
+
+      if (!collection || !objectId || !data || !userId) {
+        responseMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+        break;
+      }
 
       responseMessage = await messageManager.sendReplyToMessage(
         OperationsMessage.putRequest(collection, data, objectId, userId),
@@ -131,6 +149,12 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE: {
       const { objectId } = jsonObject;
 
+      if (!collection || !objectId || !userId) {
+        responseMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+        break;
+      }
+
       responseMessage = await messageManager.sendReplyToMessage(
         OperationsMessage.deleteRequest(collection, objectId, userId),
         MessageQueueType.APPLICATION_DBCONNECTOR,
@@ -140,6 +164,23 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
       sendBrodcastUpdateMessages(responseMessage, client);
 
       return;
+    }
+    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_CHANGE_PERMISSIONS: {
+      const { objectId, userPermissions } = jsonObject;
+
+      if (!collection || !objectId || !userPermissions || !userId) {
+        responseMessage = ErrorMessage.unprocessableEntityErrorResponse();
+
+        break;
+      }
+
+      responseMessage = await messageManager.sendReplyToMessage(
+        OperationsMessage.changePermissionRequest(collection, objectId, userPermissions, userId),
+        MessageQueueType.APPLICATION_DBCONNECTOR,
+        MessageSeverityType.APPLICATION_OPERATIONS,
+      );
+
+      break;
     }
     default: {
       logger.error('onWebSocketServerMessage', `Could not handle webservice message of type '${method}'`);
@@ -154,6 +195,12 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
 }
 
 function sendUpdateMessage(responseMessage: ResponseMessage, client: Socket) {
+  if (!responseMessage.body.data) {
+    client.emit('update', responseMessage);
+
+    return;
+  }
+
   const { result }: { result: DynamicEntity } = responseMessage.body.data as any;
   const copyOfResponseMessage = copyObject(responseMessage);
   const userId: string = client.data.user._id;
@@ -173,14 +220,15 @@ function sendUpdateMessage(responseMessage: ResponseMessage, client: Socket) {
     // eslint-disable-next-line no-param-reassign
     delete copyObjectResult.userPermissions;
   }
-  delete copyOfResponseMessage.body.data.result.userPermissions
+
+  delete copyOfResponseMessage.body.data.result.userPermissions;
 
   client.emit('update', copyOfResponseMessage);
 }
 
-function sendBrodcastUpdateMessages(responseMessage: ResponseMessage, client: Socket) {
+function sendBrodcastUpdateMessages(responseMessage: ResponseMessage, sender: Socket) {
   if (responseMessage.meta.statusCode !== StatusCodes.OK) {
-    sendUpdateMessage(responseMessage, client);
+    sendUpdateMessage(responseMessage, sender);
 
     return;
   }
@@ -188,13 +236,13 @@ function sendBrodcastUpdateMessages(responseMessage: ResponseMessage, client: So
   const { data }: any = responseMessage.body;
 
   if (!data || !data.result) {
-    sendUpdateMessage(responseMessage, client);
+    sendUpdateMessage(responseMessage, sender);
 
     return;
   }
 
-  webSocketServer.sockets.sockets.forEach((socket: Socket) => {
-    sendUpdateMessage(responseMessage, socket);
+  webSocketServer.sockets.sockets.forEach((client: Socket) => {
+    sendUpdateMessage(responseMessage, client);
   });
 }
 
