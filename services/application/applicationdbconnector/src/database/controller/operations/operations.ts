@@ -26,7 +26,6 @@ export async function dbPost(collection: string, data: any, userPermissions: Per
     permissions: [Permission.READ, Permission.UPDATE, Permission.DELETE, Permission.CHANGE_PERMISSIONS],
     userId,
   });
-
   dbObject.userPermissions.push(...userPermissions);
 
   try {
@@ -40,21 +39,42 @@ export async function dbPost(collection: string, data: any, userPermissions: Per
   return OperationsMessage.postResponse(collection, dbObject, StatusCodes.OK);
 }
 
-export async function dbGet(collection: string, query: any, fields: string[], includeFields: boolean, userId: string) {
-  if (!isJsonObject(query)) {
-    return OperationsMessage.getResponse(collection, undefined, StatusCodes.UNPROCESSABLE_ENTITY, 'Query object is not in JSON format.');
+export async function dbGet(collection: string, entities: any, selectAll: boolean, userId: string) {
+  if (!isJsonObject(entities)) {
+    return OperationsMessage.postResponse(collection, undefined, StatusCodes.UNPROCESSABLE_ENTITY, 'Hashed entities object is not in JSON format.');
   }
 
   const DynamicModel = getModelByCollectionName(collection);
-  const includedFields = getIncludedFieldsObject(fields, includeFields);
+  const ids: string[] = Object.keys(entities);
   let dbObjects: any[] = [];
+  let idsToDelete: string[] = [];
 
   try {
-    dbObjects = await DynamicModel.find(query, includedFields);
+    if (selectAll) {
+      dbObjects = await DynamicModel.find();
+    } else {
+      dbObjects = await DynamicModel.find({
+        _id: { $in: ids },
+      });
+    }
+
+    const existingIds: string[] = [];
+
+    dbObjects.forEach((dbObject: any) => {
+      if (ids.includes(dbObject._id.toString())) {
+        existingIds.push(dbObject._id.toString());
+      }
+    });
+
+    idsToDelete = ids.filter(value => !existingIds.includes(value));
+
+    dbObjects = dbObjects.filter((dbObject: any) => {
+      return entities[dbObject._id] === undefined || entities[dbObject._id] < dbObject.__v;
+    });
   } catch (exception) {
     logger.error('dbGet', exception.toString());
 
-    return OperationsMessage.getResponse(collection, undefined, StatusCodes.INTERNAL_SERVER_ERROR, exception.toString());
+    return OperationsMessage.getResponse(collection, undefined, [], StatusCodes.INTERNAL_SERVER_ERROR, exception.toString());
   }
 
   const result: any[] = [];
@@ -65,7 +85,7 @@ export async function dbGet(collection: string, query: any, fields: string[], in
     }
   });
 
-  return OperationsMessage.getResponse(collection, result, StatusCodes.OK);
+  return OperationsMessage.getResponse(collection, result, idsToDelete, StatusCodes.OK);
 }
 
 export async function dbPut(collection: string, data: any, objectId: string, userId: string) {
@@ -100,6 +120,8 @@ export async function dbPut(collection: string, data: any, objectId: string, use
   }
 
   try {
+    // eslint-disable-next-line no-param-reassign
+    data.__v = dbObject.__v ? dbObject.__v += 1 : 1;
     await DynamicModel.updateOne({ _id: objectId }, data);
 
     const result = await DynamicModel.findById(objectId);
@@ -199,20 +221,4 @@ export async function dbChangePermission(collection: string, objectId: string, u
   }
 
   return OperationsMessage.changePermissionResponse(StatusCodes.OK);
-}
-
-function getIncludedFieldsObject(fields: string[], includeFields: boolean) {
-  const includedFields: any = {};
-
-  fields.forEach((field: string) => {
-    includedFields[field] = includeFields ? 1 : 0;
-  });
-
-  if (includeFields) {
-    Constants.OPERATIONS_BLACKLIST_KEYWORDS.forEach((blacklistKeyword: string) => {
-      includedFields[blacklistKeyword] = 1;
-    });
-  }
-
-  return includedFields;
 }

@@ -36,22 +36,7 @@
         placeholder="Query"
         v-if="method == 'application_operations_get'"
         v-model="query"
-      ></textarea
-      ><input
-        type="text"
-        placeholder="Fields"
-        v-if="method == 'application_operations_get'"
-        v-model="fieldsString"
-      />
-      <label for="includeFieldsId" v-if="method == 'application_operations_get'"
-        >Include Fields (True = Include, False = Exclude)</label
-      >
-      <input
-        id="includeFieldsId"
-        type="checkbox"
-        v-model="includeFields"
-        v-if="method == 'application_operations_get'"
-      />
+      ></textarea>
       <input
         type="text"
         placeholder="Object ID"
@@ -67,7 +52,7 @@
         <br />
         <label>Response Message</label>
         <p>
-          {{ result ? JSON.parse(result) : 'No Result' }}
+          {{ result ? JSON.stringify(result) : 'No Result' }}
         </p>
         <hr />
         <label>Database</label>
@@ -106,10 +91,6 @@ export default class WebSocketPage extends Vue {
   protected userPermissions: string = '';
 
   protected query: string = '';
-
-  protected fieldsString: string = '';
-
-  protected includeFields: boolean = false;
 
   protected objectId: string = '';
 
@@ -193,7 +174,6 @@ export default class WebSocketPage extends Vue {
     let jsonData: any = {};
     let jsonUserPermissions: any[] = [];
     let jsonQuery: any = {};
-    let fields: string[] = [];
 
     try {
       jsonData = JSON.parse(this.data);
@@ -203,11 +183,6 @@ export default class WebSocketPage extends Vue {
     } catch {}
     try {
       jsonQuery = JSON.parse(this.query);
-    } catch {}
-    try {
-      if (this.fieldsString !== '') {
-        fields = this.fieldsString.replace(/\s/g, '').split(',');
-      }
     } catch {}
 
     if (this.method === 'application_operations_post') {
@@ -222,8 +197,6 @@ export default class WebSocketPage extends Vue {
         collection: this.collection,
         query: jsonQuery,
         method: this.method,
-        fields,
-        includeFields: this.includeFields,
       };
     } else if (this.method === 'application_operations_put') {
       message = {

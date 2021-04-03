@@ -4,7 +4,7 @@ import { Logger } from '@backend/logger';
 import { ErrorMessage, OperationsMessage } from '@backend/applicationmessagefactory';
 import { ApplicationConfiguration } from '@backend/applicationconfiguration';
 import { MessageQueueType, MessageSeverityType, ResponseMessage } from '@backend/messagehandler';
-import { copyObject, DynamicEntity, Permission, PermissionEntity } from '@backend/applicationinterfaces';
+import { copyObject, Permission, PermissionEntity } from '@backend/applicationinterfaces';
 import { messageManager } from './message-manager';
 
 const logger: Logger = new Logger('applicationgatewaymsg-index');
@@ -85,6 +85,8 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
   }
 
   const { method, collection } = jsonObject;
+  const messageIdentifier = jsonObject.messageIdentifier ?? '';
+
   const userId: string = client.data.user._id;
   let responseMessage: ResponseMessage;
 
@@ -106,21 +108,21 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
         MessageSeverityType.APPLICATION_OPERATIONS,
       );
 
-      sendBrodcastUpdateMessages(responseMessage, client);
+      sendBrodcastUpdateMessages(responseMessage, client, messageIdentifier);
 
       return;
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET: {
-      const { query, fields, includeFields } = jsonObject;
+      const { entities, selectAll } = jsonObject;
 
-      if (!collection || !fields || !query || !includeFields || !userId) {
+      if (!collection || !userId) {
         responseMessage = ErrorMessage.unprocessableEntityErrorResponse();
 
         break;
       }
 
       responseMessage = await messageManager.sendReplyToMessage(
-        OperationsMessage.getRequest(collection, query, fields, includeFields, userId),
+        OperationsMessage.getRequest(collection, entities, selectAll, userId),
         MessageQueueType.APPLICATION_DBCONNECTOR,
         MessageSeverityType.APPLICATION_OPERATIONS,
       );
@@ -142,7 +144,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
         MessageSeverityType.APPLICATION_OPERATIONS,
       );
 
-      sendBrodcastUpdateMessages(responseMessage, client);
+      sendBrodcastUpdateMessages(responseMessage, client, messageIdentifier);
 
       return;
     }
@@ -161,7 +163,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
         MessageSeverityType.APPLICATION_OPERATIONS,
       );
 
-      sendBrodcastUpdateMessages(responseMessage, client);
+      sendBrodcastUpdateMessages(responseMessage, client, messageIdentifier);
 
       return;
     }
@@ -191,44 +193,52 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
     }
   }
 
-  sendUpdateMessage(responseMessage, client);
+  sendMessage(responseMessage, client, 'message', messageIdentifier);
 }
 
-function sendUpdateMessage(responseMessage: ResponseMessage, client: Socket) {
+function sendMessage(responseMessage: ResponseMessage, client: Socket, message: string, messageIdentifier: String) {
+  const messageIdentifierName: string = message === 'update' ? 'update' : `${message}${!messageIdentifier ? '' : `_${messageIdentifier}`}`;
+
   if (!responseMessage.body.data) {
-    client.emit('update', responseMessage);
+    client.emit(messageIdentifierName, responseMessage);
 
     return;
   }
 
-  const { result }: { result: DynamicEntity } = responseMessage.body.data as any;
-  const copyOfResponseMessage = copyObject(responseMessage);
   const userId: string = client.data.user._id;
+  const copyOfResponseMessage: ResponseMessage = copyObject(responseMessage);
+  const { data }: any = copyOfResponseMessage.body as any;
 
-  if (!PermissionEntity.isUserPermitted(result.userPermissions, userId, Permission.READ)) {
+  if (data.result === undefined) {
+    client.emit(messageIdentifierName, responseMessage);
+
     return;
   }
 
-  const copyObjectResult = copyOfResponseMessage.body.data.result;
-
-  if (copyObjectResult.length) {
-    copyObjectResult.forEach((copiedObject: any) => {
-      // eslint-disable-next-line no-param-reassign
-      delete copiedObject.userPermissions;
-    });
+  if (data.result.length) {
+    for (let i = 0; i < data.result.length; i += 1) {
+      if (!PermissionEntity.isUserPermitted(data.result[i].userPermissions, userId, Permission.READ)) {
+        // eslint-disable-next-line no-param-reassign
+        delete data.result[i];
+      } else {
+        delete data.result[i].userPermissions;
+      }
+    }
   } else {
-    // eslint-disable-next-line no-param-reassign
-    delete copyObjectResult.userPermissions;
+    // eslint-disable-next-line no-lonely-if
+    if (!PermissionEntity.isUserPermitted(data.result.userPermissions, userId, Permission.READ)) {
+      (copyOfResponseMessage.body.data as any).result = undefined;
+    } else {
+      delete (copyOfResponseMessage.body.data as any).result.userPermissions;
+    }
   }
 
-  delete copyOfResponseMessage.body.data.result.userPermissions;
-
-  client.emit('update', copyOfResponseMessage);
+  client.emit(messageIdentifierName, copyOfResponseMessage);
 }
 
-function sendBrodcastUpdateMessages(responseMessage: ResponseMessage, sender: Socket) {
+function sendBrodcastUpdateMessages(responseMessage: ResponseMessage, sender: Socket, messageIdentifier: String) {
   if (responseMessage.meta.statusCode !== StatusCodes.OK) {
-    sendUpdateMessage(responseMessage, sender);
+    sendMessage(responseMessage, sender, 'message', messageIdentifier);
 
     return;
   }
@@ -236,13 +246,13 @@ function sendBrodcastUpdateMessages(responseMessage: ResponseMessage, sender: So
   const { data }: any = responseMessage.body;
 
   if (!data || !data.result) {
-    sendUpdateMessage(responseMessage, sender);
+    sendMessage(responseMessage, sender, 'message', messageIdentifier);
 
     return;
   }
 
   webSocketServer.sockets.sockets.forEach((client: Socket) => {
-    sendUpdateMessage(responseMessage, client);
+    sendMessage(responseMessage, client, client.id === sender.id ? 'message' : 'update', messageIdentifier);
   });
 }
 

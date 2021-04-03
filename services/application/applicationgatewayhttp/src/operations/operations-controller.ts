@@ -1,3 +1,4 @@
+import { copyObject } from '@backend/applicationinterfaces';
 import { ErrorMessage, OperationsMessage } from '@backend/applicationmessagefactory';
 import {
   MessageQueueType,
@@ -23,14 +24,15 @@ export async function dbPost(request: Request, response: Response) {
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
   );
+  const responseMessageWithoutPermissions: ResponseMessage = removeUserPermissionsFromResponse(responseMessage);
 
-  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+  response.status(responseMessageWithoutPermissions.meta.statusCode).send(responseMessageWithoutPermissions).end();
 }
 
 export async function dbGet(request: Request, response: Response) {
-  const { collection, query, fields, includeFields, userId } = request.body;
+  const { collection, entities, selectAll, userId } = request.body;
 
-  if (!collection || !query || !fields || includeFields === undefined || !userId) {
+  if (!collection || !userId) {
     const errorResponseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
 
     response.status(errorResponseMessage.meta.statusCode).send(errorResponseMessage).end();
@@ -39,12 +41,13 @@ export async function dbGet(request: Request, response: Response) {
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    OperationsMessage.getRequest(collection, query, fields, includeFields, userId),
+    OperationsMessage.getRequest(collection, entities, selectAll, userId),
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
   );
+  const responseMessageWithoutPermissions: ResponseMessage = removeUserPermissionsFromResponse(responseMessage);
 
-  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+  response.status(responseMessageWithoutPermissions.meta.statusCode).send(responseMessageWithoutPermissions).end();
 }
 
 export async function dbPut(request: Request, response: Response) {
@@ -63,8 +66,9 @@ export async function dbPut(request: Request, response: Response) {
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
   );
+  const responseMessageWithoutPermissions: ResponseMessage = removeUserPermissionsFromResponse(responseMessage);
 
-  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+  response.status(responseMessageWithoutPermissions.meta.statusCode).send(responseMessageWithoutPermissions).end();
 }
 
 export async function dbDelete(request: Request, response: Response) {
@@ -83,8 +87,9 @@ export async function dbDelete(request: Request, response: Response) {
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
   );
+  const responseMessageWithoutPermissions: ResponseMessage = removeUserPermissionsFromResponse(responseMessage);
 
-  response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+  response.status(responseMessageWithoutPermissions.meta.statusCode).send(responseMessageWithoutPermissions).end();
 }
 
 export async function dbChangePermissions(request: Request, response: Response) {
@@ -105,4 +110,23 @@ export async function dbChangePermissions(request: Request, response: Response) 
   );
 
   response.status(responseMessage.meta.statusCode).send(responseMessage).end();
+}
+
+function removeUserPermissionsFromResponse(responseMessage: ResponseMessage) {
+  const copyOfResponseMessage = copyObject(responseMessage);
+  const copyObjectResult = copyOfResponseMessage.body.data.result;
+
+  if (copyObjectResult.length) {
+    copyObjectResult.forEach((copiedObject: any) => {
+      // eslint-disable-next-line no-param-reassign
+      delete copiedObject.userPermissions;
+    });
+  } else {
+    // eslint-disable-next-line no-param-reassign
+    delete copyObjectResult.userPermissions;
+  }
+
+  delete copyOfResponseMessage.body.data.result.userPermissions;
+
+  return copyOfResponseMessage as ResponseMessage;
 }

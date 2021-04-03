@@ -8,7 +8,7 @@ export class PermissionEntity {
 
   public static isUserPermitted(userPermissions: PermissionEntity[], userId: string, ...permissions: Permission[]) {
     const objects = findObjectFromArray('userId', userId, userPermissions);
-    let haveAllPermissions: boolean = true;
+    let haveAllPermissions: boolean = objects.length > 0;
 
     objects.forEach((object) => {
       permissions.forEach((permission: Permission) => {

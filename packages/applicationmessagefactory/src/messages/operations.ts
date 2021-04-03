@@ -56,7 +56,7 @@ export class OperationsMessage {
   }
 
   // get
-  public static getRequest(collection: string, query: any, fields: string[], includeFields: boolean, userId: string): RequestMessage {
+  public static getRequest(collection: string, entities: any, selectAll: boolean = false, userId: string): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
@@ -64,9 +64,8 @@ export class OperationsMessage {
       body: {
         data: {
           collection,
-          query,
-          fields,
-          includeFields,
+          entities,
+          selectAll,
           userId,
         },
       },
@@ -76,6 +75,7 @@ export class OperationsMessage {
   public static getResponse(
     collection: string,
     result: any,
+    idsToDelete: string[] = [],
     statusCode: number,
     error?: string,
   ): ResponseMessage {
@@ -87,6 +87,7 @@ export class OperationsMessage {
         data: {
           collection,
           result,
+          idsToDelete,
           method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
         },
         error,
