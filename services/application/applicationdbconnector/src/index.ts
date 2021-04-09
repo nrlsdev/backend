@@ -31,6 +31,7 @@ import {
   dbGet,
   dbPut,
   dbDelete,
+  dbChangePermission,
 } from './database/controller/operations/operations';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
@@ -117,7 +118,7 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
-        `Messgae of type '${type}' not implemented!`,
+        `Message of type '${type}' not implemented!`,
       );
     }
   }
@@ -133,20 +134,23 @@ async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST: {
-      return dbPost(data.collection, data.data);
+      return dbPost(data.collection, data.data, data.userPermissions, data.userId);
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET: {
-      return dbGet(data.collection, data.queryObject, data.fields);
+      return dbGet(data.collection, data.entities, data.selectAll, data.userId);
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT: {
-      return dbPut(data.collection, data.queryObject, data.updateObject);
+      return dbPut(data.collection, data.data, data.objectId, data.userId);
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE: {
-      return dbDelete(data.collection, data.queryObject);
+      return dbDelete(data.collection, data.objectId, data.userId);
+    }
+    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_CHANGE_PERMISSIONS: {
+      return dbChangePermission(data.collection, data.objectId, data.userPermissions, data.userId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(
-        `Messgae of type '${type}' not implemented!`,
+        `Message of type '${type}' not implemented!`,
       );
     }
   }

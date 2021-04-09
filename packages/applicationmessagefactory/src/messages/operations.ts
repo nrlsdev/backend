@@ -1,20 +1,24 @@
+import { PermissionEntity } from '@backend/applicationinterfaces';
 import { RequestMessage, ResponseMessage } from '@backend/messagehandler';
 
 export class OperationsMessage {
   public static readonly TYPE_APPLICATION_OPERATIONS_POST: string =
-    'appliation_operations_post';
+    'application_operations_post';
 
   public static readonly TYPE_APPLICATION_OPERATIONS_GET: string =
-    'appliation_operations_get';
+    'application_operations_get';
 
   public static readonly TYPE_APPLICATION_OPERATIONS_PUT: string =
-    'appliation_operations_put';
+    'application_operations_put';
 
   public static readonly TYPE_APPLICATION_OPERATIONS_DELETE: string =
-    'appliation_operations_delete';
+    'application_operations_delete';
+
+  public static readonly TYPE_APPLICATION_OPERATIONS_CHANGE_PERMISSIONS: string =
+    'application_operations_change_permissions';
 
   // post
-  public static postRequest(collection: string, data: any): RequestMessage {
+  public static postRequest(collection: string, data: any, userPermissions: PermissionEntity[], userId: string): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST,
@@ -23,50 +27,15 @@ export class OperationsMessage {
         data: {
           collection,
           data,
+          userPermissions,
+          userId,
         },
       },
     };
   }
 
   public static postResponse(
-    id: string | undefined,
-    statusCode: number,
-    error?: string,
-  ): ResponseMessage {
-    return {
-      meta: {
-        statusCode,
-      },
-      body: {
-        data: {
-          id,
-        },
-        error,
-      },
-    };
-  }
-
-  // get
-  public static getRequest(
     collection: string,
-    queryObject: any,
-    fields: string[],
-  ): RequestMessage {
-    return {
-      meta: {
-        type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
-      },
-      body: {
-        data: {
-          collection,
-          queryObject,
-          fields,
-        },
-      },
-    };
-  }
-
-  public static getResponse(
     result: any,
     statusCode: number,
     error?: string,
@@ -77,34 +46,36 @@ export class OperationsMessage {
       },
       body: {
         data: {
+          collection,
           result,
+          method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST,
         },
         error,
       },
     };
   }
 
-  // put
-  public static putRequest(
-    collection: string,
-    queryObject: any,
-    updateObject: any,
-  ): RequestMessage {
+  // get
+  public static getRequest(collection: string, entities: any, selectAll: boolean = false, userId: string): RequestMessage {
     return {
       meta: {
-        type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT,
+        type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
       },
       body: {
         data: {
           collection,
-          queryObject,
-          updateObject,
+          entities,
+          selectAll,
+          userId,
         },
       },
     };
   }
 
-  public static putResponse(
+  public static getResponse(
+    collection: string,
+    result: any,
+    idsToDelete: string[] = [],
     statusCode: number,
     error?: string,
   ): ResponseMessage {
@@ -113,16 +84,57 @@ export class OperationsMessage {
         statusCode,
       },
       body: {
+        data: {
+          collection,
+          result,
+          idsToDelete,
+          method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
+        },
+        error,
+      },
+    };
+  }
+
+  // put
+  public static putRequest(collection: string, data: any, objectId: string, userId: string): RequestMessage {
+    return {
+      meta: {
+        type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT,
+      },
+      body: {
+        data: {
+          collection,
+          data,
+          objectId,
+          userId,
+        },
+      },
+    };
+  }
+
+  public static putResponse(
+    collection: string,
+    result: any,
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          collection,
+          result,
+          method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT,
+        },
         error,
       },
     };
   }
 
   // delete
-  public static deleteRequest(
-    collection: string,
-    queryObject: any,
-  ): RequestMessage {
+  public static deleteRequest(collection: string, objectId: string, userId: string): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE,
@@ -130,13 +142,52 @@ export class OperationsMessage {
       body: {
         data: {
           collection,
-          queryObject,
+          objectId,
+          userId,
         },
       },
     };
   }
 
   public static deleteResponse(
+    collection: string,
+    result: any,
+    statusCode: number,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          collection,
+          result,
+          method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE,
+        },
+        error,
+      },
+    };
+  }
+
+  // permissions
+  public static changePermissionRequest(collection: string, objectId: string, userPermissions: PermissionEntity[], userId: string): RequestMessage {
+    return {
+      meta: {
+        type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_CHANGE_PERMISSIONS,
+      },
+      body: {
+        data: {
+          collection,
+          objectId,
+          userPermissions,
+          userId,
+        },
+      },
+    };
+  }
+
+  public static changePermissionResponse(
     statusCode: number,
     error?: string,
   ): ResponseMessage {

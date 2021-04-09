@@ -48,9 +48,71 @@ export function copyObject(obj: any) {
 }
 
 export function findObjectFromArray(key: any, value: any, array: any[]) {
+  if (!key || !value || !array) {
+    return [];
+  }
+
   const result = array.filter((object: any) => {
-    return object[key] === value;
+    return object[key].toString() === value.toString();
   });
 
   return result;
+}
+
+export function doesObjectKeyExist(object: any, key: string) {
+  const objectKeys = Object.keys(object);
+  let doesKeyExist: boolean = false;
+
+  objectKeys.forEach((objectKey: string) => {
+    const field = object[objectKey];
+
+    if (objectKeys.includes(key)) {
+      doesKeyExist = true;
+    }
+
+    if (field instanceof Object) {
+      if (!doesKeyExist) {
+        doesKeyExist = doesObjectKeyExist(field, key);
+      }
+    }
+  });
+
+  return doesKeyExist;
+}
+
+export function doesObjectKeysExist(object: any, ...keys: string[]) {
+  let doesKeysExist: boolean = true;
+
+  keys.forEach((key: string) => {
+    if (doesKeysExist) {
+      if (!doesObjectKeyExist(object, key)) {
+        doesKeysExist = false;
+      }
+    }
+  });
+
+  return doesKeysExist;
+}
+
+export function doesOneObjectKeysExist(object: any, ...keys: string[]) {
+  let doesOneKeyExist: boolean = false;
+
+  keys.forEach((key: string) => {
+    if (!doesOneKeyExist) {
+      if (doesObjectKeyExist(object, key)) {
+        doesOneKeyExist = true;
+      }
+    }
+  });
+
+  return doesOneKeyExist;
+}
+
+export function isJsonObject(object: any) {
+  try {
+    JSON.parse(JSON.stringify(object));
+  } catch {
+    return false;
+  }
+  return true;
 }

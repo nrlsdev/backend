@@ -60,12 +60,10 @@ export async function signIn(
   // eslint-disable-next-line consistent-return
   authenticate('local', (error, user, info) => {
     if (error) {
-      const errorResponseMessage: ResponseMessage = ErrorMessage.unauthorizedErrorResponse(
-        'Invalid E-Mail or Password.',
-      );
+      const errorResponseMessage: ResponseMessage = error as ResponseMessage;
 
       logger.error('signIn', 'Invalid E-Mail or Password. (got error)');
-      logger.error('signIn', JSON.stringify(error));
+      logger.error('signIn', JSON.stringify(errorResponseMessage));
 
       return response
         .status(errorResponseMessage.meta.statusCode)
@@ -114,7 +112,14 @@ export async function signIn(
           .end();
       }
 
-      return response.status(StatusCodes.OK).send({}).end();
+      const responseMessage = ApplicationUserMessage.applicationUserEmailAndPasswordSignInResponse(
+        StatusCodes.OK,
+      );
+
+      return response
+        .status(responseMessage.meta.statusCode)
+        .send(responseMessage)
+        .end();
     });
   })(request, response, next);
 }
