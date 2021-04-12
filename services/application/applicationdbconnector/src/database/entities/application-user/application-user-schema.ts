@@ -303,6 +303,14 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
   ) {
     const applicationUser = await this.findById(id);
 
+    if (!applicationUser) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No user found.',
+        user: undefined,
+      };
+    }
+
     return {
       statusCode: StatusCodes.OK,
       error: undefined,

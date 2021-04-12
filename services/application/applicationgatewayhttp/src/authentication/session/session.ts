@@ -1,8 +1,9 @@
 import { serializeUser, deserializeUser } from 'passport';
 import { Logger } from '@backend/logger';
-import { ErrorMessage } from '@backend/applicationmessagefactory';
-import { ResponseMessage } from '@backend/messagehandler';
-import { Request, Response, NextFunction } from '@backend/server';
+import { ApplicationUserMessage, ErrorMessage } from '@backend/applicationmessagefactory';
+import { MessageQueueType, MessageSeverityType, ResponseMessage } from '@backend/messagehandler';
+import { Request, Response, NextFunction, StatusCodes } from '@backend/server';
+import { messageManager } from '../../message-manager';
 
 const logger: Logger = new Logger('user-de-serialization');
 
@@ -66,7 +67,7 @@ export function setupUserDeSerialization() {
   );
 }
 
-export const sessionAuthenticationChecker = (
+export const sessionAuthenticationChecker = async (
   request: Request,
   response: Response,
   next: NextFunction,
@@ -79,7 +80,28 @@ export const sessionAuthenticationChecker = (
     return;
   }
 
-  request.body.userId = (request.session as any).passport.user._id;
+  const userId: string = (request.session as any).passport.user._id;
+
+  const getUserByIdRequest: ResponseMessage = await messageManager.sendReplyToMessage(
+    ApplicationUserMessage.getApplicationUserByIdRequest(
+      request.body.userId,
+    ),
+    MessageQueueType.APPLICATION_DBCONNECTOR,
+    MessageSeverityType.APPLICATION_USER,
+  );
+
+  if (getUserByIdRequest.meta.statusCode !== StatusCodes.OK) {
+    const errorResponse: ResponseMessage = ErrorMessage.unauthorizedErrorResponse();
+
+    request.logout();
+
+    response.status(errorResponse.meta.statusCode).send(errorResponse).end();
+
+    return;
+  }
+
+
+  request.body.userId = userId;
   request.body.userEmail = (request.session as any).passport.user.email;
   request.body.userFacebook = (request.session as any).passport.user.facebook;
   request.body.userTwitter = (request.session as any).passport.user.twitter;
