@@ -1,6 +1,4 @@
 export { DatabaseEntity } from './src/database-entity';
-export { Permission } from './src/dynamic/permission';
-export { PermissionEntity } from './src/dynamic/permission-entity';
 export { DynamicEntity } from './src/dynamic/dynamic';
 export { ApplicationUser } from './src/application-user/application-user';
 export { ApplicationUserAccounts } from './src/application-user/application-user-accounts';

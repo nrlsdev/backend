@@ -1,5 +1,5 @@
 import { Router } from '@backend/server';
-import { dbPost, dbGet, dbPut, dbDelete, dbChangePermissions } from './operations-controller';
+import { dbPost, dbGet, dbPut, dbDelete } from './operations-controller';
 
 const operationsRouter: Router = Router();
 
@@ -10,7 +10,5 @@ operationsRouter.post('/get', dbGet);
 operationsRouter.post('/put', dbPut);
 
 operationsRouter.post('/delete', dbDelete);
-
-operationsRouter.put('/permissions', dbChangePermissions);
 
 export { operationsRouter };

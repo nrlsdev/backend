@@ -4,7 +4,6 @@ import { Logger } from '@backend/logger';
 import { ErrorMessage, OperationsMessage } from '@backend/applicationmessagefactory';
 import { ApplicationConfiguration } from '@backend/applicationconfiguration';
 import { MessageQueueType, MessageSeverityType, ResponseMessage } from '@backend/messagehandler';
-import { copyObject, Permission, PermissionEntity } from '@backend/applicationinterfaces';
 import { messageManager } from './message-manager';
 
 const logger: Logger = new Logger('applicationgatewaymsg-index');
@@ -94,16 +93,16 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
 
   switch (method) {
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST: {
-      const { data, userPermissions } = jsonObject;
+      const { data } = jsonObject;
 
-      if (!collection || !data || !userPermissions || !userId) {
+      if (!collection || !data || !userId) {
         responseMessage = ErrorMessage.unprocessableEntityErrorResponse();
 
         break;
       }
 
       responseMessage = await messageManager.sendReplyToMessage(
-        OperationsMessage.postRequest(collection, data, userPermissions, userId),
+        OperationsMessage.postRequest(collection, data, userId),
         MessageQueueType.APPLICATION_DBCONNECTOR,
         MessageSeverityType.APPLICATION_OPERATIONS,
       );
@@ -167,23 +166,6 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
 
       return;
     }
-    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_CHANGE_PERMISSIONS: {
-      const { objectId, userPermissions } = jsonObject;
-
-      if (!collection || !objectId || !userPermissions || !userId) {
-        responseMessage = ErrorMessage.unprocessableEntityErrorResponse();
-
-        break;
-      }
-
-      responseMessage = await messageManager.sendReplyToMessage(
-        OperationsMessage.changePermissionRequest(collection, objectId, userPermissions, userId),
-        MessageQueueType.APPLICATION_DBCONNECTOR,
-        MessageSeverityType.APPLICATION_OPERATIONS,
-      );
-
-      break;
-    }
     default: {
       logger.error('onWebSocketServerMessage', `Could not handle webservice message of type '${method}'`);
 
@@ -205,35 +187,7 @@ function sendMessage(responseMessage: ResponseMessage, client: Socket, message: 
     return;
   }
 
-  const userId: string = client.data.user._id;
-  const copyOfResponseMessage: ResponseMessage = copyObject(responseMessage);
-  const { data }: any = copyOfResponseMessage.body as any;
-
-  if (data.result === undefined) {
-    client.emit(messageIdentifierName, responseMessage);
-
-    return;
-  }
-
-  if (data.result.length) {
-    for (let i = 0; i < data.result.length; i += 1) {
-      if (!PermissionEntity.isUserPermitted(data.result[i].userPermissions, userId, Permission.READ)) {
-        // eslint-disable-next-line no-param-reassign
-        delete data.result[i];
-      } else {
-        delete data.result[i].userPermissions;
-      }
-    }
-  } else {
-    // eslint-disable-next-line no-lonely-if
-    if (!PermissionEntity.isUserPermitted(data.result.userPermissions, userId, Permission.READ)) {
-      (copyOfResponseMessage.body.data as any).result = undefined;
-    } else {
-      delete (copyOfResponseMessage.body.data as any).result.userPermissions;
-    }
-  }
-
-  client.emit(messageIdentifierName, copyOfResponseMessage);
+  client.emit(messageIdentifierName, responseMessage);
 }
 
 function sendBrodcastUpdateMessages(responseMessage: ResponseMessage, sender: Socket, messageIdentifier: String) {

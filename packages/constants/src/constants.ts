@@ -13,5 +13,5 @@ export class Constants {
 
   /* APPLICATION */
   // Operations
-  public static readonly OPERATIONS_BLACKLIST_KEYWORDS: string[] = ['_id', '__v', 'userPermissions', 'creationDate'];
+  public static readonly OPERATIONS_BLACKLIST_KEYWORDS: string[] = ['_id', '__v', 'creationDate'];
 }
