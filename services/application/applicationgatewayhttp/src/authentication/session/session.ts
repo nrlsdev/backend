@@ -80,11 +80,12 @@ export const sessionAuthenticationChecker = async (
     return;
   }
 
-  const userId: string = (request.session as any).passport.user._id;
+  const { _id, email, facebook, twitter } = (request.session as any).passport.user;
 
+  // ToDo Check email, facebook or twitter if valid/exist
   const getUserByIdRequest: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationUserMessage.getApplicationUserByIdRequest(
-      request.body.userId,
+      _id,
     ),
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_USER,
@@ -101,10 +102,10 @@ export const sessionAuthenticationChecker = async (
   }
 
 
-  request.body.userId = userId;
-  request.body.userEmail = (request.session as any).passport.user.email;
-  request.body.userFacebook = (request.session as any).passport.user.facebook;
-  request.body.userTwitter = (request.session as any).passport.user.twitter;
+  request.body.userId = _id;
+  request.body.userEmail = email;
+  request.body.userFacebook = facebook;
+  request.body.userTwitter = twitter;
 
   next();
 };
