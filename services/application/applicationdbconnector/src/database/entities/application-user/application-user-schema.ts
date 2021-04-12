@@ -50,7 +50,7 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
       await this.create({
         accounts: {
           emailAndPassword: {
-            email,
+            email: email.toLowerCase(),
             password: hashedPassword,
             activationCode,
             activated: false,
@@ -188,7 +188,7 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
     email: string,
   ) {
     const applicationUser = await this.findOne({
-      'accounts.emailAndPassword.email': email,
+      'accounts.emailAndPassword.email': email.toLowerCase(),
     });
 
     return applicationUser as ApplicationUser;
