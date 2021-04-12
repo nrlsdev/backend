@@ -5,13 +5,11 @@ import { DatabaseEntity } from '@backend/applicationinterfaces';
 export class DatabaseEntitySchema implements DatabaseEntity {
     @prop({
         type: mongoose.Types.ObjectId,
-        required: true,
-        unique: true,
         default: () => {
             return new mongoose.Types.ObjectId();
         },
     })
-    public _id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId();
+    public _id?: mongoose.Types.ObjectId = new mongoose.Types.ObjectId();
 
     @prop({
         type: Number,
@@ -26,8 +24,7 @@ export class DatabaseEntitySchema implements DatabaseEntity {
     @prop({
         type: Number,
         required: true,
-        unique: false,
         default: 0,
     })
-    public __v: number = 0;
+    public __v?: number = 0;
 }

@@ -13,6 +13,7 @@ import { MongoError } from 'mongodb';
 import { hash, compare } from 'bcryptjs';
 import { ApplicationUserAccountsSchema } from './application-user-accounts-schema';
 import { MongoErrorCode } from '../../error-codes';
+import { DatabaseEntitySchema } from '../database-entity-schema';
 
 @modelOptions({
   options: {
@@ -21,7 +22,7 @@ import { MongoErrorCode } from '../../error-codes';
     allowMixed: Severity.ALLOW,
   },
 })
-export class ApplicationUserSchema implements ApplicationUser {
+export class ApplicationUserSchema extends DatabaseEntitySchema implements ApplicationUser {
   private static readonly logger: Logger = new Logger('ApplicationUserSchema');
 
   @prop({
