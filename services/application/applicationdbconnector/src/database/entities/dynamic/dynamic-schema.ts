@@ -1,21 +1,21 @@
-import { DynamicEntity } from '@backend/applicationinterfaces';
-import { Model, models, Schema, model, Document } from 'mongoose';
+import { getModelForClass, modelOptions, Severity } from '@typegoose/typegoose';
+import { DatabaseEntitySchema } from '../database-entity-schema';
+
+@modelOptions({
+  options: {
+    automaticName: false,
+    allowMixed: Severity.ALLOW,
+  },
+  schemaOptions: {
+    strict: false,
+  },
+})
+export class DynamicSchema extends DatabaseEntitySchema { }
 
 export function getModelByCollectionName(collection: string) {
-  type DynamicEntityDocument = DynamicEntity & Document;
-
-  let DynamicModel: Model<DynamicEntityDocument, {}> | null =
-    models[collection];
-
-  if (DynamicModel) {
-    return DynamicModel;
-  }
-
-  const DynamicSchema = new Schema<DynamicEntityDocument>({},
-    { strict: false, collection },
-  );
-
-  DynamicModel = model(collection, DynamicSchema);
-
-  return DynamicModel;
+  return getModelForClass(DynamicSchema, {
+    schemaOptions: {
+      collection,
+    },
+  });
 }
