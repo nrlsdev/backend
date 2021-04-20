@@ -85,7 +85,6 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
 
   const { method, collection } = jsonObject;
   const messageIdentifier = jsonObject.messageIdentifier ?? '';
-
   const userId: string = client.data.user._id;
   let responseMessage: ResponseMessage;
 
@@ -179,7 +178,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
 }
 
 function sendMessage(responseMessage: ResponseMessage, client: Socket, message: string, messageIdentifier: String) {
-  const messageIdentifierName: string = message === 'update' ? 'update' : `${message}${!messageIdentifier ? '' : `_${messageIdentifier}`}`;
+  const messageIdentifierName: string = message === 'update' ? 'update' : `${messageIdentifier === '' ? 'message' : messageIdentifier}`;
 
   if (!responseMessage.body.data) {
     client.emit(messageIdentifierName, responseMessage);

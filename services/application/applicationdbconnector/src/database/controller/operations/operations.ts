@@ -71,9 +71,7 @@ export async function dbGet(collection: string, entities: any, selectAll: boolea
     return OperationsMessage.getResponse(collection, undefined, [], StatusCodes.INTERNAL_SERVER_ERROR, exception.toString());
   }
 
-  const result: any[] = [];
-
-  return OperationsMessage.getResponse(collection, result, idsToDelete, StatusCodes.OK);
+  return OperationsMessage.getResponse(collection, dbObjects, idsToDelete, StatusCodes.OK);
 }
 
 export async function dbPut(collection: string, data: any, objectId: string, _userId: string) {
