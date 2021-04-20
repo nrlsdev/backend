@@ -1,7 +1,3 @@
-import { PermissionEntity } from './permission-entity';
+import { DatabaseEntity } from '../database-entity';
 
-export class DynamicEntity {
-  public userPermissions!: PermissionEntity[];
-
-  public creationDate!: number;
-}
+export class DynamicEntity implements DatabaseEntity { }

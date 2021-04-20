@@ -148,7 +148,7 @@ export class ApplicationUserMessage {
   }
 
   public static getApplicationUserByIdResponse(
-    applicationUser: ApplicationUser,
+    applicationUser: ApplicationUser | undefined,
     statusCode: number,
     error?: string,
   ): ResponseMessage {

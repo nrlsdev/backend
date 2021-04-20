@@ -31,7 +31,6 @@ import {
   dbGet,
   dbPut,
   dbDelete,
-  dbChangePermission,
 } from './database/controller/operations/operations';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
@@ -134,7 +133,7 @@ async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
 
   switch (type) {
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST: {
-      return dbPost(data.collection, data.data, data.userPermissions, data.userId);
+      return dbPost(data.collection, data.data, data.userId);
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET: {
       return dbGet(data.collection, data.entities, data.selectAll, data.userId);
@@ -144,9 +143,6 @@ async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE: {
       return dbDelete(data.collection, data.objectId, data.userId);
-    }
-    case OperationsMessage.TYPE_APPLICATION_OPERATIONS_CHANGE_PERMISSIONS: {
-      return dbChangePermission(data.collection, data.objectId, data.userPermissions, data.userId);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

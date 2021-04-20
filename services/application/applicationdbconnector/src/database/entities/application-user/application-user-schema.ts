@@ -13,6 +13,7 @@ import { MongoError } from 'mongodb';
 import { hash, compare } from 'bcryptjs';
 import { ApplicationUserAccountsSchema } from './application-user-accounts-schema';
 import { MongoErrorCode } from '../../error-codes';
+import { DatabaseEntitySchema } from '../database-entity-schema';
 
 @modelOptions({
   options: {
@@ -21,7 +22,7 @@ import { MongoErrorCode } from '../../error-codes';
     allowMixed: Severity.ALLOW,
   },
 })
-export class ApplicationUserSchema implements ApplicationUser {
+export class ApplicationUserSchema extends DatabaseEntitySchema implements ApplicationUser {
   private static readonly logger: Logger = new Logger('ApplicationUserSchema');
 
   @prop({
@@ -49,7 +50,7 @@ export class ApplicationUserSchema implements ApplicationUser {
       await this.create({
         accounts: {
           emailAndPassword: {
-            email,
+            email: email.toLowerCase(),
             password: hashedPassword,
             activationCode,
             activated: false,
@@ -187,7 +188,7 @@ export class ApplicationUserSchema implements ApplicationUser {
     email: string,
   ) {
     const applicationUser = await this.findOne({
-      'accounts.emailAndPassword.email': email,
+      'accounts.emailAndPassword.email': email.toLowerCase(),
     });
 
     return applicationUser as ApplicationUser;
@@ -301,6 +302,14 @@ export class ApplicationUserSchema implements ApplicationUser {
     id: string,
   ) {
     const applicationUser = await this.findById(id);
+
+    if (!applicationUser) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        error: 'No user found.',
+        user: undefined,
+      };
+    }
 
     return {
       statusCode: StatusCodes.OK,
