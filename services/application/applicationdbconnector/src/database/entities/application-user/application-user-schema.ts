@@ -34,11 +34,20 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
   })
   public accounts!: ApplicationUserAccountsSchema;
 
+  @prop({
+    unique: false,
+    required: true,
+    default: {},
+    _id: false,
+  })
+  public userdata?: any;
+
   // email and password
   public static async signUpEmailAndPassword(
     this: ReturnModelType<typeof ApplicationUserSchema>,
     email: string,
     password: string,
+    userdata: any,
     activationCode: string,
   ) {
     try {
@@ -56,6 +65,7 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
             activated: false,
           },
         },
+        userdata,
       });
     } catch (exception) {
       ApplicationUserSchema.logger.fatal('signUpEmailAndPassword', exception);
@@ -133,6 +143,7 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
       user: {
         _id: user._id,
         email: user.accounts.emailAndPassword.email,
+        userdata: user.userdata,
       },
     };
   }

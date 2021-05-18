@@ -24,12 +24,13 @@ const {
 } = ApplicationConfiguration.applicationgatewayhttp.authentication;
 
 export async function signUp(request: Request, response: Response) {
-  const { email, password } = request.body;
+  const { email, password, userdata } = request.body;
   const activationCode: string = Date.now().toString();
   const signUpResponse: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationUserMessage.applicationUserEmailAndPasswordSignUpRequest(
       email,
       password,
+      userdata,
       activationCode,
     ),
     MessageQueueType.APPLICATION_DBCONNECTOR,
@@ -170,6 +171,7 @@ export function setupEmailAndPasswordAuthentication() {
         return done(null, {
           _id: data.id,
           email: data.email,
+          userdata: data.userdata,
         });
       },
     ),

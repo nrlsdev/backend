@@ -15,11 +15,13 @@ export class ApplicationUserEntity {
   public async signUpEmailAndPassword(
     email: string,
     password: string,
+    userdata: any,
     activationCode: string,
   ) {
     const result = await ApplicationUserModel.signUpEmailAndPassword(
       email,
       password,
+      userdata,
       activationCode,
     );
 
