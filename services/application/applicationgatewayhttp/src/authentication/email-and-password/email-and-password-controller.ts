@@ -117,6 +117,7 @@ export async function signIn(
         {
           _id: user._id,
           email: user.email,
+          userdata: user.userdata,
         },
       );
 
