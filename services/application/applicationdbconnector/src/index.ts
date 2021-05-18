@@ -89,6 +89,7 @@ async function onApplicationUserMessage(requestMessage: RequestMessage) {
       return signUpEmailAndPassword(
         data.email,
         data.password,
+        data.userdata,
         data.activationCode,
       );
     }

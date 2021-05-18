@@ -31,6 +31,7 @@ export class ApplicationUserMessage {
   public static applicationUserEmailAndPasswordSignUpRequest(
     email: string,
     password: string,
+    userdata: any,
     activationCode: string,
   ): RequestMessage {
     return {
@@ -42,6 +43,7 @@ export class ApplicationUserMessage {
         data: {
           email,
           password,
+          userdata,
           activationCode,
         },
       },
@@ -85,6 +87,7 @@ export class ApplicationUserMessage {
     statusCode: number,
     id?: string,
     email?: string,
+    userdata?: any,
     error?: string,
   ): ResponseMessage {
     return {
@@ -95,6 +98,25 @@ export class ApplicationUserMessage {
         data: {
           id,
           email,
+          userdata,
+        },
+        error,
+      },
+    };
+  }
+
+  public static applicationUserEmailAndPasswordSignInWithUserdataResponse(
+    statusCode: number,
+    userdata: any,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          userdata,
         },
         error,
       },

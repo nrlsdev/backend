@@ -25,6 +25,8 @@ export class SessionUser implements Express.User {
 
     accessTokenSecret: string;
   };
+
+  public userdata?: any;
 }
 
 export function setupUserDeSerialization() {
@@ -40,6 +42,7 @@ export function setupUserDeSerialization() {
       email: user.email,
       facebook: user.facebook,
       twitter: user.twitter,
+      userdata: user.userdata,
     });
   });
 
@@ -62,6 +65,7 @@ export function setupUserDeSerialization() {
         email: user.email,
         facebook: user.facebook,
         twitter: user.twitter,
+        userdata: user.userdata,
       });
     },
   );
@@ -80,7 +84,7 @@ export const sessionAuthenticationChecker = async (
     return;
   }
 
-  const { _id, email, facebook, twitter } = (request.session as any).passport.user;
+  const { _id, email, facebook, twitter, userdata } = (request.session as any).passport.user;
 
   // ToDo Check email, facebook or twitter if valid/exist
   const getUserByIdRequest: ResponseMessage = await messageManager.sendReplyToMessage(
@@ -101,11 +105,11 @@ export const sessionAuthenticationChecker = async (
     return;
   }
 
-
   request.body.userId = _id;
   request.body.userEmail = email;
   request.body.userFacebook = facebook;
   request.body.userTwitter = twitter;
+  request.body.userdata = userdata;
 
   next();
 };

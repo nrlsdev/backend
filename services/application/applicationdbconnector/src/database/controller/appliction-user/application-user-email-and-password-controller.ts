@@ -4,11 +4,13 @@ import { Database } from '../../database';
 export async function signUpEmailAndPassword(
   email: string,
   password: string,
+  userdata: any,
   activationCode: string,
 ) {
   const result = await Database.applicationUserEntity.signUpEmailAndPassword(
     email,
     password,
+    userdata,
     activationCode,
   );
 
@@ -28,6 +30,7 @@ export async function signInEmailAndPassword(email: string, password: string) {
     result.statusCode,
     result.user?._id,
     result.user?.email,
+    result.user?.userdata,
     result.error,
   );
 }

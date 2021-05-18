@@ -24,12 +24,13 @@ const {
 } = ApplicationConfiguration.applicationgatewayhttp.authentication;
 
 export async function signUp(request: Request, response: Response) {
-  const { email, password } = request.body;
+  const { email, password, userdata } = request.body;
   const activationCode: string = Date.now().toString();
   const signUpResponse: ResponseMessage = await messageManager.sendReplyToMessage(
     ApplicationUserMessage.applicationUserEmailAndPasswordSignUpRequest(
       email,
       password,
+      userdata,
       activationCode,
     ),
     MessageQueueType.APPLICATION_DBCONNECTOR,
@@ -37,9 +38,8 @@ export async function signUp(request: Request, response: Response) {
   );
 
   if (!signUpResponse.body.error) {
-    const activationLink: string = `${protocol}://${
-      host === '' ? 'localhost' : host
-    }:${port}/auth/emailandpassword/${activationCode}`;
+    const activationLink: string = `${protocol}://${host === '' ? 'localhost' : host
+      }:${port}/auth/emailandpassword/${activationCode}`;
 
     // ToDo
     noreplyMailer.sendMail({
@@ -112,8 +112,12 @@ export async function signIn(
           .end();
       }
 
-      const responseMessage = ApplicationUserMessage.applicationUserEmailAndPasswordSignInResponse(
+      const responseMessage = ApplicationUserMessage.applicationUserEmailAndPasswordSignInWithUserdataResponse(
         StatusCodes.OK,
+        {
+          _id: user._id,
+          email: user.email,
+        },
       );
 
       return response
@@ -167,6 +171,7 @@ export function setupEmailAndPasswordAuthentication() {
         return done(null, {
           _id: data.id,
           email: data.email,
+          userdata: data.userdata,
         });
       },
     ),

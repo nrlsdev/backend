@@ -1,4 +1,5 @@
-import { getModelForClass, modelOptions, Severity } from '@typegoose/typegoose';
+import { deleteModelWithClass, getModelForClass, modelOptions, Severity } from '@typegoose/typegoose';
+import { connection } from 'mongoose';
 import { DatabaseEntitySchema } from '../database-entity-schema';
 
 @modelOptions({
@@ -13,9 +14,15 @@ import { DatabaseEntitySchema } from '../database-entity-schema';
 export class DynamicSchema extends DatabaseEntitySchema { }
 
 export function getModelByCollectionName(collection: string) {
-  return getModelForClass(DynamicSchema, {
+  if (connection.models.DynamicSchema) {
+    deleteModelWithClass(DynamicSchema);
+  }
+
+  const DynamicModel = getModelForClass(DynamicSchema, {
     schemaOptions: {
       collection,
     },
   });
+
+  return DynamicModel;
 }

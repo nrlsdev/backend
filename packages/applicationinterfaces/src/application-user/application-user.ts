@@ -3,4 +3,6 @@ import { ApplicationUserAccounts } from './application-user-accounts';
 
 export interface ApplicationUser extends DatabaseEntity {
   accounts: ApplicationUserAccounts;
+
+  userdata?: any;
 }
