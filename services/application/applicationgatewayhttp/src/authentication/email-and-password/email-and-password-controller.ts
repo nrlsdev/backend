@@ -37,9 +37,8 @@ export async function signUp(request: Request, response: Response) {
   );
 
   if (!signUpResponse.body.error) {
-    const activationLink: string = `${protocol}://${
-      host === '' ? 'localhost' : host
-    }:${port}/auth/emailandpassword/${activationCode}`;
+    const activationLink: string = `${protocol}://${host === '' ? 'localhost' : host
+      }:${port}/auth/emailandpassword/${activationCode}`;
 
     // ToDo
     noreplyMailer.sendMail({
@@ -112,8 +111,12 @@ export async function signIn(
           .end();
       }
 
-      const responseMessage = ApplicationUserMessage.applicationUserEmailAndPasswordSignInResponse(
+      const responseMessage = ApplicationUserMessage.applicationUserEmailAndPasswordSignInWithUserdataResponse(
         StatusCodes.OK,
+        {
+          _id: user._id,
+          email: user.email,
+        },
       );
 
       return response

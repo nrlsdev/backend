@@ -101,6 +101,24 @@ export class ApplicationUserMessage {
     };
   }
 
+  public static applicationUserEmailAndPasswordSignInWithUserdataResponse(
+    statusCode: number,
+    userdata: any,
+    error?: string,
+  ): ResponseMessage {
+    return {
+      meta: {
+        statusCode,
+      },
+      body: {
+        data: {
+          userdata,
+        },
+        error,
+      },
+    };
+  }
+
   // actiate
   public static applicationUserEmailAndPasswordActivateRequest(
     activationCode: string,
