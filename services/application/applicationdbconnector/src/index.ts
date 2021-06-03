@@ -10,6 +10,7 @@ import {
   ApplicationUserMessage,
   ErrorMessage,
   OperationsMessage,
+  PushNotificationMessage,
 } from '@backend/applicationmessagefactory';
 import { Database } from './database/database';
 import {
@@ -32,6 +33,7 @@ import {
   dbPut,
   dbDelete,
 } from './database/controller/operations/operations';
+import { getPushNotificationDeviceIds } from './database/controller/push-notifications/push-notifications';
 
 const logger: Logger = new Logger('applicationdbconnector::index');
 const { mhHost, mhPort } = ApplicationConfiguration.applicationmessagehandler;
@@ -55,6 +57,12 @@ async function startup() {
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
     onApplicationOperationsMessage,
+  );
+
+  messageManager.createRPCServer(
+    MessageQueueType.APPLICATION_DBCONNECTOR,
+    MessageSeverityType.APPLICATION_PUSH_NOTIFICATIONS,
+    onApplicationPushNotificationsMessage,
   );
 }
 
@@ -144,6 +152,26 @@ async function onApplicationOperationsMessage(requestMessage: RequestMessage) {
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE: {
       return dbDelete(data.collection, data.objectId, data.userId);
+    }
+    default: {
+      return ErrorMessage.unprocessableEntityErrorResponse(
+        `Message of type '${type}' not implemented!`,
+      );
+    }
+  }
+}
+
+async function onApplicationPushNotificationsMessage(requestMessage: RequestMessage) {
+  const { type } = requestMessage.meta;
+  const { data }: any = requestMessage.body;
+
+  if (!type) {
+    return ErrorMessage.unprocessableEntityErrorResponse();
+  }
+
+  switch (type) {
+    case PushNotificationMessage.TYPE_APPLICATION_PUSH_NOTIFICATIONS_GET_DEVICE_TOKENS: {
+      return getPushNotificationDeviceIds(data.receiverIds);
     }
     default: {
       return ErrorMessage.unprocessableEntityErrorResponse(

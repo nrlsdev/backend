@@ -5,6 +5,9 @@ export { ApplicationUserAccounts } from './src/application-user/application-user
 export { ApplicationUserEmailAndPasswordAccount } from './src/application-user/application-user-email-and-password-account';
 export { ApplicationUserFacebookAccount } from './src/application-user/application-user-facebook-account';
 export { ApplicationUserTwitterAccount } from './src/application-user/application-user-twitter-account';
+export { ApplicationUserUserdata } from './src/application-user-userdata/application-user-userdata';
+export { ApplicationUserSession } from './src/application-user-session/application-user-session';
+export { ApplicationUserSessionObject } from './src/application-user-session/application-user-session-object';
 export {
   copyObject,
   findObjectFromArray,

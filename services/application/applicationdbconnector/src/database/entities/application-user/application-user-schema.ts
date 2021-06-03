@@ -14,6 +14,7 @@ import { hash, compare } from 'bcryptjs';
 import { ApplicationUserAccountsSchema } from './application-user-accounts-schema';
 import { MongoErrorCode } from '../../error-codes';
 import { DatabaseEntitySchema } from '../database-entity-schema';
+import { ApplicationUserUserdataModel } from '../application-user-userdata/application-user-userdata-schema';
 
 @modelOptions({
   options: {
@@ -34,14 +35,6 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
   })
   public accounts!: ApplicationUserAccountsSchema;
 
-  @prop({
-    unique: false,
-    required: true,
-    default: {},
-    _id: false,
-  })
-  public userdata?: any;
-
   // email and password
   public static async signUpEmailAndPassword(
     this: ReturnModelType<typeof ApplicationUserSchema>,
@@ -56,7 +49,7 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
         Constants.PASSWORD_BCRYPT_SALT_LENGTH,
       );
 
-      await this.create({
+      const createdUser = await this.create({
         accounts: {
           emailAndPassword: {
             email: email.toLowerCase(),
@@ -65,8 +58,9 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
             activated: false,
           },
         },
-        userdata,
       });
+
+      await ApplicationUserUserdataModel.createUserdata(createdUser._id, userdata);
     } catch (exception) {
       ApplicationUserSchema.logger.fatal('signUpEmailAndPassword', exception);
 
@@ -137,13 +131,15 @@ export class ApplicationUserSchema extends DatabaseEntitySchema implements Appli
       };
     }
 
+    const userdata = await ApplicationUserUserdataModel.getUserDataById(user._id);
+
     return {
       statusCode: StatusCodes.OK,
       error: undefined,
       user: {
         _id: user._id,
         email: user.accounts.emailAndPassword.email,
-        userdata: user.userdata,
+        userdata,
       },
     };
   }
