@@ -8,6 +8,7 @@ import {
 } from 'mongoose';
 import { ConnectionState } from './connection-state';
 import { ApplicationUserEntity } from './entities/application-user/application-user-entitiy';
+import { ApplicationUserSessionEntity } from './entities/application-user-session/application-user-session-entity';
 
 export class Database {
   private static logger: Logger = new Logger('Database');
@@ -22,6 +23,9 @@ export class Database {
 
   public static applicationUserEntity: ApplicationUserEntity =
     ApplicationUserEntity.Instance;
+
+  public static applicationUserSessionEntity: ApplicationUserSessionEntity =
+    ApplicationUserSessionEntity.Instance;
 
   private static getConnectionUrl(
     urlFormat: string,
