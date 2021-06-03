@@ -13,6 +13,7 @@ import { setupEmailAndPasswordAuthentication } from './authentication/email-and-
 import { setupFacebookAuthentication } from './authentication/facebook/facebook-controller';
 import { setupTwitterAuthentication } from './authentication/twitter/twitter-controller';
 import { operationsRouter } from './operations/operations-router';
+import { pushNotificationsRouter } from './push-notifications/push-notifications-router';
 
 const {
   applicationgatewayhttp,
@@ -73,6 +74,7 @@ applicationServer.Application.use(initialize());
 applicationServer.Application.use(session());
 applicationServer.Application.use(sessionAuthenticationChecker);
 applicationServer.Application.use('/operations', operationsRouter);
+applicationServer.Application.use('/push', pushNotificationsRouter);
 
 setupUserDeSerialization();
 setupEmailAndPasswordAuthentication();
