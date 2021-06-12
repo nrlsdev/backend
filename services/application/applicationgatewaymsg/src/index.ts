@@ -83,7 +83,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
     return;
   }
 
-  const { method, collection } = jsonObject;
+  const { method, collection, custom } = jsonObject;
   const messageIdentifier = jsonObject.messageIdentifier ?? '';
   const userId: string = client.data.user._id;
   let responseMessage: ResponseMessage;
@@ -101,7 +101,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
       }
 
       responseMessage = await messageManager.sendReplyToMessage(
-        OperationsMessage.postRequest(collection, data, userId),
+        OperationsMessage.postRequest(collection, data, userId, custom),
         MessageQueueType.APPLICATION_DBCONNECTOR,
         MessageSeverityType.APPLICATION_OPERATIONS,
       );
@@ -120,7 +120,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
       }
 
       responseMessage = await messageManager.sendReplyToMessage(
-        OperationsMessage.getRequest(collection, entities, selectAll, userId),
+        OperationsMessage.getRequest(collection, entities, {}, selectAll, userId, custom), // ToDo: Query
         MessageQueueType.APPLICATION_DBCONNECTOR,
         MessageSeverityType.APPLICATION_OPERATIONS,
       );
@@ -137,7 +137,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
       }
 
       responseMessage = await messageManager.sendReplyToMessage(
-        OperationsMessage.putRequest(collection, data, objectId, userId),
+        OperationsMessage.putRequest(collection, data, objectId, userId, custom),
         MessageQueueType.APPLICATION_DBCONNECTOR,
         MessageSeverityType.APPLICATION_OPERATIONS,
       );
@@ -156,7 +156,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
       }
 
       responseMessage = await messageManager.sendReplyToMessage(
-        OperationsMessage.deleteRequest(collection, objectId, userId),
+        OperationsMessage.deleteRequest(collection, objectId, userId, custom),
         MessageQueueType.APPLICATION_DBCONNECTOR,
         MessageSeverityType.APPLICATION_OPERATIONS,
       );

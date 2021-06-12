@@ -8,7 +8,7 @@ import { Request, Response } from '@backend/server';
 import { messageManager } from '../message-manager';
 
 export async function dbPost(request: Request, response: Response) {
-  const { collection, data, userId } = request.body;
+  const { collection, data, userId, custom } = request.body;
 
   if (!collection || !data || !userId) {
     const errorResponseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
@@ -19,7 +19,7 @@ export async function dbPost(request: Request, response: Response) {
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    OperationsMessage.postRequest(collection, data, userId),
+    OperationsMessage.postRequest(collection, data, userId, custom),
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
   );
@@ -28,7 +28,7 @@ export async function dbPost(request: Request, response: Response) {
 }
 
 export async function dbGet(request: Request, response: Response) {
-  const { collection, entities, selectAll, userId } = request.body;
+  const { collection, entities, query, selectAll, userId, custom } = request.body;
 
   if (!collection || !userId) {
     const errorResponseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
@@ -39,7 +39,7 @@ export async function dbGet(request: Request, response: Response) {
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    OperationsMessage.getRequest(collection, entities, selectAll, userId),
+    OperationsMessage.getRequest(collection, entities, query, selectAll, userId, custom),
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
   );
@@ -48,7 +48,7 @@ export async function dbGet(request: Request, response: Response) {
 }
 
 export async function dbPut(request: Request, response: Response) {
-  const { collection, data, objectId, userId } = request.body;
+  const { collection, data, objectId, userId, custom } = request.body;
 
   if (!collection || !data || !objectId || !userId) {
     const errorResponseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
@@ -59,7 +59,7 @@ export async function dbPut(request: Request, response: Response) {
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    OperationsMessage.putRequest(collection, data, objectId, userId),
+    OperationsMessage.putRequest(collection, data, objectId, userId, custom),
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
   );
@@ -68,7 +68,7 @@ export async function dbPut(request: Request, response: Response) {
 }
 
 export async function dbDelete(request: Request, response: Response) {
-  const { collection, objectId, userId } = request.body;
+  const { collection, objectId, userId, custom } = request.body;
 
   if (!collection || !objectId || !userId) {
     const errorResponseMessage: ResponseMessage = ErrorMessage.unprocessableEntityErrorResponse();
@@ -79,7 +79,7 @@ export async function dbDelete(request: Request, response: Response) {
   }
 
   const responseMessage: ResponseMessage = await messageManager.sendReplyToMessage(
-    OperationsMessage.deleteRequest(collection, objectId, userId),
+    OperationsMessage.deleteRequest(collection, objectId, userId, custom),
     MessageQueueType.APPLICATION_DBCONNECTOR,
     MessageSeverityType.APPLICATION_OPERATIONS,
   );
