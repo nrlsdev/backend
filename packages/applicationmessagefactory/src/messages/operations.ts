@@ -14,7 +14,7 @@ export class OperationsMessage {
     'application_operations_delete';
 
   // post
-  public static postRequest(collection: string, data: any, userId: string): RequestMessage {
+  public static postRequest(collection: string, data: any, userId: string, custom: any): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST,
@@ -24,6 +24,7 @@ export class OperationsMessage {
           collection,
           data,
           userId,
+          custom,
         },
       },
     };
@@ -32,6 +33,7 @@ export class OperationsMessage {
   public static postResponse(
     collection: string,
     result: any,
+    custom: any,
     statusCode: number,
     error?: string,
   ): ResponseMessage {
@@ -44,6 +46,7 @@ export class OperationsMessage {
           collection,
           result,
           method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_POST,
+          custom,
         },
         error,
       },
@@ -51,7 +54,7 @@ export class OperationsMessage {
   }
 
   // get
-  public static getRequest(collection: string, entities: any, selectAll: boolean = false, userId: string): RequestMessage {
+  public static getRequest(collection: string, entities: any, query: any, selectAll: boolean = false, userId: string, custom: any): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
@@ -60,8 +63,10 @@ export class OperationsMessage {
         data: {
           collection,
           entities,
+          query,
           selectAll,
           userId,
+          custom,
         },
       },
     };
@@ -71,6 +76,7 @@ export class OperationsMessage {
     collection: string,
     result: any,
     idsToDelete: string[] = [],
+    custom: any,
     statusCode: number,
     error?: string,
   ): ResponseMessage {
@@ -84,6 +90,7 @@ export class OperationsMessage {
           result,
           idsToDelete,
           method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET,
+          custom,
         },
         error,
       },
@@ -91,7 +98,7 @@ export class OperationsMessage {
   }
 
   // put
-  public static putRequest(collection: string, data: any, objectId: string, userId: string): RequestMessage {
+  public static putRequest(collection: string, data: any, objectId: string, userId: string, custom: any): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT,
@@ -102,6 +109,7 @@ export class OperationsMessage {
           data,
           objectId,
           userId,
+          custom,
         },
       },
     };
@@ -110,6 +118,7 @@ export class OperationsMessage {
   public static putResponse(
     collection: string,
     result: any,
+    custom: any,
     statusCode: number,
     error?: string,
   ): ResponseMessage {
@@ -122,6 +131,7 @@ export class OperationsMessage {
           collection,
           result,
           method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_PUT,
+          custom,
         },
         error,
       },
@@ -129,7 +139,7 @@ export class OperationsMessage {
   }
 
   // delete
-  public static deleteRequest(collection: string, objectId: string, userId: string): RequestMessage {
+  public static deleteRequest(collection: string, objectId: string, userId: string, custom: any): RequestMessage {
     return {
       meta: {
         type: OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE,
@@ -139,6 +149,7 @@ export class OperationsMessage {
           collection,
           objectId,
           userId,
+          custom,
         },
       },
     };
@@ -147,6 +158,7 @@ export class OperationsMessage {
   public static deleteResponse(
     collection: string,
     result: any,
+    custom: any,
     statusCode: number,
     error?: string,
   ): ResponseMessage {
@@ -159,6 +171,7 @@ export class OperationsMessage {
           collection,
           result,
           method: OperationsMessage.TYPE_APPLICATION_OPERATIONS_DELETE,
+          custom,
         },
         error,
       },
