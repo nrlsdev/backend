@@ -111,7 +111,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
       return;
     }
     case OperationsMessage.TYPE_APPLICATION_OPERATIONS_GET: {
-      const { entities, selectAll } = jsonObject;
+      const { entities, selectAll, query } = jsonObject;
 
       if (!collection || !userId) {
         responseMessage = ErrorMessage.unprocessableEntityErrorResponse();
@@ -120,7 +120,7 @@ async function onWebSocketServerMessage(message: string, client: Socket) {
       }
 
       responseMessage = await messageManager.sendReplyToMessage(
-        OperationsMessage.getRequest(collection, entities, {}, selectAll, userId, custom), // ToDo: Query
+        OperationsMessage.getRequest(collection, entities, query, selectAll, userId, custom),
         MessageQueueType.APPLICATION_DBCONNECTOR,
         MessageSeverityType.APPLICATION_OPERATIONS,
       );

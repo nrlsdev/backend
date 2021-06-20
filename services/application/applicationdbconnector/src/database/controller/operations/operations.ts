@@ -2,7 +2,7 @@ import { OperationsMessage } from '@backend/applicationmessagefactory';
 import { StatusCodes } from '@backend/server';
 import { Constants } from '@backend/constants';
 import { Logger } from '@backend/logger';
-import { doesOneObjectKeysExist, isJsonObject } from '@backend/applicationinterfaces';
+import { doesOneObjectKeysExist, isJsonObject, objectEquals } from '@backend/applicationinterfaces';
 import { getModelByCollectionName } from '../../entities/dynamic/dynamic-schema';
 
 const logger: Logger = new Logger('operations');
@@ -33,7 +33,7 @@ export async function dbPost(collection: string, data: any, _userId: string, cus
   return OperationsMessage.postResponse(collection, dbObject, custom, StatusCodes.OK);
 }
 
-export async function dbGet(collection: string, entities: any, _query: any, selectAll: boolean, _userId: string, custom: any) {
+export async function dbGet(collection: string, entities: any, query: any, selectAll: boolean, _userId: string, custom: any) {
   if (!isJsonObject(entities)) {
     return OperationsMessage.postResponse(collection, undefined, custom, StatusCodes.UNPROCESSABLE_ENTITY, 'Hashed entities object is not in JSON format.');
   }
@@ -46,6 +46,8 @@ export async function dbGet(collection: string, entities: any, _query: any, sele
   try {
     if (selectAll) {
       dbObjects = await DynamicModel.find();
+    } else if (query !== undefined && !objectEquals(query, {})) {
+      dbObjects = await DynamicModel.find(query);
     } else {
       dbObjects = await DynamicModel.find({
         _id: { $in: ids },
