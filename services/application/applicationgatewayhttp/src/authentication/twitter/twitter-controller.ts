@@ -20,9 +20,8 @@ import { messageManager } from '../../message-manager';
 
 const logger: Logger = new Logger('twitter-controller');
 const { authentication } = ApplicationConfiguration.applicationgatewayhttp;
-const redirectBaseUrl: string = `${authentication.protocol}://${
-  authentication.host ? authentication.host : 'localhost'
-}:${authentication.port}`;
+const redirectBaseUrl: string = `${authentication.protocol}://${authentication.host ? authentication.host : 'localhost'
+  }:${authentication.port}`;
 
 export function setupTwitterAuthentication() {
   use(
@@ -31,10 +30,8 @@ export function setupTwitterAuthentication() {
         consumerKey: 'muFyteJX37HiBMlpvQiqlCuaP', // ToDo: Make configurable in mgmtconsole
         consumerSecret: 'gtGZw72h6Vh7aB9TlyWkwZwbuHltYpYGLtJk2t9owhRMX5da3q', // ToDo: Make configurable in mgmtconsole
         callbackURL: `${redirectBaseUrl}/auth/twitter/callback`, // ToDo: Make configurable in mgmtconsole
-        passReqToCallback: true,
       },
       async (
-        _request: Request,
         accessTokenKey: string,
         accessTokenSecret: string,
         profile: TwitterProfile,

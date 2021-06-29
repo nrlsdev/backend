@@ -1,8 +1,8 @@
-import { NuxtVueI18n } from 'nuxt-i18n';
+import { Options } from 'nuxt-i18n';
 import { enUS } from './lang/en-US';
 import { deDE } from './lang/de-DE';
 
-export const LanguageConfiguration: NuxtVueI18n.Options.AllOptionsInterface = {
+export const LanguageConfiguration: Options = {
   locales: [
     {
       code: 'en-US',

@@ -1,6 +1,6 @@
 import { Server, ServerSessionOptions } from '@backend/server';
 import { ApplicationConfiguration } from '@backend/applicationconfiguration';
-import { initialize, session } from 'passport';
+import { initialize, session as passportSession } from 'passport';
 import {
   publicAuthenticationRouter,
   privateAuthenticationRouter,
@@ -56,7 +56,7 @@ authenticationServer.useLanguageMiddleware();
 authenticationServer.useCookieParserMiddleware();
 authenticationServer.useExpressSession(sessionOptions);
 authenticationServer.Application.use(initialize());
-authenticationServer.Application.use(session());
+authenticationServer.Application.use(passportSession());
 
 authenticationServer.Application.use('/auth', publicAuthenticationRouter);
 authenticationServer.Application.use(sessionAuthenticationChecker);
@@ -71,7 +71,7 @@ applicationServer.useLanguageMiddleware();
 applicationServer.useCookieParserMiddleware();
 applicationServer.useExpressSession(sessionOptions);
 applicationServer.Application.use(initialize());
-applicationServer.Application.use(session());
+applicationServer.Application.use(passportSession());
 applicationServer.Application.use(sessionAuthenticationChecker);
 applicationServer.Application.use('/operations', operationsRouter);
 applicationServer.Application.use('/push', pushNotificationsRouter);

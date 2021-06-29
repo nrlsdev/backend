@@ -17,6 +17,7 @@
     "@backend/logger": "^1.0.0",
     "@backend/messagehandler": "^1.0.0",
     "@backend/server": "^1.0.0",
+    "connect-mongodb-session": "^2.4.1",
     "cross-env": "^7.0.3",
     "nodemon": "^2.0.6",
     "passport": "^0.4.1",
@@ -26,9 +27,11 @@
     "ts-node": "^9.1.0"
   },
   "devDependencies": {
+    "@types/connect-mongodb-session": "^2.4.0",
     "@types/passport": "^1.0.6",
     "@types/passport-facebook": "^2.1.10",
     "@types/passport-local": "^1.0.33",
-    "@types/passport-twitter": "^1.0.36"
+    "@types/passport-twitter": "^1.0.36",
+    "@types/express": "^4.17.4"
   }
 }

@@ -78,11 +78,9 @@ export const config: NuxtConfig = {
     },
   },
   publicRuntimeConfig: {
-    authenticationBaseUrl: `${authenticationAPIProtocol}://${
-      authenticationAPIHost === '' ? 'localhost' : authenticationAPIHost
-    }:${authenticationAPIPort}`,
-    systemBaseUrl: `${systemAPIProtocol}://${
-      systemAPIHost === '' ? 'localhost' : systemAPIHost
-    }:${systemAPIPort}`,
+    authenticationBaseUrl: `${authenticationAPIProtocol}://${authenticationAPIHost === '' ? 'localhost' : authenticationAPIHost
+      }:${authenticationAPIPort}`,
+    systemBaseUrl: `${systemAPIProtocol}://${systemAPIHost === '' ? 'localhost' : systemAPIHost
+      }:${systemAPIPort}`,
   },
 };
