@@ -20,9 +20,8 @@ import { messageManager } from '../../message-manager';
 
 const logger: Logger = new Logger('facebook-controller');
 const { authentication } = ApplicationConfiguration.applicationgatewayhttp;
-const redirectBaseUrl: string = `${authentication.protocol}://${
-  authentication.host ? authentication.host : 'localhost'
-}:${authentication.port}`;
+const redirectBaseUrl: string = `${authentication.protocol}://${authentication.host ? authentication.host : 'localhost'
+  }:${authentication.port}`;
 
 export function setupFacebookAuthentication() {
   use(
@@ -31,10 +30,8 @@ export function setupFacebookAuthentication() {
         clientID: '1390552057796759', // ToDo: Make configurable in mgmtconsole
         clientSecret: '9659f3c3d3dd2d82c15bb8cdf56f8108', // ToDo: Make configurable in mgmtconsole
         callbackURL: `${redirectBaseUrl}/auth/facebook/callback`, // ToDo: Make configurable in mgmtconsole
-        passReqToCallback: true,
       },
       async (
-        _request: Request,
         accessToken: string,
         _refreshToken: string,
         profile: FacebookProfile,
